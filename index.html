@@ -336,7 +336,7 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 <div class="sheet" id="cSheet" role="dialog" aria-modal="true">
   <h2>IA &amp; Configurações</h2>
   <div class="id-note show" id="aiSrcNote" style="margin-top:0"></div>
-  <div class="field"><label>Provedor de IA</label><select id="c_provider"><option value="">Automático (Claude nativo)</option><option value="gemini">Gemini — com fontes web</option><option value="glm">GLM (Zhipu) — com fontes web</option><option value="openai">OpenAI-compatível</option></select></div>
+  <div class="field"><label>Provedor de IA</label><select id="c_provider"><option value="">Selecione um provedor</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI / compatível</option></select></div>
   <div class="field"><label>Chave da API</label><input type="text" id="c_key" placeholder="cole sua chave aqui" autocomplete="off"></div>
   <div class="row2">
     <div class="field"><label>Base URL (GLM/OpenAI)</label><input type="text" id="c_base" placeholder="opcional" autocomplete="off"></div>
@@ -645,50 +645,92 @@ function performanceOf(i){const r=i.radar||{};if(r.performance!=null&&!isNaN(Num
 function occasionLabel(i){if(i.best_occasion)return i.best_occasion;const r=i.radar||{};const c=[["Encontro",r.romantico||0],["Noite",r.noite||0],["Dia",r.dia||0]];c.sort((a,b)=>b[1]-a[1]);return c[0][1]>0?c[0][0]:"Versátil";}
 function clamp(n,a,b){n=Number(n);if(isNaN(n))return a;return Math.max(a,Math.min(b,n));}
 function validFamily(v){if(!v)return "outra";v=String(v).toLowerCase().trim();const ids=FAMILIES.map(f=>f.id);if(ids.includes(v))return v;const m=FAMILIES.find(f=>f.name.toLowerCase().includes(v)||v.includes(f.id));return m?m.id:"outra";}
-function getAiCfg(){try{return JSON.parse(localStorage.getItem("gde:ai")||"{}");}catch(e){return{};}}
+function getAiCfg(){try{const c=JSON.parse(localStorage.getItem("gde:ai")||"{}");return c&&typeof c==="object"?c:{};}catch(e){return{};}}
 function saveAiCfg(c){try{localStorage.setItem("gde:ai",JSON.stringify(c));}catch(e){}}
+function normalizeAiCfg(c){
+  c=c||{};
+  if(c.provider==="gemini"){
+    if(!c.model||/^gemini-2\\.0-/i.test(c.model)||/^gemini-3\\.0-/i.test(c.model))c.model="gemini-2.5-flash";
+    c.baseUrl="";
+  }else if(c.provider==="glm"){
+    c.baseUrl=(c.baseUrl||"https://api.z.ai/api/paas/v4").replace(/\\/$/,"");
+    if(!c.model||/^glm-4-(flash|v)/i.test(c.model))c.model="glm-4.6";
+  }else if(c.provider==="openai"){
+    c.baseUrl=(c.baseUrl||"https://api.openai.com/v1").replace(/\\/$/,"");
+    if(!c.model)c.model="gpt-4o-mini";
+  }
+  return c;
+}
+async function readApiError(res){
+  let body="";
+  try{body=await res.text();}catch(e){}
+  let msg="";
+  try{const j=JSON.parse(body);msg=(j.error&&((j.error.message)||j.error.code))||j.message||j.detail||"";}catch(e){}
+  const e=new Error(msg||("HTTP "+res.status));e.code="http_"+res.status;e.apiMessage=msg||body.slice(0,300);throw e;
+}
 async function openaiJSON(prompt){
-  const cfg=getAiCfg();
+  const cfg=normalizeAiCfg(getAiCfg());
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
-  const base=(cfg.baseUrl||"https://api.openai.com/v1").replace(/\/$/,"");
-  const res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"gpt-4o-mini",temperature:0.3,messages:[{role:"user",content:prompt}]})});
-  if(!res.ok){const e=new Error("http");e.code="http_"+res.status;throw e;}
+  const base=(cfg.baseUrl||"https://api.openai.com/v1").replace(/\\/$/,"");
+  let res;
+  try{
+    res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"gpt-4o-mini",temperature:0.3,messages:[{role:"user",content:prompt}]})});
+  }catch(e){e.code="network";throw e;}
+  if(!res.ok)await readApiError(res);
   const j=await res.json();let txt=(j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||"";
-  txt=txt.replace(/```json|```/g,"").trim();return JSON.parse(txt);
+  txt=txt.replace(/^```json\\s*|^```\\s*|\\s*```$/g,"").trim();
+  try{return JSON.parse(txt);}catch(e){e.code="bad_json";throw e;}
 }
 async function geminiJSON(prompt,cfg){
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
-  const model=cfg.model||"gemini-2.0-flash";
-  const url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent?key="+encodeURIComponent(cfg.key);
-  const body={contents:[{parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.2}};
-  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!res.ok){const e=new Error("http");e.code="http_"+res.status;throw e;}
+  const model=(cfg.model||"gemini-2.5-flash").replace(/^models\\//,"");
+  const url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent";
+  const body={contents:[{parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.2,responseMimeType:"application/json"}};
+  let res;
+  try{res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key},body:JSON.stringify(body)});}catch(e){e.code="network";throw e;}
+  if(!res.ok)await readApiError(res);
   const j=await res.json();const cand=(j.candidates&&j.candidates[0])||{};
-  let txt=(((cand.content||{}).parts)||[]).map(p=>p.text||"").join("");txt=txt.replace(/```json|```/g,"").trim();
-  const data=JSON.parse(txt);
+  let txt=(((cand.content||{}).parts)||[]).map(p=>p.text||"").join("").trim();
+  txt=txt.replace(/^```json\\s*|^```\\s*|\\s*```$/g,"").trim();
+  let data;try{data=JSON.parse(txt);}catch(e){e.code="bad_json";throw e;}
   const chunks=((cand.groundingMetadata||{}).groundingChunks)||[];
-  const sources=chunks.map(c=>c.web?{title:c.web.title||c.web.uri,uri:c.web.uri}:null).filter(Boolean);
+  const sources=chunks.map(x=>x.web?{title:x.web.title||x.web.uri,uri:x.web.uri}:null).filter(Boolean);
   return {data,sources};
 }
 async function glmJSON(prompt,cfg){
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
-  const base=(cfg.baseUrl||"https://open.bigmodel.cn/api/paas/v4").replace(/\/$/,"");
-  const model=cfg.model||"glm-4-flash";
-  const body={model,temperature:0.2,messages:[{role:"user",content:prompt}],tools:[{type:"web_search",web_search:{enable:true}}]};
-  const res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify(body)});
-  if(!res.ok){const e=new Error("http");e.code="http_"+res.status;throw e;}
+  const base=(cfg.baseUrl||"https://api.z.ai/api/paas/v4").replace(/\\/$/,"");
+  const model=cfg.model||"glm-4.6";
+  const body={model,temperature:0.2,messages:[{role:"user",content:prompt}]};
+  let res;
+  try{res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify(body)});}catch(e){e.code="network";throw e;}
+  if(!res.ok)await readApiError(res);
   const j=await res.json();const msg=((j.choices&&j.choices[0])||{}).message||{};
-  let txt=msg.content||"";txt=txt.replace(/```json|```/g,"").trim();const data=JSON.parse(txt);
-  let sources=[];const ws=j.web_search||msg.web_search;if(Array.isArray(ws))sources=ws.map(s=>({title:s.title||s.link||s.url,uri:s.link||s.url})).filter(s=>s.uri);
-  return {data,sources};
+  let txt=msg.content||"";txt=txt.replace(/^```json\\s*|^```\\s*|\\s*```$/g,"").trim();
+  let data;try{data=JSON.parse(txt);}catch(e){e.code="bad_json";throw e;}
+  return {data,sources:[]};
 }
 async function aiComplete(prompt){
-  const cfg=getAiCfg();const prov=cfg.provider||"";
+  const cfg=normalizeAiCfg(getAiCfg());const prov=cfg.provider||"";
   if(prov==="gemini")return geminiJSON(prompt,cfg);
   if(prov==="glm")return glmJSON(prompt,cfg);
   if(prov==="openai")return {data:await openaiJSON(prompt),sources:[]};
   if(sampleNS)return {data:await sampleNS.json(prompt,{modelTier:"default"}),sources:[]};
   const e=new Error("no_provider");e.code="no_provider";throw e;
+}
+function aiErr(e){
+  const c=(e&&e.code)||"";
+  if(c==="no_provider")return "Selecione um provedor de IA e salve as configurações.";
+  if(c==="no_key")return "A chave da API está vazia.";
+  if(c==="network")return "Falha de rede/CORS: o navegador não conseguiu acessar o endpoint da IA.";
+  if(c==="bad_json")return "A IA respondeu em formato inválido. Tente novamente.";
+  if(c==="http_400")return "Requisição rejeitada: "+(e.apiMessage||"verifique modelo, endpoint e parâmetros.");
+  if(c==="http_401"||c==="http_403")return "Autenticação recusada: confira a chave e as permissões do projeto.";
+  if(c==="http_404")return "Modelo ou endpoint não encontrado: confira o modelo configurado.";
+  if(c==="http_429")return "Limite de requisições/quota atingido. Aguarde ou verifique o plano.";
+  if(c==="http_500"||c==="http_502"||c==="http_503")return "O provedor está indisponível temporariamente.";
+  if(c==="not_granted")return "Permita o uso da Claude para a IA.";
+  return "IA indisponível: "+(e&&e.message?e.message:"erro desconhecido");
 }
 function perfumePrompt(brand,name){
   return 'Você é especialista em perfumaria. Consulte fontes CONFIÁVEIS, priorizando o FRAGRANTICA (fragrantica.com.br / fragrantica.com), e também o site oficial da marca e o Parfumo, sobre o perfume "'+brand+' '+name+'". Corrija a marca/casa se estiver errada. Responda SOMENTE com JSON válido (sem markdown, sem texto extra): {"brand":"marca/casa correta segundo a fonte","concentration":"EDC|EDT|EDP|Parfum|Extrait ou vazio","family":"uma de: ambar, amadeirado, aromatico, citrico, aquatico, floral, gourmand, especiado, couro, chipre, outra","gender":"masculino|feminino|unissex ou vazio","perfumer":"","year":"","pyramid":{"top":["notas de saída"],"heart":["notas de corpo"],"base":["notas de fundo"]},"notes":["principais notas em português"],"seasons":["subconjunto de: Verão, Outono, Inverno, Primavera"],"best_occasion":"melhor ocasião em 1-2 palavras (ex.: Noite, Encontro, Trabalho, Festa, Dia a dia)","rating":8,"metrics":{"dia":0,"noite":0,"romantico":0,"doce":0,"maritimo":0,"citrico":0,"projecao":0,"longevidade":0,"performance":0,"versatilidade":0,"frescor":0,"amadeirado":0,"elegancia":0},"comment":"frase curta em português","sources":[{"title":"","uri":""}]}. Os campos brand, family, gender, perfumer, year, pyramid, notes e concentration DEVEM vir das fontes (de preferência Fragrantica) — não invente. Em metrics cada valor 0 a 10: doce=doçura, projecao=projeção, longevidade=fixação, performance=intensidade geral de desempenho, dia/noite=melhor período, romantico=apelo romântico, maritimo=aquático, citrico, versatilidade, frescor, amadeirado, elegancia. Em sources liste os LINKS reais consultados, incluindo o do Fragrantica.';
@@ -751,7 +793,7 @@ $("#cfgBtn").onclick=()=>{
   buildAxisChecks();openSheet("c");
 };
 $("#cSave").onclick=()=>{
-  saveAiCfg({provider:$("#c_provider").value,key:$("#c_key").value.trim(),baseUrl:$("#c_base").value.trim(),model:$("#c_model").value.trim()});
+  saveAiCfg(normalizeAiCfg({provider:$("#c_provider").value,key:$("#c_key").value.trim(),baseUrl:$("#c_base").value.trim(),model:$("#c_model").value.trim()}));
   const checked=[...document.querySelectorAll('#axisChecks button[aria-pressed="true"]')].map(x=>x.dataset.k);
   if(checked.length>=3)saveAxes(checked); else if(checked.length){toast("Escolha ao menos 3 variáveis");return;}
   closeSheet("c");renderAll();if(detailId&&$("#dSheet").classList.contains("open"))openDetail(detailId);toast("Configurações salvas");
