@@ -683,7 +683,7 @@ async function openaiJSON(prompt){
 }
 async function geminiJSON(prompt,cfg){
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
-  const model=(cfg.model||"gemini-2.5-flash").replace(/^models\\//,"");
+  const model=(cfg.model||"gemini-2.5-flash").replace(/^models\//,"");
   const url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent";
   const body={contents:[{parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.2,responseMimeType:"application/json"}};
   let res;
