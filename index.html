@@ -668,7 +668,7 @@ async function readApiError(res){
   try{const j=JSON.parse(body);msg=(j.error&&((j.error.message)||j.error.code))||j.message||j.detail||"";}catch(e){}
   const e=new Error(msg||("HTTP "+res.status));e.code="http_"+res.status;e.apiMessage=msg||body.slice(0,300);throw e;
 }
-async async function openaiJSON(prompt){
+async function openaiJSON(prompt){
   const cfg=normalizeAiCfg(getAiCfg());
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
   const base=(cfg.baseUrl||"https://api.openai.com/v1").replace(/\/$/,"");
