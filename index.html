@@ -237,6 +237,11 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .cmp-notes .cnl{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:6px}
 .cmp-notes .chip{font-size:11.5px;color:var(--ink-soft);background:var(--surface-2);padding:4px 9px;border-radius:8px;margin:0 5px 5px 0;display:inline-block}
 .cmp-notes .chip.sh{background:var(--gold-line);color:var(--gold)}
+.cmp-opinion{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--gold-bright);border-radius:12px;padding:12px 14px;margin:2px 0 14px}
+.cmp-opinion .cnl{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:6px}
+.cmp-opinion p{margin:0 0 7px;font-size:13px;color:var(--ink-soft);line-height:1.45}
+.cmp-opinion p:last-child{margin-bottom:0}
+.cmp-opinion .cvd{font-weight:700;color:var(--ink);font-size:14px}
 </style>
 </head>
 <body>
@@ -1063,22 +1068,47 @@ function renderSuggest(r,owned){
 }
 let tTimer;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove("show"),2600);}
 
-const COMP_B="#7FB2FF";
+const COMP_B="#EFC13A";
 const clamp01=x=>Math.max(0,Math.min(1,x));
 function famGroupOf(f){f=f||"";if(["ambar","gourmand","especiado","couro"].includes(f))return "quente";if(["amadeirado","chipre"].includes(f))return "amadeirado";if(["citrico","aquatico","aromatico"].includes(f))return "fresco";if(f==="floral")return "floral";return "outro";}
-function famBlend(fa,fb){const ga=famGroupOf(fa),gb=famGroupOf(fb);if(ga===gb)return .82;const k=[ga,gb].sort().join("|");const m={"amadeirado|quente":.92,"fresco|quente":.6,"amadeirado|fresco":.82,"floral|quente":.8,"floral|fresco":.78,"amadeirado|floral":.8};return m[k]!=null?m[k]:.62;}
+function famBlend(fa,fb){const ga=famGroupOf(fa),gb=famGroupOf(fb);if(ga===gb)return .9;const k=[ga,gb].sort().join("|");const m={"amadeirado|quente":.85,"amadeirado|fresco":.7,"floral|quente":.62,"floral|fresco":.62,"amadeirado|floral":.6,"fresco|quente":.35};return m[k]!=null?m[k]:.45;}
+function vecOf(p,gid){const gv=groupValues(p,gid);return (RGROUPS.find(g=>g.id===gid)||RGROUPS[0]).axes.map(([k])=>Math.max(0,Math.min(10,gv[k]||0)));}
+function cosine(a,b){let dot=0,na=0,nb=0;for(let i=0;i<a.length;i++){dot+=a[i]*b[i];na+=a[i]*a[i];nb+=b[i]*b[i];}return (na&&nb)?dot/(Math.sqrt(na)*Math.sqrt(nb)):0;}
+function simGroup(a,b,gid){return cosine(vecOf(a,gid),vecOf(b,gid));}
+function domAxis(p,gid){const gv=groupValues(p,gid),grp=RGROUPS.find(g=>g.id===gid)||RGROUPS[0];let bl=grp.axes[0][1],bv=-1;grp.axes.forEach(([k,l])=>{const v=gv[k]||0;if(v>bv){bv=v;bl=l;}});return bl;}
 function compatScore(a,b){
   const na=(a.notes||[]).map(x=>String(x).toLowerCase()), nb=(b.notes||[]).map(x=>String(x).toLowerCase());
-  const setb=new Set(nb), shared=[...new Set(na.filter(x=>setb.has(x)))];
-  const overlap=shared.length/Math.max(1,Math.min(na.length,nb.length));
-  const harmony=1-Math.min(1,Math.abs(overlap-0.35)/0.65);
+  const setA=new Set(na), setB=new Set(nb);
+  const shared=[...setA].filter(x=>setB.has(x));
+  const uni=new Set([...na,...nb]).size||1;
+  const jac=shared.length/uni;
+  const simTipo=simGroup(a,b,"tipo"), simEst=simGroup(a,b,"estacao"), simOcc=simGroup(a,b,"ocasiao");
   const fam=famBlend(a.family,b.family);
-  const ta=groupValues(a,"tipo"),tb=groupValues(b,"tipo");
-  const compl=clamp01((Math.abs((ta.citrico+ta.aquatico)/2-(tb.citrico+tb.aquatico)/2)+Math.abs((ta.doce||0)-(tb.doce||0)))/20);
   const curated=(a.layering||[]).some(n=>String(n).toLowerCase()===String(b.name).toLowerCase())||(b.layering||[]).some(n=>String(n).toLowerCase()===String(a.name).toLowerCase());
-  let s=0.45*fam+0.28*harmony+0.15*compl+0.12;
-  if(curated)s=Math.max(s,0.86);
-  return {pct:Math.round(clamp01(s)*100),curated,shared};
+  let s=0.34*simTipo+0.15*simEst+0.13*simOcc+0.16*jac+0.22*fam;
+  s=Math.pow(clamp01(s),1.25);
+  if(curated)s=Math.min(1,Math.max(s,0.80)+0.08);
+  return {pct:Math.round(clamp01(s)*100),curated,shared,simTipo,simEst,simOcc,fam};
+}
+function perfumerOpinion(a,b,r){
+  const pct=r.pct, ga=famGroupOf(a.family), gb=famGroupOf(b.family), sameFam=ga===gb;
+  const ta=groupValues(a,"tipo"), tb=groupValues(b,"tipo");
+  const sweetA=ta.doce||0, sweetB=tb.doce||0;
+  const freshA=((ta.citrico||0)+(ta.aquatico||0))/2, freshB=((tb.citrico||0)+(tb.aquatico||0))/2;
+  const occA=domAxis(a,"ocasiao"), occB=domAxis(b,"ocasiao"), seaA=domAxis(a,"estacao"), seaB=domAxis(b,"estacao");
+  const sh=r.shared.slice(0,3).map(esc).join(", ");
+  const verdict=r.curated?"Sim — vale combinar (a curadoria já indica).":pct>=72?"Sim — combinam bem.":pct>=48?"Talvez — combine com cautela, em camada leve.":"Não — melhor usar separados.";
+  let perf;
+  if(r.curated) perf=`Como perfumista: a dupla já é indicação de layering — ${famById(a.family).name.toLowerCase()} e ${famById(b.family).name.toLowerCase()} se sustentam sem uma abafar a outra${sh?`, com ${sh} de ponte`:""}.`;
+  else if(sameFam) perf=`Como perfumista: mesma família (${famById(a.family).name.toLowerCase()}), empilham sem brigar${sh?`; ${sh} servem de ponte`:", mas o resultado pode ficar redundante"}.`;
+  else if((ga==="quente"&&gb==="amadeirado")||(ga==="amadeirado"&&gb==="quente")) perf=`Como perfumista: doçura/âmbar sobre madeira é casamento clássico — um dá calor, o outro dá estrutura.`;
+  else if((freshA>6&&sweetB>6)||(freshB>6&&sweetA>6)) perf=`Como perfumista: um é fresco/cítrico e o outro doce/quente — contraste grande; se insistir, o doce vai por baixo (leve) e o fresco por cima, senão um cobre o outro.`;
+  else perf=`Como perfumista: perfis distintos e ${r.shared.length?`só ${r.shared.length} nota(s) em comum`:"quase nenhuma nota em comum"} — falta uma ponte que amarre os dois.`;
+  let sty;
+  if(seaA===seaB && occA===occB) sty=`Como personal stylist: os dois pedem ${occA.toLowerCase()} no ${seaA.toLowerCase()} — mesmo look, mesmo momento.`;
+  else if(seaA!==seaB) sty=`Como personal stylist: um brilha no ${seaA.toLowerCase()} e o outro no ${seaB.toLowerCase()}; use juntos numa transição, não em estações opostas.`;
+  else sty=`Como personal stylist: um puxa mais pra ${occA.toLowerCase()} e o outro pra ${occB.toLowerCase()} — funciona se a ocasião comportar os dois climas.`;
+  return {verdict, perf, sty};
 }
 function compareRadarSvg(a,b,gid,size){
   const grp=RGROUPS.find(x=>x.id===gid)||RGROUPS[0], axes=grp.axes, va=groupValues(a,gid), vb=groupValues(b,gid);
@@ -1089,7 +1119,7 @@ function compareRadarSvg(a,b,gid,size){
   axes.forEach((_,i)=>{const[x,y]=pt(i,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--radar-grid)" stroke-width="1"/>`;});
   const poly=(vals,col,fill)=>{const p=axes.map(([k],i)=>pt(i,R*(Math.max(0,Math.min(10,vals[k]||0))/10)).map(z=>z.toFixed(1)).join(",")).join(" ");let s=`<polygon points="${p}" fill="${fill}" stroke="${col}" stroke-width="1.7"/>`;s+=axes.map(([k],i)=>{const v=Math.max(0,Math.min(10,vals[k]||0));const[x,y]=pt(i,R*(v/10));return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.3" fill="${col}"/>`;}).join("");return s;};
   const l=axes.map(([k,lbl],i)=>{const[x,y]=pt(i,R+13);const anc=Math.abs(x-cx)<4?"middle":(x>cx?"start":"end");return `<text x="${x.toFixed(1)}" y="${(y+3).toFixed(1)}" font-size="10.5" fill="var(--muted)" text-anchor="${anc}">${lbl}</text>`;}).join("");
-  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="overflow:visible;display:block;margin:0 auto;max-width:100%">${g}${poly(vb,COMP_B,"rgba(127,178,255,.16)")}${poly(va,"var(--gold-bright)","var(--radar-fill)")}${l}</svg>`;
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="overflow:visible;display:block;margin:0 auto;max-width:100%">${g}${poly(vb,COMP_B,"rgba(239,193,58,.16)")}${poly(va,"var(--gold-bright)","var(--radar-fill)")}${l}</svg>`;
 }
 let cmpGroup="tipo";
 function fillCmpSelect(sel,selId){$(sel).innerHTML=state.perfumes.map(p=>`<option value="${p.id}"${p.id===selId?" selected":""}>${esc(p.name)}${p.brand?" — "+esc(p.brand):""}</option>`).join("");}
@@ -1109,6 +1139,7 @@ function renderCompare(){
   const verdict=pct>=85?"Excelente combinação para layering":pct>=70?"Combinam muito bem":pct>=55?"Combinam bem":pct>=40?"Combinação neutra — camadas leves":"Contrastam — melhor separados";
   const fa=famById(a.family),fb=famById(b.family);
   const reason=(r.curated?"✦ Curadoria indica combinar. ":"")+"Famílias "+fa.name+" + "+fb.name+" · "+(r.shared.length?r.shared.length+" nota(s) em comum":"sem notas em comum");
+  const op=perfumerOpinion(a,b,r);
   const na=(a.notes||[]).map(x=>x.toLowerCase()), nb=(b.notes||[]).map(x=>x.toLowerCase()), sh=new Set(r.shared.map(x=>x.toLowerCase()));
   const onlyA=(a.notes||[]).filter(x=>!nb.includes(x.toLowerCase())), onlyB=(b.notes||[]).filter(x=>!na.includes(x.toLowerCase()));
   const chips=arr=>arr.length?arr.map(x=>`<span class="chip">${esc(x)}</span>`).join(""):'<span class="muted" style="font-size:12px">—</span>';
@@ -1116,6 +1147,7 @@ function renderCompare(){
     <div class="cmp-score"><div class="cmp-pct" style="color:${col}">${pct}%</div><div class="cmp-verdict">${verdict}</div></div>
     <div class="cmp-bar"><div style="width:${pct}%;background:${col}"></div></div>
     <div class="cmp-reason">${esc(reason)}</div>
+    <div class="cmp-opinion"><div class="cnl">Parecer — perfumista &amp; personal stylist</div><p class="cvd">${esc(op.verdict)}</p><p>${op.perf}</p><p>${op.sty}</p></div>
     <div class="rtabs cmp-tabs">${RGROUPS.map(gp=>`<button type="button" class="rtab${gp.id===cmpGroup?" on":""}" data-g="${gp.id}">${gp.name}</button>`).join("")}</div>
     <div id="cmpCanvas"></div>
     <div class="cmp-legend"><span><i style="background:var(--gold-bright)"></i>${esc(a.name)}</span><span><i style="background:${COMP_B}"></i>${esc(b.name)}</span></div>
