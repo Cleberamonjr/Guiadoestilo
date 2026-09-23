@@ -221,6 +221,22 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 #rCanvas{display:flex;justify-content:center}
 #rCanvas svg{max-width:100%;height:auto}
 .dstats2{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
+.cmp-score{display:flex;align-items:baseline;gap:12px;margin:8px 0 8px}
+.cmp-pct{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1}
+.cmp-verdict{font-weight:600;font-size:15px;color:var(--ink)}
+.cmp-bar{height:9px;border-radius:6px;background:var(--surface-2);overflow:hidden;margin-bottom:10px}
+.cmp-bar>div{height:100%;border-radius:6px;transition:width .3s}
+.cmp-reason{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.cmp-tabs{margin:0 auto 6px}
+#cmpCanvas{display:flex;justify-content:center}
+#cmpCanvas svg{max-width:100%;height:auto}
+.cmp-legend{display:flex;gap:20px;justify-content:center;margin:8px 0 12px;font-size:12.5px;color:var(--ink-soft)}
+.cmp-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.cmp-notes{display:grid;grid-template-columns:1fr;gap:10px}
+.cmp-notes .cn{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.cmp-notes .cnl{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:6px}
+.cmp-notes .chip{font-size:11.5px;color:var(--ink-soft);background:var(--surface-2);padding:4px 9px;border-radius:8px;margin:0 5px 5px 0;display:inline-block}
+.cmp-notes .chip.sh{background:var(--gold-line);color:var(--gold)}
 </style>
 </head>
 <body>
@@ -231,6 +247,7 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
     <div class="top-actions">
       <button class="icon-btn" id="installBtn" title="Instalar app" aria-label="Instalar app" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 6v7m0 0-2.4-2.4M12 13l2.4-2.4M9.5 18.5h5"/></svg></button>
       <button class="icon-btn" id="suggestBtn" title="Sugestão pelo look" aria-label="Sugestão pelo look"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z"/><circle cx="18.5" cy="17.5" r="2.4"/></svg></button>
+      <button class="icon-btn" id="compareBtn" title="Comparar perfumes" aria-label="Comparar perfumes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="12" r="6.5"/><circle cx="15" cy="12" r="6.5"/></svg></button>
       <button class="icon-btn" id="cfgBtn" title="IA / Configurações" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.2a1.6 1.6 0 0 0-2.6-1.1 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4.6 15H4.4a2 2 0 0 1 0-4h.2A1.6 1.6 0 0 0 6 8.4a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10.6A1.6 1.6 0 0 0 12 2.6V2.4a2 2 0 0 1 4 0v.2a1.6 1.6 0 0 0 2.6 1.1 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V8.4a1.6 1.6 0 0 0 1.4 1.4h.2a2 2 0 0 1 0 4H21a1.6 1.6 0 0 0-1.4 1.2z"/></svg></button>
       <button class="icon-btn" id="themeBtn" title="Tema" aria-label="Alternar tema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
       <button class="icon-btn" id="dlBtn" title="Backup" aria-label="Exportar backup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></button>
@@ -340,6 +357,17 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 <div class="overlay" id="dOverlay" onclick="closeSheet('d')"></div>
 <div class="sheet detail" id="dSheet" role="dialog" aria-modal="true"><div id="dBody"></div></div>
 
+<div class="overlay" id="kOverlay" onclick="closeSheet('k')"></div>
+<div class="sheet" id="kSheet" role="dialog" aria-modal="true">
+  <h2>Comparar &amp; compatibilidade</h2>
+  <div class="row2">
+    <div class="field"><label>Perfume A</label><select id="cmpA"></select></div>
+    <div class="field"><label>Perfume B</label><select id="cmpB"></select></div>
+  </div>
+  <div id="cmpResult"></div>
+  <div class="sheet-foot"><button class="btn-ghost" onclick="closeSheet('k')">Fechar</button></div>
+</div>
+
 <div class="overlay" id="cOverlay" onclick="closeSheet('c')"></div>
 <div class="sheet" id="cSheet" role="dialog" aria-modal="true">
   <h2>IA &amp; Configurações</h2>
@@ -390,9 +418,33 @@ function blankW(){return{status:"tenho",rating:0};}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
+const SB_URL="https://eraxjtfedswksiyigasf.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyYXhqdGZlZHN3a3NpeWlnYXNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1MDc0NzgsImV4cCI6MjEwMDA4MzQ3OH0.y4ruu9PiG037pW6gL_nqhT_H4mzq1S5BLe8y6Et4MXU";
+const SB_ON=!!(SB_URL&&SB_KEY);
+function sbTable(coll){return coll==="perfumes"?"gde_perfumes":"gde_watches";}
+function sbHeaders(extra){return Object.assign({apikey:SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},extra||{});}
+async function sbSelect(coll){const r=await fetch(SB_URL+"/rest/v1/"+sbTable(coll)+"?select=data",{headers:sbHeaders()});if(!r.ok)throw new Error("sb_"+r.status);const rows=await r.json();return rows.map(x=>x.data).filter(Boolean);}
+async function sbUpsert(coll,item){if(!item||!item.id)return;const row={id:item.id,data:item};const r=await fetch(SB_URL+"/rest/v1/"+sbTable(coll),{method:"POST",headers:sbHeaders({Prefer:"resolution=merge-duplicates,return=minimal"}),body:JSON.stringify(row)});if(!r.ok)throw new Error("sb_"+r.status);}
+async function sbDelete(coll,id){const r=await fetch(SB_URL+"/rest/v1/"+sbTable(coll)+"?id=eq."+encodeURIComponent(id),{method:"DELETE",headers:sbHeaders({Prefer:"return=minimal"})});if(!r.ok)throw new Error("sb_"+r.status);}
+async function sbDeleteAll(coll){await fetch(SB_URL+"/rest/v1/"+sbTable(coll)+"?id=not.is.null",{method:"DELETE",headers:sbHeaders({Prefer:"return=minimal"})}).catch(()=>{});}
+function sbInited(){try{return localStorage.getItem("gde:sbInit")==="1";}catch(e){return false;}}
+async function initStatic(){
+  if(!SB_ON)return false;
+  try{
+    const [ps,ws]=await Promise.all([sbSelect("perfumes"),sbSelect("watches")]);
+    mode="supabase";connecting=false;setSync(true,"nuvem");
+    state.perfumes=Array.isArray(ps)?ps:[];state.watches=Array.isArray(ws)?ws:[];
+    if(!sbInited()){
+      if(!state.perfumes.length){let base=null;try{const ls=JSON.parse(localStorage.getItem("gde:perfumes")||"null");if(Array.isArray(ls)&&ls.length)base=ls;}catch(e){}state.perfumes=base||JSON.parse(JSON.stringify(SEED));await Promise.all(state.perfumes.map(p=>sbUpsert("perfumes",p).catch(()=>{})));}
+      if(!state.watches.length){let lw=null;try{const l=JSON.parse(localStorage.getItem("gde:watches")||"null");if(Array.isArray(l)&&l.length)lw=l;}catch(e){}if(lw&&lw.length){state.watches=lw;await Promise.all(lw.map(w=>sbUpsert("watches",w).catch(()=>{})));}}
+      try{localStorage.setItem("gde:sbInit","1");}catch(e){}
+    }
+    saveLocal();pLoaded=wLoaded=true;renderAll();return true;
+  }catch(e){return false;}
+}
 function initCaps(){
   const has = typeof window!=="undefined" && window.claude && typeof window.claude.use==="function";
-  if(!has){ goLocal(); return; }
+  if(!has){ initStatic().then(ok=>{ if(!ok) goLocal(); }).catch(()=>goLocal()); return; }
   claude.use("db").then(ns=>{ if(ns){ dbNS=ns; mode="cloud"; setSync(true); subscribeCloud(); } else goLocal(); }).catch(goLocal);
   claude.use("assets").then(ns=>{assetsNS=ns;}).catch(()=>{});
   claude.use("downloads").then(ns=>{downloadsNS=ns;}).catch(()=>{});
@@ -400,7 +452,7 @@ function initCaps(){
   setTimeout(()=>{ if(connecting && !dbNS) goLocal(); },10500);
 }
 function goLocal(){ if(mode==="cloud")return; mode="local"; connecting=false; setSync(false); loadLocal(); pLoaded=wLoaded=true; renderAll(); }
-function setSync(cloud){$("#sync").classList.toggle("cloud",cloud); $("#syncText").textContent=cloud?"nuvem":"neste dispositivo";}
+function setSync(cloud,label){$("#sync").classList.toggle("cloud",cloud); $("#syncText").textContent=label||(cloud?"nuvem":"neste dispositivo");}
 function subscribeCloud(){
   connecting=false;
   dbNS.collection("perfumes").onSnapshot(s=>{state.perfumes=s.docs.map(d=>({id:d.id,...d.data()})); pLoaded=true; renderPerfumes();},()=>{pLoaded=true;renderPerfumes();});
@@ -416,9 +468,9 @@ function loadLocal(){
 }
 function saveLocal(){try{localStorage.setItem("gde:perfumes",JSON.stringify(state.perfumes));localStorage.setItem("gde:watches",JSON.stringify(state.watches));}catch(e){}}
 
-async function dataAdd(coll,data){ if(mode==="cloud"){await dbNS.collection(coll).add(data);} else{data.id="l"+Date.now()+Math.floor(Math.random()*1000); state[coll].unshift(data); saveLocal(); renderTab(coll);} }
-async function dataUpdate(coll,id,data){ if(mode==="cloud"){const {id:_,...body}=data; await dbNS.doc(coll+"/"+id).set(body);} else{const i=state[coll].findIndex(x=>x.id===id); if(i>=0){state[coll][i]={...state[coll][i],...data,id}; saveLocal(); renderTab(coll);}} }
-async function dataDelete(coll,id){ if(mode==="cloud"){await dbNS.doc(coll+"/"+id).delete();} else{state[coll]=state[coll].filter(x=>x.id!==id); saveLocal(); renderTab(coll);} }
+async function dataAdd(coll,data){ if(mode==="cloud"){await dbNS.collection(coll).add(data);} else{ if(!data.id)data.id="l"+Date.now()+Math.floor(Math.random()*1000); state[coll].unshift(data); saveLocal(); renderTab(coll); if(mode==="supabase")sbUpsert(coll,data).catch(()=>toast("Sem conexão — salvo no aparelho")); } }
+async function dataUpdate(coll,id,data){ if(mode==="cloud"){const {id:_,...body}=data; await dbNS.doc(coll+"/"+id).set(body);} else{const i=state[coll].findIndex(x=>x.id===id); if(i>=0){state[coll][i]={...state[coll][i],...data,id}; saveLocal(); renderTab(coll); if(mode==="supabase")sbUpsert(coll,state[coll][i]).catch(()=>toast("Sem conexão — salvo no aparelho"));}} }
+async function dataDelete(coll,id){ if(mode==="cloud"){await dbNS.doc(coll+"/"+id).delete();} else{state[coll]=state[coll].filter(x=>x.id!==id); saveLocal(); renderTab(coll); if(mode==="supabase")sbDelete(coll,id).catch(()=>{});} }
 function renderTab(coll){coll==="perfumes"?renderPerfumes():renderWatches();}
 function renderAll(){renderPerfumes();renderWatches();}
 
@@ -816,7 +868,7 @@ $("#resetBtn").onclick=async()=>{
     if(mode==="cloud"){
       for(const p of state.perfumes.slice()){try{await dbNS.doc("perfumes/"+p.id).delete();}catch(e){}}
       for(const w of state.watches.slice()){try{if(w.photo_id&&assetsNS)assetsNS.delete(w.photo_id).catch(()=>{});await dbNS.doc("watches/"+w.id).delete();}catch(e){}}
-    }else{state.perfumes=[];state.watches=[];try{localStorage.setItem("gde:seeded","1");}catch(e){}saveLocal();renderAll();}
+    }else{if(mode==="supabase"){await sbDeleteAll("perfumes");await sbDeleteAll("watches");}state.perfumes=[];state.watches=[];try{localStorage.setItem("gde:seeded","1");localStorage.setItem("gde:sbInit","1");}catch(e){}saveLocal();renderAll();}
     closeSheet("c");toast("Coleção zerada");
   }catch(e){toast("Erro ao zerar");}
 };
@@ -1011,6 +1063,71 @@ function renderSuggest(r,owned){
 }
 let tTimer;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove("show"),2600);}
 
+const COMP_B="#7FB2FF";
+const clamp01=x=>Math.max(0,Math.min(1,x));
+function famGroupOf(f){f=f||"";if(["ambar","gourmand","especiado","couro"].includes(f))return "quente";if(["amadeirado","chipre"].includes(f))return "amadeirado";if(["citrico","aquatico","aromatico"].includes(f))return "fresco";if(f==="floral")return "floral";return "outro";}
+function famBlend(fa,fb){const ga=famGroupOf(fa),gb=famGroupOf(fb);if(ga===gb)return .82;const k=[ga,gb].sort().join("|");const m={"amadeirado|quente":.92,"fresco|quente":.6,"amadeirado|fresco":.82,"floral|quente":.8,"floral|fresco":.78,"amadeirado|floral":.8};return m[k]!=null?m[k]:.62;}
+function compatScore(a,b){
+  const na=(a.notes||[]).map(x=>String(x).toLowerCase()), nb=(b.notes||[]).map(x=>String(x).toLowerCase());
+  const setb=new Set(nb), shared=[...new Set(na.filter(x=>setb.has(x)))];
+  const overlap=shared.length/Math.max(1,Math.min(na.length,nb.length));
+  const harmony=1-Math.min(1,Math.abs(overlap-0.35)/0.65);
+  const fam=famBlend(a.family,b.family);
+  const ta=groupValues(a,"tipo"),tb=groupValues(b,"tipo");
+  const compl=clamp01((Math.abs((ta.citrico+ta.aquatico)/2-(tb.citrico+tb.aquatico)/2)+Math.abs((ta.doce||0)-(tb.doce||0)))/20);
+  const curated=(a.layering||[]).some(n=>String(n).toLowerCase()===String(b.name).toLowerCase())||(b.layering||[]).some(n=>String(n).toLowerCase()===String(a.name).toLowerCase());
+  let s=0.45*fam+0.28*harmony+0.15*compl+0.12;
+  if(curated)s=Math.max(s,0.86);
+  return {pct:Math.round(clamp01(s)*100),curated,shared};
+}
+function compareRadarSvg(a,b,gid,size){
+  const grp=RGROUPS.find(x=>x.id===gid)||RGROUPS[0], axes=grp.axes, va=groupValues(a,gid), vb=groupValues(b,gid);
+  const n=axes.length, pad=28, R=size/2-pad, cx=size/2, cy=size/2;
+  const pt=(i,r)=>{const ang=(-90+i*360/n)*Math.PI/180;return [cx+Math.cos(ang)*r,cy+Math.sin(ang)*r];};
+  let g="";
+  [1,.75,.5,.25].forEach(fr=>{const p=axes.map((_,i)=>pt(i,R*fr).map(z=>z.toFixed(1)).join(",")).join(" ");g+=`<polygon points="${p}" fill="none" stroke="var(--radar-grid)" stroke-width="1"/>`;});
+  axes.forEach((_,i)=>{const[x,y]=pt(i,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--radar-grid)" stroke-width="1"/>`;});
+  const poly=(vals,col,fill)=>{const p=axes.map(([k],i)=>pt(i,R*(Math.max(0,Math.min(10,vals[k]||0))/10)).map(z=>z.toFixed(1)).join(",")).join(" ");let s=`<polygon points="${p}" fill="${fill}" stroke="${col}" stroke-width="1.7"/>`;s+=axes.map(([k],i)=>{const v=Math.max(0,Math.min(10,vals[k]||0));const[x,y]=pt(i,R*(v/10));return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.3" fill="${col}"/>`;}).join("");return s;};
+  const l=axes.map(([k,lbl],i)=>{const[x,y]=pt(i,R+13);const anc=Math.abs(x-cx)<4?"middle":(x>cx?"start":"end");return `<text x="${x.toFixed(1)}" y="${(y+3).toFixed(1)}" font-size="10.5" fill="var(--muted)" text-anchor="${anc}">${lbl}</text>`;}).join("");
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="overflow:visible;display:block;margin:0 auto;max-width:100%">${g}${poly(vb,COMP_B,"rgba(127,178,255,.16)")}${poly(va,"var(--gold-bright)","var(--radar-fill)")}${l}</svg>`;
+}
+let cmpGroup="tipo";
+function fillCmpSelect(sel,selId){$(sel).innerHTML=state.perfumes.map(p=>`<option value="${p.id}"${p.id===selId?" selected":""}>${esc(p.name)}${p.brand?" — "+esc(p.brand):""}</option>`).join("");}
+function openCompare(){
+  if(state.perfumes.length<2){toast("Cadastre ao menos 2 perfumes");return;}
+  fillCmpSelect("#cmpA",state.perfumes[0].id);fillCmpSelect("#cmpB",state.perfumes[1].id);
+  $("#cmpA").onchange=renderCompare;$("#cmpB").onchange=renderCompare;
+  cmpGroup="tipo";renderCompare();openSheet("k");
+}
+function renderCompare(){
+  const box=$("#cmpResult");
+  const a=state.perfumes.find(x=>x.id===$("#cmpA").value), b=state.perfumes.find(x=>x.id===$("#cmpB").value);
+  if(!a||!b){box.innerHTML="";return;}
+  if(a.id===b.id){box.innerHTML='<div class="id-note show">Escolha dois perfumes diferentes.</div>';return;}
+  const r=compatScore(a,b), pct=r.pct;
+  const col=pct>=70?"#4FB07E":pct>=55?"var(--gold-bright)":pct>=40?"#E0A24E":"#D08A8A";
+  const verdict=pct>=85?"Excelente combinação para layering":pct>=70?"Combinam muito bem":pct>=55?"Combinam bem":pct>=40?"Combinação neutra — camadas leves":"Contrastam — melhor separados";
+  const fa=famById(a.family),fb=famById(b.family);
+  const reason=(r.curated?"✦ Curadoria indica combinar. ":"")+"Famílias "+fa.name+" + "+fb.name+" · "+(r.shared.length?r.shared.length+" nota(s) em comum":"sem notas em comum");
+  const na=(a.notes||[]).map(x=>x.toLowerCase()), nb=(b.notes||[]).map(x=>x.toLowerCase()), sh=new Set(r.shared.map(x=>x.toLowerCase()));
+  const onlyA=(a.notes||[]).filter(x=>!nb.includes(x.toLowerCase())), onlyB=(b.notes||[]).filter(x=>!na.includes(x.toLowerCase()));
+  const chips=arr=>arr.length?arr.map(x=>`<span class="chip">${esc(x)}</span>`).join(""):'<span class="muted" style="font-size:12px">—</span>';
+  box.innerHTML=`
+    <div class="cmp-score"><div class="cmp-pct" style="color:${col}">${pct}%</div><div class="cmp-verdict">${verdict}</div></div>
+    <div class="cmp-bar"><div style="width:${pct}%;background:${col}"></div></div>
+    <div class="cmp-reason">${esc(reason)}</div>
+    <div class="rtabs cmp-tabs">${RGROUPS.map(gp=>`<button type="button" class="rtab${gp.id===cmpGroup?" on":""}" data-g="${gp.id}">${gp.name}</button>`).join("")}</div>
+    <div id="cmpCanvas"></div>
+    <div class="cmp-legend"><span><i style="background:var(--gold-bright)"></i>${esc(a.name)}</span><span><i style="background:${COMP_B}"></i>${esc(b.name)}</span></div>
+    <div class="cmp-notes">
+      <div class="cn"><div class="cnl">Notas em comum</div>${r.shared.length?r.shared.map(x=>`<span class="chip sh">${esc(x)}</span>`).join(""):'<span class="muted" style="font-size:12px">nenhuma</span>'}</div>
+      <div class="cn"><div class="cnl">Só em ${esc(a.name)}</div>${chips(onlyA)}</div>
+      <div class="cn"><div class="cnl">Só em ${esc(b.name)}</div>${chips(onlyB)}</div>
+    </div>`;
+  document.querySelectorAll("#cmpResult .rtab").forEach(btn=>btn.onclick=()=>{cmpGroup=btn.dataset.g;document.querySelectorAll("#cmpResult .rtab").forEach(x=>x.classList.toggle("on",x.dataset.g===cmpGroup));$("#cmpCanvas").innerHTML=compareRadarSvg(a,b,cmpGroup,300);});
+  $("#cmpCanvas").innerHTML=compareRadarSvg(a,b,cmpGroup,300);
+}
+$("#compareBtn").onclick=openCompare;
 initSuggest();
 renderAll();
 initCaps();
