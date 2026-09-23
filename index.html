@@ -213,6 +213,14 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .muted{color:var(--muted)}
 [hidden]{display:none!important}
 @media (max-width:560px){.summary{grid-template-columns:1fr;gap:16px;padding:18px}.count{min-width:0}.row2{grid-template-columns:1fr}header{padding-top:22px}}
+.dradarbox{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:14px 10px 16px;margin-bottom:14px}
+.rtabs{display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px;margin:0 auto 4px;width:fit-content;max-width:100%;flex-wrap:wrap;justify-content:center}
+.rtab{border:none;background:transparent;color:var(--ink-soft);font-weight:600;font-size:13px;padding:7px 15px;border-radius:9px;cursor:pointer;transition:all .15s}
+.rtab.on{background:var(--gold-bright);color:#0e1a2d}
+.rcap{text-align:center;font-size:11px;color:var(--gold);opacity:.85;margin:4px 0 6px;letter-spacing:.2px}
+#rCanvas{display:flex;justify-content:center}
+#rCanvas svg{max-width:100%;height:auto}
+.dstats2{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
 </style>
 </head>
 <body>
@@ -500,7 +508,7 @@ function perfumeCard(i){
   const conc=i.concentration?` · ${esc(i.concentration)}`:"";
   const bl=(i.brand||conc)?`<p class="brand">${i.brand?`<b>${esc(i.brand)}</b>`:""}${conc}</p>`:"";
   const rt=(i.rating||0)>0?`<span class="pf-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2 14.9 8l6.4.9-4.6 4.5 1 6.4L12 16.8 6.3 19.8l1-6.4L2.7 8.9 9.1 8 12 2.2Z"/></svg>${Number(i.rating).toFixed(1)}</span>`:"";
-  el.innerHTML=`<div class="pf-top"><div class="pf-info"><h3 class="name">${esc(i.name)}</h3>${bl}<div class="fam-tag"><span class="dot"></span>${f.name} <span class="occ-tag">${esc(occasionLabel(i))}</span>${badge?" ":""}${badge}</div></div><div class="pf-radar">${radarSvg(i.radar,86)}</div></div>
+  el.innerHTML=`<div class="pf-top"><div class="pf-info"><h3 class="name">${esc(i.name)}</h3>${bl}<div class="fam-tag"><span class="dot"></span>${f.name} <span class="occ-tag">${esc(occasionLabel(i))}</span>${badge?" ":""}${badge}</div></div><div class="pf-radar">${groupRadarSvg(i,"tipo",86,true)}</div></div>
     <div class="notes">${notes}</div>
     <div class="foot"><div>${rt}${i.size_ml?`<span class="meta-size">${i.size_ml} ml</span>`:""}</div>
     <button class="kebab" aria-label="Opções"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg></button></div>`;
@@ -826,6 +834,77 @@ $("#bulkBtn").onclick=async()=>{
   btn.disabled=false;btn.textContent="Buscar no Fragrantica p/ toda a coleção (IA)";
   toast("Concluído: "+done+" atualizados"+(fail?(", "+fail+" falharam"):""));
 };
+const RGROUPS=[
+  {id:"tipo",name:"Tipo",axes:[["citrico","Cítrico"],["aquatico","Aquático"],["floral","Floral"],["frutado","Frutado"],["doce","Doce"],["especiado","Especiado"],["amadeirado","Amadeirado"],["ambarado","Ambarado"]]},
+  {id:"ocasiao",name:"Ocasião",axes:[["dia","Dia"],["noite","Noite"],["trabalho","Trabalho"],["encontro","Encontro"],["festa","Festa"],["esporte","Esporte"]]},
+  {id:"estacao",name:"Estação",axes:[["verao","Verão"],["primavera","Primavera"],["outono","Outono"],["inverno","Inverno"]]},
+  {id:"publico",name:"Público",axes:[["masculino","Masculino"],["unissex","Unissex"],["feminino","Feminino"],["jovem","Jovem"],["maduro","Maduro"]]}
+];
+let detailGroup="tipo";
+function deriveGroups(p){
+  const r=p.radar||{}, fam=(p.family||""), g=(p.gender||"").toLowerCase();
+  const nt=(p.notes||[]).join(" ").toLowerCase();
+  const hit=(...ws)=>ws.some(w=>nt.includes(w))?9:2;
+  const tipo={
+    citrico:r.citrico||0, aquatico:r.maritimo||0,
+    floral: fam==="floral"?9:hit("rosa","jasmim","flor","lavanda","íris","violeta","gerânio"),
+    frutado: hit("maçã","abacaxi","frutas","frutas vermelhas","laranja","pêssego","fruta","tâmara"),
+    doce:r.doce||0,
+    especiado: fam==="especiado"?9:hit("pimenta","canela","cardamomo","açafrão","gengibre","especiarias","noz-moscada"),
+    amadeirado: fam==="amadeirado"?9:(r.amadeirado||hit("sândalo","cedro","vetiver","madeira","oud","patchouli","madeiras")),
+    ambarado: (fam==="ambar")?9:hit("âmbar","baunilha","benjoim","incenso","resina","resinas","tonka","ambar-cinza")
+  };
+  const ocasiao={
+    dia:r.dia||0, noite:r.noite||0, encontro:r.romantico||0,
+    trabalho:clamp(Math.round(((r.versatilidade||r.dia||0)+(10-(r.projecao||5)))/2),0,10),
+    festa:clamp(Math.round(((r.noite||0)+(r.projecao||0))/2),0,10),
+    esporte:clamp(Math.round(((r.citrico||0)+(r.maritimo||0))/2),0,10)
+  };
+  const seas=(p.seasons||[]).map(s=>String(s).toLowerCase());
+  const sv=n=>seas.includes(n)?9:2;
+  let estacao={verao:sv("verão"),primavera:sv("primavera"),outono:sv("outono"),inverno:sv("inverno")};
+  if(!seas.length){estacao={verao:clamp((r.maritimo||0)+(r.citrico||0)>10?9:4,0,10),primavera:6,outono:6,inverno:clamp(r.doce||4,0,10)};}
+  const publico={
+    masculino:g==="masculino"?9:g==="feminino"?2:6,
+    feminino:g==="feminino"?9:g==="masculino"?2:6,
+    unissex:g==="unissex"?9:5,
+    jovem:clamp(Math.round(((r.citrico||0)+(r.maritimo||0)+(r.dia||0))/3),0,10),
+    maduro:clamp(Math.round(((tipo.amadeirado)+(tipo.ambarado)+(r.noite||0))/3),0,10)
+  };
+  return {tipo,ocasiao,estacao,publico};
+}
+function groupValues(p,gid){
+  const stored=(p.groups&&p.groups[gid])||{}, der=deriveGroups(p)[gid], out={};
+  Object.keys(der).forEach(k=>{const s=stored[k];out[k]=(s!=null&&!isNaN(Number(s)))?clamp(Math.round(s),0,10):der[k];});
+  return out;
+}
+function groupRadarSvg(p,gid,size,noLabels){
+  const grp=RGROUPS.find(x=>x.id===gid)||RGROUPS[0], axes=grp.axes, gv=groupValues(p,gid);
+  const n=axes.length, pad=noLabels?4:28, R=size/2-pad, cx=size/2, cy=size/2;
+  const pt=(i,r)=>{const a=(-90+i*360/n)*Math.PI/180;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r];};
+  const v=axes.map(([k])=>Math.max(0,Math.min(10,gv[k]||0)));
+  const mx=Math.max.apply(null,v), maxi=v.indexOf(mx);
+  let g="";
+  (noLabels?[1,.66,.33]:[1,.75,.5,.25]).forEach(fr=>{const p2=axes.map((_,i)=>pt(i,R*fr).map(z=>z.toFixed(1)).join(",")).join(" ");g+=`<polygon points="${p2}" fill="none" stroke="var(--radar-grid)" stroke-width="1"/>`;});
+  axes.forEach((_,i)=>{const[x,y]=pt(i,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--radar-grid)" stroke-width="1"/>`;});
+  let d="";
+  if(v.some(x=>x>0)){
+    const poly=v.map((val,i)=>pt(i,R*(val/10)).map(z=>z.toFixed(1)).join(",")).join(" ");
+    d=`<polygon points="${poly}" fill="var(--radar-fill)" stroke="var(--gold-bright)" stroke-width="1.6"/>`;
+    d+=v.map((val,i)=>{if(val<=0)return"";const[x,y]=pt(i,R*(val/10));return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${noLabels?2:2.6}" fill="var(--gold-bright)"/>`;}).join("");
+  }
+  let l="";
+  if(!noLabels){l=axes.map(([k,lbl],i)=>{const[x,y]=pt(i,R+14);const anc=Math.abs(x-cx)<4?"middle":(x>cx?"start":"end");const hi=i===maxi&&v[i]>0;return `<text x="${x.toFixed(1)}" y="${(y+3).toFixed(1)}" font-size="${hi?12:10.5}" font-weight="${hi?"700":"500"}" fill="${hi?"var(--gold-bright)":"var(--muted)"}" text-anchor="${anc}">${lbl}</text>`;}).join("");}
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="overflow:visible;display:block;margin:0 auto;max-width:100%">${g}${d}${l}</svg>`;
+}
+function radarTabsHtml(){
+  return `<div class="rtabs">${RGROUPS.map(gp=>`<button type="button" class="rtab${gp.id===detailGroup?" on":""}" data-g="${gp.id}">${gp.name}</button>`).join("")}</div><div class="rcap">✦ perfil olfativo</div><div id="rCanvas"></div>`;
+}
+function paintRadarTab(p){
+  const box=document.querySelector("#rCanvas");if(!box)return;
+  box.innerHTML=groupRadarSvg(p,detailGroup,320);
+  document.querySelectorAll(".rtab").forEach(b=>b.classList.toggle("on",b.dataset.g===detailGroup));
+}
 function openDetail(id){
   const i=state.perfumes.find(x=>x.id===id);if(!i)return;detailId=id;
   const f=famById(i.family);
@@ -842,13 +921,16 @@ function openDetail(id){
   const layer=(i.layering||[]).length?`<div class="dblock"><div class="dlabel">Combina com (layering)</div><div class="notes">${i.layering.map(l=>`<span class="chip">${esc(l)}</span>`).join("")}</div></div>`:"";
   const rt=(i.rating||0)>0?`<div class="dbig"><span class="pf-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2 14.9 8l6.4.9-4.6 4.5 1 6.4L12 16.8 6.3 19.8l1-6.4L2.7 8.9 9.1 8 12 2.2Z"/></svg>${Number(i.rating).toFixed(1)}</span><span class="muted">/10</span></div>`:"";
   $("#dBody").innerHTML=`<div class="dhead"><div><div class="mk">${esc(i.brand||"—")}${i.concentration?" · "+esc(i.concentration):""}</div><h2>${esc(i.name)}</h2><div class="fam-tag"><span class="dot" style="background:${f.color}"></span>${f.name} <span class="occ-tag">Melhor: ${esc(occasionLabel(i))}</span>${badge}</div>${meta?`<div class="muted" style="font-size:12px;margin-top:6px">${meta}</div>`:""}</div><button class="kebab" onclick="closeSheet('d')" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-   <div class="dgrid"><div class="dradar">${radarSvg(i.radar,230,{labels:true})}</div><div class="dstats">${rt}${bar("Doçura",doce,"#FFB74D")}${bar("Performance",perf,"#FF8A65")}<div class="dmetrics">${metrics}</div></div></div>
+   <div class="dradarbox">${radarTabsHtml()}</div>
+   <div class="dstats2">${rt}${bar("Doçura",doce,"#FFB74D")}${bar("Performance",perf,"#FF8A65")}</div>
    ${hasPyr?`<div class="dblock"><div class="dlabel">Pirâmide olfativa</div><div class="pyr">${prow("Topo",i.pyramid.top)}${prow("Coração",i.pyramid.heart)}${prow("Fundo",i.pyramid.base)}</div></div>`:`<div class="dblock"><div class="dlabel">Notas</div><div class="notes">${notes}</div></div>`}
    <div class="dblock"><div class="dlabel">Estações</div><div>${esc(seasons)}</div></div>
    ${i.comment?`<div class="dblock"><div class="dlabel">Observações</div><div>${esc(i.comment)}</div></div>`:""}${layer}${sources}
    <div class="sheet-foot"><button class="btn-ghost" id="dAiBtn">Buscar no Fragrantica (IA)</button><button class="btn-primary" id="dEditBtn">Editar</button></div>`;
   $("#dEditBtn").onclick=()=>{closeSheet("d");openPerfume(id);};
   $("#dAiBtn").onclick=()=>aiUpdateExisting(id);
+  paintRadarTab(i);
+  document.querySelectorAll(".rtab").forEach(b=>b.onclick=()=>{detailGroup=b.dataset.g;paintRadarTab(i);});
   openSheet("d");
 }
 async function aiUpdateExisting(id){
