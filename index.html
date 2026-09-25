@@ -1103,35 +1103,36 @@ function collectionSearchPrompt(name,brand,owned){
     notas:(p.notes||[]).slice(0,12),estacoes:p.seasons||[],ocasiao:p.best_occasion||"",
     radar:p.radar||{},rating:p.rating||0,observacoes:p.comment||""
   }));
-  return 'Você é um consultor de curadoria de coleção de perfumes. O usuário está avaliando COMPRAR um perfume novo. '+
-  'Pesquise o perfume candidato em fontes confiáveis na web, priorizando Fragrantica, Parfumo e o site oficial da marca. '+
-  'Depois compare o candidato com a coleção REAL fornecida abaixo. Não invente dados sobre o candidato: se houver incerteza, declare-a. '+
-  'O objetivo é responder se a compra adiciona diversidade à coleção ou se é principalmente redundante. '+
-  'Considere família, notas, acordes/perfil, estação, ocasião, performance e o radar da coleção. '+
-  'Não diga simplesmente que é parecido: identifique quais perfumes existentes são os mais próximos e por quê. '+
-  'Também identifique 1-3 lacunas que o candidato poderia preencher, se realmente preencher alguma. '+
-  'Responda SOMENTE JSON válido, sem markdown: '+
-  '{"candidate":{"name":"","brand":"","family":"","concentration":"","notes":[],"seasons":[],"best_occasion":"","rating":0,"comment":"","sources":[{"title":"","uri":""}]},"verdict":"ADICIONA_DIVERSIDADE|PARCIALMENTE_REDUNDANTE|MUITO_REDUNDANTE|DADOS_INSUFICIENTES","confidence":0,"summary":"","closest":[{"id":"","name":"","reason":"","similarity":0}],"gaps":[],"risks":[],"purchase_case":"","sources":[{"title":"","uri":""}]}. '+
-  'confidence é de 0 a 100 e representa confiança nos dados, não recomendação de compra. '+
+  return 'Você é um consultor de curadoria de coleção de perfumes. Pesquise o perfume candidato em fontes confiáveis, priorizando Fragrantica, Parfumo e site oficial. Compare-o SOMENTE com a coleção REAL fornecida. Não invente dados. '+
+  'Calcule uma diversidade estimada de 0 a 100: 0 = praticamente ocupa o mesmo espaço olfativo/uso que perfumes existentes; 100 = acrescenta um espaço claramente novo. '+
+  'Calcule redundância estimada de 0 a 100, considerando família, notas, acordes, radar/perfil, estação, ocasião e desempenho. '+
+  'Identifique até 5 perfumes existentes mais próximos, explique a sobreposição e qual percentual aproximado do perfil se repete. '+
+  'Depois determine se o candidato cria uma lacuna relevante de coleção. A resposta deve informar fatos e estimativas, não uma ordem de compra. '+
+  'Responda SOMENTE JSON válido: '+
+  '{"candidate":{"name":"","brand":"","family":"","concentration":"","notes":[],"seasons":[],"best_occasion":"","rating":0,"comment":"","sources":[{"title":"","uri":""}]},"verdict":"ADICIONA_DIVERSIDADE|PARCIALMENTE_REDUNDANTE|MUITO_REDUNDANTE|DADOS_INSUFICIENTES","confidence":0,"diversity_score":0,"redundancy_score":0,"collection_coverage":0,"summary":"","space_added":"","closest":[{"id":"","name":"","reason":"","overlap":0}],"gaps":[],"risks":[],"purchase_case":"","sources":[{"title":"","uri":""}]}. '+
+  'diversity_score, redundancy_score e collection_coverage são estimativas analíticas de 0 a 100; não são notas de qualidade. '+
   'Coleção atual: '+JSON.stringify(compact)+'. Candidato: '+JSON.stringify({name,brand});
 }
 function renderCollectionSearch(r,owned){
   if(!r||!r.candidate){$("#qResult").innerHTML='<div class="id-note show">A IA não retornou dados suficientes.</div>';return;}
   const v=r.verdict||"DADOS_INSUFICIENTES";
   const labels={ADICIONA_DIVERSIDADE:"Adiciona diversidade",PARCIALMENTE_REDUNDANTE:"Parcialmente redundante",MUITO_REDUNDANTE:"Muito redundante",DADOS_INSUFICIENTES:"Dados insuficientes"};
-  const p=owned.find(x=>x.id===((r.closest||[])[0]||{}).id);
-  const list=(arr,empty)=>Array.isArray(arr)&&arr.length?'<ul class="ai-search-list">'+arr.slice(0,4).map(x=>'<li>'+esc(typeof x==="string"?x:(x.reason||x.name||""))+'</li>').join("")+'</ul>':'<p>'+empty+'</p>';
+  const div=clamp(r.diversity_score||0,0,100), red=clamp(r.redundancy_score||0,0,100), cov=clamp(r.collection_coverage||0,0,100);
+  const list=(arr,empty)=>Array.isArray(arr)&&arr.length?'<ul class="ai-search-list">'+arr.slice(0,5).map(x=>'<li>'+esc(typeof x==="string"?x:(x.reason||x.name||""))+'</li>').join("")+'</ul>':'<p>'+empty+'</p>';
   let html='<div class="ai-search-head"><div><div class="ai-search-verdict">'+esc(labels[v]||v)+'</div><div class="ai-search-sub">'+esc(r.summary||"")+'</div></div><div class="ai-search-badge">Confiança '+clamp(r.confidence||0,0,100)+'%</div></div>';
   html+='<div class="ai-search-grid">';
-  html+='<div class="ai-search-box"><div class="dlabel">Perfume pesquisado</div><p><b>'+esc(r.candidate.brand||"")+'</b> · '+esc(r.candidate.name||"")+'<br>'+esc(r.candidate.family||"")+(r.candidate.concentration?" · "+esc(r.candidate.concentration):"")+'</p></div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Caso de compra</div><p>'+esc(r.purchase_case||"")+'</p></div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Mais próximos na sua coleção</div>';
-  if(Array.isArray(r.closest)&&r.closest.length) html+='<ul class="ai-search-list">'+r.closest.slice(0,4).map(x=>'<li><b>'+esc(x.name||"")+'</b> · '+clamp(x.similarity||0,0,100)+'% — '+esc(x.reason||"")+'</li>').join("")+'</ul>';
+  html+='<div class="ai-search-box"><div class="dlabel">Diversidade adicionada</div><p><b>'+div+'%</b><br><span class="ai-search-sub">Quanto o candidato amplia o espaço olfativo/uso da coleção.</span></p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Redundância estimada</div><p><b>'+red+'%</b><br><span class="ai-search-sub">Quanto ele se sobrepõe ao que você já possui.</span></p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Cobertura da coleção</div><p><b>'+cov+'%</b><br><span class="ai-search-sub">Estimativa de quanto do perfil do candidato já é representado por sua coleção.</span></p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Espaço que ele acrescenta</div><p>'+esc(r.space_added||"Não identificado.")+'</p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Perfumes mais próximos</div>';
+  if(Array.isArray(r.closest)&&r.closest.length) html+='<ul class="ai-search-list">'+r.closest.slice(0,5).map(x=>'<li><b>'+esc(x.name||"")+'</b> · sobreposição '+clamp(x.overlap||0,0,100)+'% — '+esc(x.reason||"")+'</li>').join("")+'</ul>';
   else html+='<p>Nenhum semelhante identificado.</p>';
   html+='</div>';
   html+='<div class="ai-search-box"><div class="dlabel">Lacunas que pode preencher</div>'+list(r.gaps,"Nenhuma lacuna clara foi identificada.")+'</div>';
   html+='<div class="ai-search-box"><div class="dlabel">Riscos de redundância</div>'+list(r.risks,"Nenhum risco relevante informado.")+'</div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Notas encontradas</div><p>'+esc((r.candidate.notes||[]).slice(0,8).join(", ")||"Não informado")+'</p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Caso de compra</div><p>'+esc(r.purchase_case||"")+'</p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Perfume pesquisado</div><p><b>'+esc(r.candidate.brand||"")+'</b> · '+esc(r.candidate.name||"")+'<br>'+esc(r.candidate.family||"")+(r.candidate.concentration?" · "+esc(r.candidate.concentration):"")+'<br>'+esc((r.candidate.notes||[]).slice(0,8).join(", ")||"Notas não informadas")+'</p></div>';
   html+='</div>';
   const src=(r.sources||r.candidate.sources||[]).filter(x=>x&&x.uri).slice(0,5);
   html+='<div class="ai-search-foot">Fontes consultadas: '+(src.length?src.map(x=>'<a href="'+esc(x.uri)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||x.uri)+'</a>').join(" · "):"o provedor não retornou URLs de fonte")+'</div>';
@@ -1143,15 +1144,11 @@ async function runCollectionSearch(){
   const owned=state.perfumes.filter(p=>p.status==="tenho");
   if(!owned.length){toast("Sua coleção está vazia");return;}
   const btn=$("#qRun");btn.disabled=true;btn.textContent="Pesquisando e comparando…";$("#qResult").innerHTML="";
-  try{
-    const out=await aiComplete(collectionSearchPrompt(name,brand,owned));
-    renderCollectionSearch(out.data,owned);
-  }catch(e){$("#qResult").innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
+  try{const out=await aiComplete(collectionSearchPrompt(name,brand,owned));renderCollectionSearch(out.data,owned);}
+  catch(e){$("#qResult").innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
   finally{btn.disabled=false;btn.textContent="Analisar minha coleção";}
 }
-$("#collectionSearchBtn").onclick=()=>{
-  $("#q_name").value="";$("#q_brand").value="";$("#qResult").innerHTML="";openSheet("q");setTimeout(()=>$("#q_name").focus(),100);
-};
+$("#collectionSearchBtn").onclick=()=>{$("#q_name").value="";$("#q_brand").value="";$("#qResult").innerHTML="";openSheet("q");setTimeout(()=>$("#q_name").focus(),100);};
 $("#qRun").onclick=runCollectionSearch;
 $("#q_name").addEventListener("keydown",e=>{if(e.key==="Enter")runCollectionSearch();});
 
