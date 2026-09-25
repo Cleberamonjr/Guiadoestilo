@@ -505,6 +505,14 @@ header::after{
 .profile-radar{display:flex;align-items:center;justify-content:center;min-height:310px;padding:6px 4px 0}
 .collection-radar-svg{display:block;width:min(100%,330px);height:auto;overflow:visible;filter:drop-shadow(0 10px 18px rgba(0,0,0,.2))}
 @media(max-width:560px){.profile-radar{min-height:285px;padding-inline:0}.collection-radar-svg{width:min(100%,310px)}}
+</style><style id="commercial-ux-css">
+.profile-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.profile-action{appearance:none;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:12px 13px;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.profile-action:hover{transform:translateY(-2px);border-color:var(--gold-bright);box-shadow:var(--shadow)}
+.profile-action span{display:block;color:var(--gold-bright);font-size:18px;line-height:1;margin-bottom:7px}
+.profile-action b{display:block;font-size:12.5px}
+.profile-action small{display:block;color:var(--muted);font-size:10.5px;margin-top:3px}
+@media(max-width:620px){.profile-actions{grid-template-columns:1fr}.profile-action{display:grid;grid-template-columns:24px 1fr;column-gap:8px;align-items:center}.profile-action span{grid-row:1/3;margin:0}.profile-action small{margin-top:1px}}
 </style></head>
 <body>
 <div class="wrap">
@@ -539,6 +547,11 @@ header::after{
         </div>
         <div class="profile-count" id="profileCount">0<small>perfumes na coleção</small></div>
       </div>
+      <div class="profile-actions" aria-label="Ações rápidas">
+        <button type="button" class="profile-action" onclick="document.getElementById('oaOccasion').focus();document.getElementById('occasionAdvisor').scrollIntoView({behavior:'smooth',block:'start'})"><span>✦</span><b>Escolher perfume</b><small>Para uma ocasião</small></button>
+        <button type="button" class="profile-action" onclick="openSheet('q')"><span>⌕</span><b>Consultar compra</b><small>Ver se vale acrescentar</small></button>
+        <button type="button" class="profile-action" onclick="document.getElementById('pSearch').focus();document.getElementById('pSearch').scrollIntoView({behavior:'smooth',block:'center'})"><span>◌</span><b>Explorar coleção</b><small>Buscar e filtrar</small></button>
+      </div>
       <div class="profile-grid">
         <article class="profile-card">
           <h3>Perfil olfativo</h3>
@@ -546,9 +559,9 @@ header::after{
           <div class="profile-radar" id="profileBars" aria-label="Radar do perfil olfativo da coleção"></div>
         </article>
         <article class="profile-card">
-          <h3>Perfil psicocomportamental</h3>
+          <h3>Impacto social</h3>
           <p id="profilePsych">—</p>
-          <p class="profile-note">Interpretação de preferência e estilo baseada na coleção; não é diagnóstico psicológico ou clínico.</p>
+          <p class="profile-note">Leitura baseada no DNA olfativo da coleção e em associações perceptivas; não é diagnóstico psicológico.</p>
           <div class="profile-families" id="profileFamilies"></div>
         </article>
       </div>
@@ -1449,7 +1462,7 @@ function renderCollectionProfile(){
     ["Sensualidade",Math.round(owned.reduce((s,p)=>s+(p.radar?.romantico||0),0)/owned.length*10)],
     ["Frescor",Math.round(owned.reduce((s,p)=>s+(p.radar?.frescor||0),0)/owned.length*10)],
     ["Doçura",Math.round(owned.reduce((s,p)=>s+(p.radar?.doce||0),0)/owned.length*10)]
-  ].map(x=>[x[0],clamp(x[1],0,100)]).sort((a,b)=>b[1]-a[1]);
+  ].map(x=>[x[0],clamp(x[1],0,100)]);
   const topType=Object.entries(RGROUPS[0].axes.reduce((acc,[k,l])=>{acc[l]=owned.reduce((s,p)=>s+(groupValues(p,"tipo")[k]||0),0)/owned.length;return acc;},{})).sort((a,b)=>b[1]-a[1])[0];
   const topOcc=Object.entries(RGROUPS[1].axes.reduce((acc,[k,l])=>{acc[l]=owned.reduce((s,p)=>s+(groupValues(p,"ocasiao")[k]||0),0)/owned.length;return acc;},{})).sort((a,b)=>b[1]-a[1])[0];
   const fam={};owned.forEach(p=>{const f=famById(p.family);fam[f.name]=(fam[f.name]||0)+1;});
@@ -1457,14 +1470,21 @@ function renderCollectionProfile(){
   const dominant=fams[0]?.[0]||"perfil diversificado";
   head.textContent='Predomínio de '+dominant.toLowerCase()+', com maior afinidade por '+(topOcc?.[0]||"uso versátil").toLowerCase()+'.';
   olf.textContent='Sua coleção combina '+(topType?.[0]||"vários estilos").toLowerCase()+' com '+(topOcc?.[0]||"versatilidade").toLowerCase()+', indicando um guarda-roupa olfativo construído para presença e contexto.';
-  const radarAxes=metrics.slice(0,6).map(([label,value])=>[label,value]);
+  const radarAxes=["Elegância","Versatilidade","Presença","Sensualidade","Frescor","Doçura"].map(label=>[label,metrics.find(x=>x[0]===label)?.[1]||0]);
   $("#profileBars").innerHTML=collectionProfileRadarSvg(radarAxes,330);
   $("#profileFamilies").innerHTML=fams.slice(0,6).map(([k,v])=>'<span>'+esc(k)+' · '+v+'</span>').join("");
+  const ranked=[...metrics].sort((a,b)=>b[1]-a[1]);
   const e=metrics.find(x=>x[0]==="Elegância")?.[1]||0, pr=metrics.find(x=>x[0]==="Presença")?.[1]||0, fr=metrics.find(x=>x[0]==="Frescor")?.[1]||0, se=metrics.find(x=>x[0]==="Sensualidade")?.[1]||0;
   const traits=[];
   if(e>=70)traits.push("sofisticação e controle de imagem"); if(pr>=70)traits.push("presença e impacto"); if(se>=70)traits.push("expressividade e magnetismo"); if(fr>=70)traits.push("busca por leveza e estímulo");
   if(!traits.length)traits.push("equilíbrio entre identidade e contexto");
-  psych.textContent='O padrão da coleção sugere preferência por '+traits.slice(0,3).join(", ")+'. Isso descreve seu comportamento de escolha olfativa — não permite inferir personalidade, saúde mental ou traços clínicos com validade científica.';
+  const socialMap=[];
+  if(e>=70)socialMap.push("sofisticação");
+  if(pr>=70)socialMap.push("presença");
+  if(fr>=70)socialMap.push("energia e leveza");
+  if(se>=70)socialMap.push("magnetismo");
+  if(!socialMap.length)socialMap.push("equilíbrio e adaptação ao contexto");
+  psych.textContent='Sua coleção apresenta maior potencial de comunicação de '+socialMap.slice(0,3).join(", ")+'. Em termos de percepção, esse conjunto tende a construir uma imagem '+(ranked[0]?.[0]||"equilibrada").toLowerCase()+' e orientada ao contexto.';
 }
 function renderOccasionAdvisor(r,owned){
   const byId={};owned.forEach(p=>byId[p.id]=p);
