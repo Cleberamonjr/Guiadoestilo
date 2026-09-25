@@ -1092,7 +1092,20 @@ $("#pSave").onclick=async()=>{
     closeSheet("p");toast(pEdit?"Perfume atualizado":"Perfume salvo com sucesso");
   }catch(e){
     console.error("Guia do Estilo: erro ao salvar perfume",e);
-    toast("Não foi possível salvar o perfume. Seus dados locais foram preservados.");
+    // Última camada: garante o salvamento local mesmo se alguma etapa de UI/sincronização falhar.
+    try{
+      if(!pEdit){
+        if(!Array.isArray(state.perfumes))state.perfumes=[];
+        const fallback={...pDraft,name,brand:$("#f_brand").value.trim(),concentration:$("#f_conc").value,
+          family:$("#f_fam").value,size_ml:$("#f_size").value?Number($("#f_size").value):null,
+          rating:Number($("#f_rating").value)||0,comment:$("#f_comment").value.trim(),created_at:Date.now()};
+        if(!fallback.id)fallback.id="l"+Date.now()+Math.floor(Math.random()*1000);
+        state.perfumes.unshift(fallback); saveLocal(); pLoaded=true; renderPerfumes();
+        closeSheet("p"); toast("Perfume salvo no aparelho. Sincronização pendente.");
+        return;
+      }
+    }catch(localErr){console.error("Falha no fallback local",localErr);}
+    toast("Erro ao salvar: "+(e&&e.message?e.message:"erro desconhecido"));
   }finally{
     btn.disabled=false;btn.textContent=pEdit?"Salvar alterações":"Salvar perfume";
   }
