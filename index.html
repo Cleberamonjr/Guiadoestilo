@@ -243,7 +243,21 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .cmp-opinion p:last-child{margin-bottom:0}
 .cmp-opinion .cvd{font-weight:700;color:var(--ink);font-size:14px}
 </style>
-</head>
+<style id="collection-ai-search-css">
+.ai-search-result{margin-top:16px}
+.ai-search-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px;border:1px solid var(--line);background:var(--bg);border-radius:14px}
+.ai-search-verdict{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1.05}
+.ai-search-sub{font-size:12.5px;color:var(--muted);margin-top:4px}
+.ai-search-badge{font-size:11px;font-weight:700;padding:5px 9px;border-radius:20px;background:var(--surface-2);color:var(--ink-soft);white-space:nowrap}
+.ai-search-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.ai-search-box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.ai-search-box .dlabel{margin-bottom:5px}
+.ai-search-box p{margin:0;font-size:13px;color:var(--ink-soft)}
+.ai-search-list{margin:6px 0 0;padding-left:18px;color:var(--ink-soft);font-size:13px}
+.ai-search-list li{margin:4px 0}
+.ai-search-foot{margin-top:10px;font-size:11.5px;color:var(--muted)}
+@media(max-width:560px){.ai-search-grid{grid-template-columns:1fr}}
+</style></head>
 <body>
 <div class="wrap">
   <header>
@@ -252,7 +266,8 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
     <div class="top-actions">
       <button class="icon-btn" id="installBtn" title="Instalar app" aria-label="Instalar app" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 6v7m0 0-2.4-2.4M12 13l2.4-2.4M9.5 18.5h5"/></svg></button>
       <button class="icon-btn" id="suggestBtn" title="Sugestão pelo look" aria-label="Sugestão pelo look"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z"/><circle cx="18.5" cy="17.5" r="2.4"/></svg></button>
-      <button class="icon-btn" id="compareBtn" title="Comparar perfumes" aria-label="Comparar perfumes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="12" r="6.5"/><circle cx="15" cy="12" r="6.5"/></svg></button>
+      <button class="icon-btn" id="compareBtn" title="Comparar perfumes" aria-label="Comparar perfumes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="12" r="6.5"/><circle cx="15" cy="12" r="6.5"/></svg></button> 
+      <button class="icon-btn" id="collectionSearchBtn" title="Pesquisar perfume na coleção" aria-label="Pesquisar perfume na coleção"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.2 4.2"/><path d="M8.5 10.8h4.6M10.8 8.5v4.6"/></svg></button>
       <button class="icon-btn" id="cfgBtn" title="IA / Configurações" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.2a1.6 1.6 0 0 0-2.6-1.1 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4.6 15H4.4a2 2 0 0 1 0-4h.2A1.6 1.6 0 0 0 6 8.4a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10.6A1.6 1.6 0 0 0 12 2.6V2.4a2 2 0 0 1 4 0v.2a1.6 1.6 0 0 0 2.6 1.1 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V8.4a1.6 1.6 0 0 0 1.4 1.4h.2a2 2 0 0 1 0 4H21a1.6 1.6 0 0 0-1.4 1.2z"/></svg></button>
       <button class="icon-btn" id="themeBtn" title="Tema" aria-label="Alternar tema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
       <button class="icon-btn" id="dlBtn" title="Backup" aria-label="Exportar backup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></button>
@@ -373,6 +388,18 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
   <div class="sheet-foot"><button class="btn-ghost" onclick="closeSheet('k')">Fechar</button></div>
 </div>
 
+<div class="overlay" id="qOverlay" onclick="closeSheet('q')"></div>
+<div class="sheet" id="qSheet" role="dialog" aria-modal="true">
+  <h2>Pesquisar perfume</h2>
+  <div class="id-note show" style="margin-top:0">Digite um perfume que você está pensando em comprar. A IA compara o perfil dele com os perfumes que você já tem e procura sinais de redundância, lacunas e diferenciação.</div>
+  <div class="row2">
+    <div class="field"><label>Nome do perfume <span class="req">*</span></label><input type="text" id="q_name" placeholder="Ex.: Dior Homme 2020" autocomplete="off"></div>
+    <div class="field"><label>Marca / casa (opcional)</label><input type="text" id="q_brand" placeholder="Ex.: Dior" autocomplete="off"></div>
+  </div>
+  <button class="btn-primary" id="qRun" style="width:100%">Analisar minha coleção</button>
+  <div id="qResult" class="ai-search-result"></div>
+  <div class="sheet-foot"><button class="btn-ghost" onclick="closeSheet('q')">Fechar</button></div>
+</div>
 <div class="overlay" id="cOverlay" onclick="closeSheet('c')"></div>
 <div class="sheet" id="cSheet" role="dialog" aria-modal="true">
   <h2>IA &amp; Configurações</h2>
@@ -1067,6 +1094,66 @@ function renderSuggest(r,owned){
   $("#sResult").innerHTML=html||'<div class="id-note show">Não encontrei um match claro.</div>';
 }
 let tTimer;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove("show"),2600);}
+
+/* Collection purchase advisor */
+function normalizeText(x){return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();}
+function collectionSearchPrompt(name,brand,owned){
+  const compact=owned.slice(0,100).map(p=>({
+    id:p.id,nome:p.name,marca:p.brand,familia:p.family,concentracao:p.concentration,
+    notas:(p.notes||[]).slice(0,12),estacoes:p.seasons||[],ocasiao:p.best_occasion||"",
+    radar:p.radar||{},rating:p.rating||0,observacoes:p.comment||""
+  }));
+  return 'Você é um consultor de curadoria de coleção de perfumes. O usuário está avaliando COMPRAR um perfume novo. '+
+  'Pesquise o perfume candidato em fontes confiáveis na web, priorizando Fragrantica, Parfumo e o site oficial da marca. '+
+  'Depois compare o candidato com a coleção REAL fornecida abaixo. Não invente dados sobre o candidato: se houver incerteza, declare-a. '+
+  'O objetivo é responder se a compra adiciona diversidade à coleção ou se é principalmente redundante. '+
+  'Considere família, notas, acordes/perfil, estação, ocasião, performance e o radar da coleção. '+
+  'Não diga simplesmente que é parecido: identifique quais perfumes existentes são os mais próximos e por quê. '+
+  'Também identifique 1-3 lacunas que o candidato poderia preencher, se realmente preencher alguma. '+
+  'Responda SOMENTE JSON válido, sem markdown: '+
+  '{"candidate":{"name":"","brand":"","family":"","concentration":"","notes":[],"seasons":[],"best_occasion":"","rating":0,"comment":"","sources":[{"title":"","uri":""}]},"verdict":"ADICIONA_DIVERSIDADE|PARCIALMENTE_REDUNDANTE|MUITO_REDUNDANTE|DADOS_INSUFICIENTES","confidence":0,"summary":"","closest":[{"id":"","name":"","reason":"","similarity":0}],"gaps":[],"risks":[],"purchase_case":"","sources":[{"title":"","uri":""}]}. '+
+  'confidence é de 0 a 100 e representa confiança nos dados, não recomendação de compra. '+
+  'Coleção atual: '+JSON.stringify(compact)+'. Candidato: '+JSON.stringify({name,brand});
+}
+function renderCollectionSearch(r,owned){
+  if(!r||!r.candidate){$("#qResult").innerHTML='<div class="id-note show">A IA não retornou dados suficientes.</div>';return;}
+  const v=r.verdict||"DADOS_INSUFICIENTES";
+  const labels={ADICIONA_DIVERSIDADE:"Adiciona diversidade",PARCIALMENTE_REDUNDANTE:"Parcialmente redundante",MUITO_REDUNDANTE:"Muito redundante",DADOS_INSUFICIENTES:"Dados insuficientes"};
+  const p=owned.find(x=>x.id===((r.closest||[])[0]||{}).id);
+  const list=(arr,empty)=>Array.isArray(arr)&&arr.length?'<ul class="ai-search-list">'+arr.slice(0,4).map(x=>'<li>'+esc(typeof x==="string"?x:(x.reason||x.name||""))+'</li>').join("")+'</ul>':'<p>'+empty+'</p>';
+  let html='<div class="ai-search-head"><div><div class="ai-search-verdict">'+esc(labels[v]||v)+'</div><div class="ai-search-sub">'+esc(r.summary||"")+'</div></div><div class="ai-search-badge">Confiança '+clamp(r.confidence||0,0,100)+'%</div></div>';
+  html+='<div class="ai-search-grid">';
+  html+='<div class="ai-search-box"><div class="dlabel">Perfume pesquisado</div><p><b>'+esc(r.candidate.brand||"")+'</b> · '+esc(r.candidate.name||"")+'<br>'+esc(r.candidate.family||"")+(r.candidate.concentration?" · "+esc(r.candidate.concentration):"")+'</p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Caso de compra</div><p>'+esc(r.purchase_case||"")+'</p></div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Mais próximos na sua coleção</div>';
+  if(Array.isArray(r.closest)&&r.closest.length) html+='<ul class="ai-search-list">'+r.closest.slice(0,4).map(x=>'<li><b>'+esc(x.name||"")+'</b> · '+clamp(x.similarity||0,0,100)+'% — '+esc(x.reason||"")+'</li>').join("")+'</ul>';
+  else html+='<p>Nenhum semelhante identificado.</p>';
+  html+='</div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Lacunas que pode preencher</div>'+list(r.gaps,"Nenhuma lacuna clara foi identificada.")+'</div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Riscos de redundância</div>'+list(r.risks,"Nenhum risco relevante informado.")+'</div>';
+  html+='<div class="ai-search-box"><div class="dlabel">Notas encontradas</div><p>'+esc((r.candidate.notes||[]).slice(0,8).join(", ")||"Não informado")+'</p></div>';
+  html+='</div>';
+  const src=(r.sources||r.candidate.sources||[]).filter(x=>x&&x.uri).slice(0,5);
+  html+='<div class="ai-search-foot">Fontes consultadas: '+(src.length?src.map(x=>'<a href="'+esc(x.uri)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||x.uri)+'</a>').join(" · "):"o provedor não retornou URLs de fonte")+'</div>';
+  $("#qResult").innerHTML=html;
+}
+async function runCollectionSearch(){
+  const name=$("#q_name").value.trim(),brand=$("#q_brand").value.trim();
+  if(!name){toast("Digite o nome do perfume");return;}
+  const owned=state.perfumes.filter(p=>p.status==="tenho");
+  if(!owned.length){toast("Sua coleção está vazia");return;}
+  const btn=$("#qRun");btn.disabled=true;btn.textContent="Pesquisando e comparando…";$("#qResult").innerHTML="";
+  try{
+    const out=await aiComplete(collectionSearchPrompt(name,brand,owned));
+    renderCollectionSearch(out.data,owned);
+  }catch(e){$("#qResult").innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
+  finally{btn.disabled=false;btn.textContent="Analisar minha coleção";}
+}
+$("#collectionSearchBtn").onclick=()=>{
+  $("#q_name").value="";$("#q_brand").value="";$("#qResult").innerHTML="";openSheet("q");setTimeout(()=>$("#q_name").focus(),100);
+};
+$("#qRun").onclick=runCollectionSearch;
+$("#q_name").addEventListener("keydown",e=>{if(e.key==="Enter")runCollectionSearch();});
 
 const COMP_B="#EFC13A";
 const clamp01=x=>Math.max(0,Math.min(1,x));
