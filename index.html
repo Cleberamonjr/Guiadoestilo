@@ -991,7 +991,7 @@ function renderPerfumes(){
   else if(["dia","noite","romantico","doce","citrico","maritimo"].includes(sort))list.sort((a,b)=>((b.radar&&b.radar[sort])||0)-((a.radar&&a.radar[sort])||0));
   else list.sort((a,b)=>(b.created_at||0)-(a.created_at||0));
   const grid=$("#pGrid");grid.innerHTML="";
-  if(has&&!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:36px 0">Nenhum perfume com esses filtros.</div>`;return;}
+  if(has&&!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:36px 0"><div style="font-size:14px;margin-bottom:10px">Nenhum perfume corresponde aos filtros atuais.</div><button type="button" class="btn-ghost" id="clearPerfumeFilters" style="height:40px">Limpar filtros e mostrar a coleção</button></div>`;const cb=$("#clearPerfumeFilters");if(cb)cb.onclick=()=>{$("#pSearch").value="";$("#pFamily").value="";$("#pCharacteristic").value="";$("#pStatus").value="";$("#pSort").value="recent";renderPerfumes();};return;}
   list.forEach(i=>grid.appendChild(perfumeCard(i)));
 }
 function perfumeCard(i){
@@ -1304,27 +1304,83 @@ function buildAxisChecks(){
   const box=$("#axisChecks");box.innerHTML="";const sel=getAxes();
   METRICS.forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.dataset.k=k;b.setAttribute("aria-pressed",sel.includes(k));b.onclick=()=>b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")!=="true");box.appendChild(b);});
 }
+async function recoverLegacyCloudPerfumes(){
+  // The original app could use the host-provided cloud DB before Supabase.
+  // Read only; never delete or overwrite anything during diagnosis.
+  try{
+    if(!dbNS && window.claude && typeof window.claude.use==="function"){
+      try{dbNS=await window.claude.use("db");}catch(e){}
+    }
+    if(!dbNS || typeof dbNS.collection!=="function")return [];
+    const ref=dbNS.collection("perfumes");
+    if(ref && typeof ref.get==="function"){
+      const snap=await ref.get();
+      const docs=(snap&&snap.docs)||[];
+      return docs.map(d=>({id:d.id,...(typeof d.data==="function"?d.data():{})}));
+    }
+    if(ref && typeof ref.onSnapshot==="function"){
+      return await new Promise((resolve,reject)=>{
+        let done=false;
+        const finish=(fn,v)=>{if(done)return;done=true;clearTimeout(timer);try{fn(v)}catch(e){reject(e)}};
+        const timer=setTimeout(()=>finish(reject,new Error("cloud_timeout")),7000);
+        try{
+          ref.onSnapshot(
+            s=>finish(resolve,((s&&s.docs)||[]).map(d=>({id:d.id,...(typeof d.data==="function"?d.data():{})}))),
+            e=>finish(reject,e||new Error("cloud_error"))
+          );
+        }catch(e){finish(reject,e)}
+      });
+    }
+  }catch(e){}
+  return [];
+}
 $("#recoverBtn").onclick=async()=>{
   const out=$("#recoverStatus");
-  out.textContent="Verificando fontes de recuperação…";
-  let localCount=0, backupCount=0, cloudCount=0;
-  let localData=null, backupData=null, cloudData=null;
+  out.textContent="Verificando Local, Backup, Supabase e Cloud antigo…";
+  let localCount=0, backupCount=0, cloudCount=0, legacyCount=0;
+  let localData=null, backupData=null, cloudData=null, legacyData=null;
+
   try{localData=JSON.parse(localStorage.getItem("gde:perfumes")||"null");}catch(e){}
   try{backupData=JSON.parse(localStorage.getItem("gde:perfumes_backup")||"null");}catch(e){}
   if(Array.isArray(localData))localCount=localData.length;
   if(Array.isArray(backupData))backupCount=backupData.length;
+
   try{cloudData=await sbSelect("perfumes");if(Array.isArray(cloudData))cloudCount=cloudData.length;}catch(e){}
-  out.textContent="Local: "+localCount+" • Backup: "+backupCount+" • Supabase: "+cloudCount;
-  const source=cloudCount?cloudData:(backupCount?backupData:(localCount?localData:null));
+  legacyData=await recoverLegacyCloudPerfumes();
+  if(Array.isArray(legacyData))legacyCount=legacyData.length;
+
+  out.textContent="Local: "+localCount+" • Backup: "+backupCount+" • Supabase: "+cloudCount+" • Cloud antigo: "+legacyCount;
+
+  // Prefer the historical cloud source, then Supabase, then local recovery copies.
+  const source=legacyCount?legacyData:(cloudCount?cloudData:(backupCount?backupData:(localCount?localData:null)));
+  const sourceName=legacyCount?"Cloud antigo":cloudCount?"Supabase":backupCount?"Backup":"Local";
+
   if(!source||!source.length){
-    out.textContent+="\nNenhuma cópia da coleção foi encontrada automaticamente. Não vou substituir seus dados por uma lista nova.";
+    out.textContent+="\nNenhuma cópia completa foi encontrada automaticamente. Os dados atuais serão preservados e a lista SEED não será usada para substituir sua coleção.";
     return;
   }
-  if(!confirm("Encontrei "+source.length+" perfumes. Restaurar essa coleção no aparelho?"))return;
+
+  const names=source.slice(0,5).map(p=>p&&p.name).filter(Boolean).join(", ");
+  if(!confirm("Encontrei "+source.length+" perfumes em "+sourceName+". Restaurar essa coleção no aparelho?"+(names?"\n\nExemplos: "+names:""))){
+    return;
+  }
+
   state.perfumes=JSON.parse(JSON.stringify(source));
-  saveLocal(); renderAll();
-  if(mode==="supabase" && source.length) await Promise.all(source.map(p=>sbUpsert("perfumes",p).catch(()=>{})));
-  out.textContent="✅ Coleção restaurada: "+source.length+" perfumes.";
+  try{localStorage.setItem("gde:sbInit","1");}catch(e){}
+  saveLocal();
+  // Re-render after clearing any stale browser filters so recovered records are visible.
+  try{$("#pSearch").value="";$("#pFamily").value="";$("#pCharacteristic").value="";$("#pStatus").value="";$("#pSort").value="recent";}catch(e){}
+  pLoaded=true;
+  renderAll();
+
+  // If the source was the old cloud, also migrate the recovered collection to Supabase.
+  if(source.length && SB_ON){
+    let migrated=0;
+    await Promise.all(source.map(async p=>{try{await sbUpsert("perfumes",p);migrated++;}catch(e){}}));
+    out.textContent="✅ Coleção restaurada: "+source.length+" perfumes ("+sourceName+"). Supabase recebeu "+migrated+" registros.";
+  }else{
+    out.textContent="✅ Coleção restaurada: "+source.length+" perfumes ("+sourceName+").";
+  }
   toast("Coleção restaurada");
 };
 $("#resetBtn").onclick=async()=>{
