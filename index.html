@@ -608,8 +608,8 @@ function renderPerfumes(){
   const bar=$("#famBar"),leg=$("#famLegend");bar.innerHTML="";leg.innerHTML="";
   if(owned.length){const c={};owned.forEach(i=>{const k=i.family||"outra";c[k]=(c[k]||0)+1;});
     FAMILIES.filter(f=>c[f.id]).sort((a,b)=>c[b.id]-c[a.id]).forEach(f=>{const s=document.createElement("span");s.style.flex=c[f.id];s.style.background=f.color;bar.appendChild(s);const it=document.createElement("div");it.className="i";it.innerHTML=`<span class="dot" style="background:${f.color}"></span>${f.name} <span>${c[f.id]}</span>`;leg.appendChild(it);});}
-  const q=$("#pSearch").value.trim().toLowerCase(),ff=$("#pFamily").value,fs=$("#pStatus").value,sort=$("#pSort").value;
-  let list=state.perfumes.filter(i=>{if(ff&&i.family!==ff)return false;if(fs&&i.status!==fs)return false;if(q){const h=(i.name+" "+(i.brand||"")+" "+(i.notes||[]).join(" ")).toLowerCase();if(!h.includes(q))return false;}return true;});
+  const q=$("#pSearch").value.trim().toLowerCase(),ff=$("#pFamily").value,ch=$("#pCharacteristic").value,fs=$("#pStatus").value,sort=$("#pSort").value;
+  let list=state.perfumes.filter(i=>{if(ff&&i.family!==ff)return false;if(ch&&!strictCharacteristicMatch(i,ch))return false;if(fs&&i.status!==fs)return false;if(q){const h=(i.name+" "+(i.brand||"")+" "+(i.notes||[]).join(" ")).toLowerCase();if(!h.includes(q))return false;}return true;});
   if(sort==="name")list.sort((a,b)=>a.name.localeCompare(b.name,"pt"));
   else if(sort==="rating")list.sort((a,b)=>(b.rating||0)-(a.rating||0));
   else if(["dia","noite","romantico","doce","citrico","maritimo"].includes(sort))list.sort((a,b)=>((b.radar&&b.radar[sort])||0)-((a.radar&&a.radar[sort])||0));
