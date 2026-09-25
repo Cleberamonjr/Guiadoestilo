@@ -257,7 +257,7 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .ai-search-list li{margin:4px 0}
 .ai-search-foot{margin-top:10px;font-size:11.5px;color:var(--muted)}
 @media(max-width:560px){.ai-search-grid{grid-template-columns:1fr}}
-</style></head>
+.occasion-advisor{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}.occasion-advisor .oa-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--gold);font-weight:700}.occasion-advisor h2{font-family:var(--serif);font-size:26px;margin:3px 0 4px}.occasion-advisor .oa-sub{font-size:12.5px;color:var(--muted);margin:0 0 13px}.oa-row{display:flex;gap:9px}.oa-row input{flex:1;height:44px;border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:0 13px;outline:none}.oa-row input:focus{border-color:var(--gold)}.oa-row button{height:44px;padding:0 17px;border:0;border-radius:11px;background:var(--accent);color:var(--accent-ink);font-weight:700}.oa-result{margin-top:13px}.oa-result-card{border:1px solid var(--gold-line);background:var(--bg);border-radius:14px;padding:14px}.oa-result-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.oa-result-name{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.05}.oa-result-brand{font-size:12px;color:var(--muted);margin-top:2px}.oa-score{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--gold-bright);white-space:nowrap}.oa-why{font-size:13.5px;color:var(--ink-soft);margin-top:8px}.oa-meta{font-size:11.5px;color:var(--muted);margin-top:8px}.char-filter{position:relative}.char-filter select{appearance:none;height:44px;padding:0 34px 0 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);outline:none;font-weight:500;font-size:14px;cursor:pointer}.char-filter:after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}@media(max-width:560px){.oa-row{flex-direction:column}.oa-row button{width:100%}.occasion-advisor{padding:16px}.oa-result-top{align-items:flex-start}.oa-score{font-size:26px}}</style></head>
 <body>
 <div class="wrap">
   <header>
@@ -282,9 +282,17 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
       <div class="count"><div class="num" id="pCount">0</div><div class="lbl"><b id="pWord">frascos</b><span class="w">na coleção</span><div id="pWish"></div></div></div>
       <div><p class="p-ttl">Perfil olfativo</p><div class="fam-bar" id="famBar"></div><div class="fam-legend" id="famLegend"></div></div>
     </div>
+    <section class="occasion-advisor" id="occasionAdvisor" aria-label="Consultor de ocasião">
+      <div class="oa-kicker">Consultor da sua coleção</div>
+      <h2>Para qual ocasião você vai usar?</h2>
+      <p class="oa-sub">Digite a ocasião — por exemplo: “entrevista de trabalho às 10h30, clima quente”. O consultor escolhe apenas entre os perfumes que você possui.</p>
+      <div class="oa-row"><input id="oaOccasion" type="text" placeholder="Ex.: reunião de negócios pela manhã" autocomplete="off"><button id="oaRun" type="button">Consultar</button></div>
+      <div class="oa-result" id="oaResult" aria-live="polite"></div>
+    </section>
     <div class="bar-row" id="pControls" hidden>
       <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg><input id="pSearch" placeholder="Buscar por nome, marca ou nota…" autocomplete="off"></div>
       <div class="select"><select id="pFamily"><option value="">Todas as famílias</option></select></div>
+      <div class="char-filter"><select id="pCharacteristic" aria-label="Filtrar por característica"><option value="">Qualquer característica</option><option value="dia">Dia</option><option value="noite">Noite</option><option value="romantico">Romântico</option><option value="doce">Doce</option><option value="maritimo">Aquático / marinho</option><option value="citrico">Cítrico</option><option value="projecao">Alta projeção</option><option value="longevidade">Alta longevidade</option><option value="versatilidade">Versátil</option><option value="frescor">Fresco</option><option value="amadeirado">Amadeirado</option><option value="elegancia">Elegante</option><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="festa">Festa</option><option value="esporte">Esporte</option><option value="verao">Verão</option><option value="primavera">Primavera</option><option value="outono">Outono</option><option value="inverno">Inverno</option></select></div>
       <div class="select"><select id="pStatus"><option value="">Todas</option><option value="tenho">Tenho</option><option value="desejo">Desejo</option><option value="acabou">Acabou</option></select></div>
       <div class="select"><select id="pSort"><option value="recent">Recentes</option><option value="rating">Rating</option><option value="dia">Dia</option><option value="noite">Noite</option><option value="romantico">Romântico</option><option value="doce">Doce</option><option value="name">Nome A–Z</option></select></div>
       <button class="btn-add" onclick="openPerfume()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Perfume</button>
@@ -563,6 +571,32 @@ function renderNotes(){notesBox.querySelectorAll(".tag").forEach(t=>t.remove());
 function switchTab(t){tab=t;$("#tabP").setAttribute("aria-selected",t==="perfumes");$("#tabW").setAttribute("aria-selected",t==="watches");$("#viewPerfumes").hidden=t!=="perfumes";$("#viewWatches").hidden=t!=="watches";}
 window.switchTab=switchTab;
 
+function characteristicValue(p,key){
+  const r=p.radar||{};
+  if(["verao","primavera","outono","inverno"].includes(key)) return (p.seasons||[]).some(s=>normalizeText(s)===normalizeText({verao:"Verão",primavera:"Primavera",outono:"Outono",inverno:"Inverno"}[key]))?10:0;
+  if(["trabalho","encontro","festa","esporte"].includes(key)) return groupValues(p,"ocasiao")[key]||0;
+  if(key==="amadeirado") return groupValues(p,"tipo").amadeirado||0;
+  return Number(r[key]||0);
+}
+function strictCharacteristicMatch(p,key){return characteristicValue(p,key)>=7;}
+function localOccasionScore(p,occasion){
+  const n=normalizeText(occasion),r=p.radar||{},g=groupValues(p,"ocasiao"),t=groupValues(p,"tipo");
+  const weights=[];
+  const add=(k,w)=>weights.push([(g[k]??r[k]??t[k]??0),w]);
+  if(/trabalho|empresa|reuniao|entrevista|escritorio|negocio|business/.test(n)){add("trabalho",1.5);add("dia",1);add("noite",.2);}
+  if(/encontro|date|romant|jantar a dois|namor/.test(n)){add("encontro",1.5);add("noite",1);add("romantico",1.2);}
+  if(/festa|balada|casamento|evento|formatura/.test(n)){add("festa",1.4);add("noite",1);add("projecao",.8);}
+  if(/esporte|academia|treino|corrida/.test(n)){add("esporte",1.5);add("dia",1);add("frescor",.8);}
+  if(/manha|manhã|dia|almoco|almoço/.test(n))add("dia",1.1);
+  if(/noite|noturno|jantar/.test(n))add("noite",1.1);
+  if(/calor|quente|verao|verão|praia/.test(n)){add("frescor",.9);add("citrico",.7);add("maritimo",.7);}
+  if(/frio|inverno|outono/.test(n)){add("doce",.7);add("noite",.7);}
+  if(/elegante|executivo|luxo|formal/.test(n)){add("elegancia",1.2);add("trabalho",.8);}
+  if(!weights.length){add("versatilidade",1);add("dia",.5);add("noite",.5);}
+  let total=0,w=0;weights.forEach(([v,ww])=>{total+=Number(v||0)*ww;w+=ww;});
+  const base=w?total/w:5;
+  return clamp(Math.round(base*10),0,100);
+}
 function renderPerfumes(){
   const loading=(mode!=="local"&&!pLoaded);
   if(loading){$("#pGrid").innerHTML="";$("#pEmpty").hidden=true;$("#pSummary").hidden=true;$("#pControls").hidden=true;return;}
@@ -721,7 +755,7 @@ function openSheet(p){$("#"+p+"Overlay").classList.add("open");$("#"+p+"Sheet").
 function closeSheet(p){$("#"+p+"Overlay").classList.remove("open");$("#"+p+"Sheet").classList.remove("open");document.body.style.overflow="";}
 window.openPerfume=openPerfume;window.openWatch=openWatch;window.closeSheet=closeSheet;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("#pSheet").classList.contains("open"))closeSheet("p");if($("#wSheet").classList.contains("open"))closeSheet("w");}});
-["pSearch","pFamily","pStatus","pSort"].forEach(id=>$("#"+id).addEventListener("input",renderPerfumes));
+["pSearch","pFamily","pCharacteristic","pStatus","pSort"].forEach(id=>$("#"+id).addEventListener("input",renderPerfumes));
 ["wSearch","wStatus","wSort"].forEach(id=>$("#"+id).addEventListener("input",renderWatches));
 
 (function(){try{const t=localStorage.getItem("gde:theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
@@ -1095,7 +1129,35 @@ function renderSuggest(r,owned){
 }
 let tTimer;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove("show"),2600);}
 
-/* Collection purchase advisor */
+
+function renderOccasionAdvisor(r,owned){
+  const byId={};owned.forEach(p=>byId[p.id]=p);
+  const p=byId[r.id]||owned.find(x=>x.name===r.name);
+  if(!p){$("#oaResult").innerHTML='<div class="id-note show">O consultor não encontrou um perfume válido dentro da sua coleção.</div>';return;}
+  const pct=clamp(r.match_percent!=null?r.match_percent:localOccasionScore(p,$("#oaOccasion").value),0,100);
+  $("#oaResult").innerHTML='<div class="oa-result-card"><div class="oa-result-top"><div><div class="oa-result-brand">'+esc(p.brand||"")+'</div><div class="oa-result-name">'+esc(p.name)+'</div></div><div class="oa-score">'+pct+'%</div></div><div class="oa-why">'+esc(r.why||"Melhor correspondência encontrada para a ocasião informada.")+'</div><div class="oa-meta">Compatibilidade estimada com a ocasião · baseada somente na sua coleção.</div></div>';
+}
+async function runOccasionAdvisor(){
+  const occasion=$("#oaOccasion").value.trim();
+  if(!occasion){$("#oaOccasion").focus();toast("Digite a ocasião");return;}
+  const owned=state.perfumes.filter(p=>p.status==="tenho");
+  if(!owned.length){toast("Sua coleção está vazia");return;}
+  const btn=$("#oaRun");btn.disabled=true;btn.textContent="Consultando…";$("#oaResult").innerHTML="";
+  const ranked=owned.map(p=>({p,score:localOccasionScore(p,occasion)})).sort((a,b)=>b.score-a.score);
+  const list=owned.map(p=>({id:p.id,nome:p.name,marca:p.brand,familia:p.family,notas:(p.notes||[]).slice(0,8),radar:p.radar||{},estacoes:p.seasons||[],ocasiao:p.best_occasion||"",observacoes:p.comment||""}));
+  const prompt='Você é meu consultor pessoal de fragrâncias. Ocasião informada: '+JSON.stringify(occasion)+'. Escolha EXATAMENTE 1 perfume entre os ids da coleção abaixo. Avalie adequação ao contexto informado usando perfil olfativo, horário, estação, projeção, longevidade, elegância, versatilidade e notas. Não invente perfumes fora da lista. Retorne SOMENTE JSON válido: {"id":"id_da_colecao","match_percent":0,"why":"explicação objetiva em 1-2 frases"}. match_percent é compatibilidade estimada de 0 a 100, NÃO é nota de qualidade. Coleção: '+JSON.stringify(list);
+  try{
+    const out=await aiComplete(prompt);let r=out.data||{};
+    if(!r.id||!owned.some(p=>p.id===r.id)){r={id:ranked[0].p.id,match_percent:ranked[0].score,why:"É a maior correspondência calculada localmente para as características da ocasião."};}
+    renderOccasionAdvisor(r,owned);
+  }catch(e){
+    const top=ranked[0];renderOccasionAdvisor({id:top.p.id,match_percent:top.score,why:"O consultor usou o perfil da sua coleção para encontrar a maior compatibilidade disponível."},owned);
+    toast("IA indisponível; usei a análise local da coleção.");
+  }finally{btn.disabled=false;btn.textContent="Consultar";}
+}
+$("#oaRun").onclick=runOccasionAdvisor;
+$("#oaOccasion").addEventListener("keydown",e=>{if(e.key==="Enter")runOccasionAdvisor();});
+\n/* Collection purchase advisor */
 function normalizeText(x){return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();}
 function collectionSearchPrompt(name,brand,owned){
   const compact=owned.slice(0,100).map(p=>({
