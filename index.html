@@ -513,6 +513,15 @@ header::after{
 .profile-action b{display:block;font-size:12.5px}
 .profile-action small{display:block;color:var(--muted);font-size:10.5px;margin-top:3px}
 @media(max-width:620px){.profile-actions{grid-template-columns:1fr}.profile-action{display:grid;grid-template-columns:24px 1fr;column-gap:8px;align-items:center}.profile-action span{grid-row:1/3;margin:0}.profile-action small{margin-top:1px}}
+</style><style id="product-navigation-css">
+.product-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:0 0 16px;padding:7px;background:var(--surface);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow);position:sticky;top:8px;z-index:20;backdrop-filter:blur(14px)}
+.product-nav-item{border:1px solid transparent;background:transparent;color:var(--muted);border-radius:12px;padding:9px 8px;text-align:center;cursor:pointer;transition:.18s ease}
+.product-nav-item span{display:block;color:var(--gold-bright);font-size:17px;line-height:1;margin-bottom:4px}
+.product-nav-item b{display:block;font-size:11.5px;color:var(--ink)}
+.product-nav-item small{display:block;font-size:9.5px;margin-top:2px}
+.product-nav-item:hover,.product-nav-item.active{background:var(--bg);border-color:var(--line);transform:translateY(-1px)}
+.legacy-tabs{display:none!important}
+@media(max-width:620px){.product-nav{grid-template-columns:repeat(4,1fr);gap:4px;padding:5px;top:4px}.product-nav-item{padding:8px 3px}.product-nav-item span{font-size:16px}.product-nav-item b{font-size:10.5px}.product-nav-item small{font-size:8.5px}.product-nav-item[data-view="watches"]{grid-column:span 4}.product-nav-item[data-view="watches"]{display:none}}
 </style></head>
 <body>
 <div class="wrap">
@@ -529,7 +538,14 @@ header::after{
       <button class="icon-btn" id="dlBtn" title="Backup" aria-label="Exportar backup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></button>
     </div>
   </header>
-  <div class="tabs" role="tablist">
+  <nav class="product-nav" aria-label="Navegação principal">
+    <button class="product-nav-item active" type="button" data-view="perfumes" onclick="switchProductView('colecao')"><span>◈</span><b>Coleção</b><small>Seu acervo</small></button>
+    <button class="product-nav-item" type="button" data-view="consultor" onclick="focusProductSection('occasionAdvisor')"><span>✦</span><b>Consultor</b><small>Qual usar?</small></button>
+    <button class="product-nav-item" type="button" data-view="impacto" onclick="focusProductSection('profileDashboard')"><span>◎</span><b>Impacto</b><small>Como comunica</small></button>
+    <button class="product-nav-item" type="button" data-view="compra" onclick="openSheet('q')"><span>⌕</span><b>Compra</b><small>O que acrescentar?</small></button>
+    <button class="product-nav-item" type="button" data-view="watches" onclick="switchProductView('relogios')"><span>◷</span><b>Relógios</b><small>Seu acervo</small></button>
+  </nav>
+  <div class="legacy-tabs" role="tablist" aria-hidden="true">
     <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Perfumes</button>
     <button role="tab" id="tabW" aria-selected="false" onclick="switchTab('watches')">Relógios</button>
   </div>
@@ -1705,5 +1721,20 @@ initCaps();
   }
 })();
 </script>
-</body>
+<script id="product-navigation-js">
+function setProductNav(view){
+  document.querySelectorAll(".product-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+}
+function focusProductSection(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  setProductNav(id==="profileDashboard"?"impacto":"consultor");
+  el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function switchProductView(view){
+  if(view==="relogios"){switchTab("watches");setProductNav("watches");return;}
+  switchTab("perfumes");setProductNav("perfumes");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script></body>
 </html>
