@@ -278,7 +278,230 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .ai-search-list li{margin:4px 0}
 .ai-search-foot{margin-top:10px;font-size:11.5px;color:var(--muted)}
 @media(max-width:560px){.ai-search-grid{grid-template-columns:1fr}}
-.occasion-advisor{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}.occasion-advisor .oa-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--gold);font-weight:700}.occasion-advisor h2{font-family:var(--serif);font-size:26px;margin:3px 0 4px}.occasion-advisor .oa-sub{font-size:12.5px;color:var(--muted);margin:0 0 13px}.oa-row{display:flex;gap:9px}.oa-row input{flex:1;height:44px;border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:0 13px;outline:none}.oa-row input:focus{border-color:var(--gold)}.oa-row button{height:44px;padding:0 17px;border:0;border-radius:11px;background:var(--accent);color:var(--accent-ink);font-weight:700}.oa-result{margin-top:13px}.oa-result-card{border:1px solid var(--gold-line);background:var(--bg);border-radius:14px;padding:14px}.oa-result-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.oa-result-name{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.05}.oa-result-brand{font-size:12px;color:var(--muted);margin-top:2px}.oa-score{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--gold-bright);white-space:nowrap}.oa-why{font-size:13.5px;color:var(--ink-soft);margin-top:8px}.oa-meta{font-size:11.5px;color:var(--muted);margin-top:8px}.char-filter{position:relative}.char-filter select{appearance:none;height:44px;padding:0 34px 0 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);outline:none;font-weight:500;font-size:14px;cursor:pointer}.char-filter:after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}@media(max-width:560px){.oa-row{flex-direction:column}.oa-row button{width:100%}.occasion-advisor{padding:16px}.oa-result-top{align-items:flex-start}.oa-score{font-size:26px}}</style></head>
+.occasion-advisor{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}.occasion-advisor .oa-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--gold);font-weight:700}.occasion-advisor h2{font-family:var(--serif);font-size:26px;margin:3px 0 4px}.occasion-advisor .oa-sub{font-size:12.5px;color:var(--muted);margin:0 0 13px}.oa-row{display:flex;gap:9px}.oa-row input{flex:1;height:44px;border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:0 13px;outline:none}.oa-row input:focus{border-color:var(--gold)}.oa-row button{height:44px;padding:0 17px;border:0;border-radius:11px;background:var(--accent);color:var(--accent-ink);font-weight:700}.oa-result{margin-top:13px}.oa-result-card{border:1px solid var(--gold-line);background:var(--bg);border-radius:14px;padding:14px}.oa-result-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.oa-result-name{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.05}.oa-result-brand{font-size:12px;color:var(--muted);margin-top:2px}.oa-score{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--gold-bright);white-space:nowrap}.oa-why{font-size:13.5px;color:var(--ink-soft);margin-top:8px}.oa-meta{font-size:11.5px;color:var(--muted);margin-top:8px}.char-filter{position:relative}.char-filter select{appearance:none;height:44px;padding:0 34px 0 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);outline:none;font-weight:500;font-size:14px;cursor:pointer}.char-filter:after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}@media(max-width:560px){.oa-row{flex-direction:column}.oa-row button{width:100%}.occasion-advisor{padding:16px}.oa-result-top{align-items:flex-start}.oa-score{font-size:26px}}
+/* === Tech UI layer: mantém a paleta existente e moderniza a linguagem visual === */
+:root{
+  --tech-radius:18px;
+  --tech-ease:cubic-bezier(.2,.75,.2,1);
+}
+body{
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size:32px 32px;
+  background-position:center top;
+}
+.wrap{position:relative}
+header{
+  position:relative;
+  padding-top:32px;
+  padding-bottom:18px;
+}
+header::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--line),transparent);
+  opacity:.9;
+}
+.brand h1{
+  letter-spacing:.2px;
+  text-shadow:0 0 24px rgba(255,255,255,.04);
+}
+.brand .sub{margin-top:10px}
+.sync{
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  background:rgba(255,255,255,.018);
+}
+.top-actions .icon-btn{
+  border-radius:13px;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  transition:transform .18s var(--tech-ease),border-color .18s,color .18s,box-shadow .18s;
+}
+.top-actions .icon-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+.tabs{
+  width:100%;
+  justify-content:flex-start;
+  border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.tabs button{
+  position:relative;
+  flex:0 0 auto;
+  transition:transform .18s var(--tech-ease),background .18s,color .18s,box-shadow .18s;
+}
+.tabs button[aria-selected="true"]{
+  box-shadow:0 0 0 1px var(--accent),0 7px 20px -8px rgba(0,0,0,.55);
+}
+.summary,
+.profile-dashboard,
+.occasion-advisor,
+.card,
+.dradarbox,
+.ai-search-box,
+.cmp-opinion{
+  position:relative;
+  overflow:hidden;
+}
+.summary::before,
+.profile-dashboard::before,
+.occasion-advisor::before,
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.035),transparent 35%,transparent 70%,rgba(255,255,255,.018));
+  opacity:.8;
+}
+.summary::after,
+.profile-dashboard::after,
+.occasion-advisor::after{
+  content:"";
+  position:absolute;
+  width:140px;height:140px;
+  right:-90px;top:-90px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  opacity:.55;
+  pointer-events:none;
+}
+.summary,
+.profile-dashboard,
+.occasion-advisor{
+  border-radius:var(--tech-radius);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.025);
+}
+.card{
+  border-radius:var(--tech-radius);
+  transform:translateZ(0);
+  transition:transform .22s var(--tech-ease),box-shadow .22s var(--tech-ease),border-color .22s;
+}
+.card:hover{
+  transform:translateY(-4px);
+  border-color:var(--gold-line);
+}
+.search input,
+.select select,
+.btn-add,
+.field input[type=text],
+.field input[type=number],
+.field textarea,
+.field select{
+  transition:transform .18s var(--tech-ease),border-color .18s,box-shadow .18s,background .18s;
+}
+.search input:focus,
+.select select:focus,
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  box-shadow:0 0 0 3px rgba(255,255,255,.025),0 8px 22px -14px rgba(0,0,0,.7);
+}
+.btn-add,
+.btn-primary{
+  position:relative;
+  overflow:hidden;
+}
+.btn-add::after,
+.btn-primary::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.18) 50%,transparent 80%);
+  transform:translateX(-130%);
+  transition:transform .55s var(--tech-ease);
+  pointer-events:none;
+}
+.btn-add:hover::after,
+.btn-primary:hover::after{transform:translateX(130%)}
+.profile-dashboard{
+  margin:0 0 20px;
+  padding:22px;
+  border:1px solid var(--line);
+  background:var(--surface);
+}
+.profile-hero{
+  position:relative;
+  z-index:1;
+}
+.profile-count{
+  box-shadow:inset 0 0 0 1px var(--line),0 12px 28px -20px rgba(0,0,0,.65);
+}
+.profile-card{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+  transition:transform .2s var(--tech-ease),border-color .2s,box-shadow .2s;
+}
+.profile-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--gold-line);
+  box-shadow:var(--shadow);
+}
+.profile-bars .bar-row .bt{
+  box-shadow:inset 0 0 0 1px var(--line);
+}
+.occasion-advisor{
+  border:1px solid var(--line);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.025);
+}
+.occasion-advisor input{
+  transition:border-color .18s,box-shadow .18s;
+}
+.occasion-advisor input:focus{
+  box-shadow:0 0 0 3px rgba(255,255,255,.025);
+}
+.pf-radar svg,
+.dradar svg,
+#rCanvas svg,
+#cmpCanvas svg{
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,.18));
+}
+.badge,
+.fam-tag .dot,
+.profile-count{
+  box-shadow:0 0 0 1px rgba(255,255,255,.025);
+}
+.empty{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.025),transparent 45%),
+    var(--surface);
+}
+.empty::after{
+  content:"";
+  position:absolute;
+  inset:14px;
+  border:1px dashed var(--line);
+  border-radius:14px;
+  pointer-events:none;
+  opacity:.55;
+}
+@media (max-width:560px){
+  body{background-size:26px 26px}
+  header{padding-top:24px}
+  .tabs{
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{padding:9px 15px}
+  .summary,.profile-dashboard,.occasion-advisor{border-radius:16px}
+  .grid{grid-template-columns:1fr;gap:12px}
+  .card:hover{transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .card,.profile-card,.top-actions .icon-btn{transform:none!important}
+}
+</style></head>
 <body>
 <div class="wrap">
   <header>
