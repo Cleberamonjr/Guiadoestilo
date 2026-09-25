@@ -728,7 +728,10 @@ header::after{
   </div>
   <div class="hint">Chave salva só neste navegador. <b>Gemini</b> usa Google Search e <b>GLM</b> usa web_search — os campos factuais e as fontes vêm dessas buscas reais.</div>
   <div class="field" style="margin-top:8px"><label>Variáveis do radar (escolha 3 ou mais)</label><div class="chips" id="axisChecks"></div></div>
-  <div class="field"><label>Coleção</label><button class="btn-ghost" id="bulkBtn" style="width:100%;margin-bottom:8px">Buscar no Fragrantica p/ toda a coleção (IA)</button><button class="btn-ghost" id="resetBtn" style="width:100%;border-color:var(--danger);color:var(--danger)">Zerar coleção (apagar tudo)</button></div>
+  <div class="field"><label>Coleção</label><button class="btn-ghost" id="bulkBtn" style="width:100%;margin-bottom:8px">Buscar no Fragrantica p/ toda a coleção (IA)</button>
+    <button class="btn-ghost" id="recoverBtn" style="width:100%;margin-bottom:8px;border-color:var(--gold);color:var(--gold)">🔐 Diagnosticar e recuperar coleção</button>
+    <div id="recoverStatus" style="font-size:12px;color:var(--muted);line-height:1.45;margin:4px 0 10px"></div>
+    <button class="btn-ghost" id="resetBtn" style="width:100%;border-color:var(--danger);color:var(--danger)">Zerar coleção (apagar tudo)</button></div>
   <div class="sheet-foot"><button class="btn-ghost" onclick="closeSheet('c')">Fechar</button><button class="btn-primary" id="cSave">Salvar</button></div>
 </div>
 
@@ -1301,6 +1304,29 @@ function buildAxisChecks(){
   const box=$("#axisChecks");box.innerHTML="";const sel=getAxes();
   METRICS.forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.dataset.k=k;b.setAttribute("aria-pressed",sel.includes(k));b.onclick=()=>b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")!=="true");box.appendChild(b);});
 }
+$("#recoverBtn").onclick=async()=>{
+  const out=$("#recoverStatus");
+  out.textContent="Verificando fontes de recuperação…";
+  let localCount=0, backupCount=0, cloudCount=0;
+  let localData=null, backupData=null, cloudData=null;
+  try{localData=JSON.parse(localStorage.getItem("gde:perfumes")||"null");}catch(e){}
+  try{backupData=JSON.parse(localStorage.getItem("gde:perfumes_backup")||"null");}catch(e){}
+  if(Array.isArray(localData))localCount=localData.length;
+  if(Array.isArray(backupData))backupCount=backupData.length;
+  try{cloudData=await sbSelect("perfumes");if(Array.isArray(cloudData))cloudCount=cloudData.length;}catch(e){}
+  out.textContent="Local: "+localCount+" • Backup: "+backupCount+" • Supabase: "+cloudCount;
+  const source=cloudCount?cloudData:(backupCount?backupData:(localCount?localData:null));
+  if(!source||!source.length){
+    out.textContent+="\nNenhuma cópia da coleção foi encontrada automaticamente. Não vou substituir seus dados por uma lista nova.";
+    return;
+  }
+  if(!confirm("Encontrei "+source.length+" perfumes. Restaurar essa coleção no aparelho?"))return;
+  state.perfumes=JSON.parse(JSON.stringify(source));
+  saveLocal(); renderAll();
+  if(mode==="supabase" && source.length) await Promise.all(source.map(p=>sbUpsert("perfumes",p).catch(()=>{})));
+  out.textContent="✅ Coleção restaurada: "+source.length+" perfumes.";
+  toast("Coleção restaurada");
+};
 $("#resetBtn").onclick=async()=>{
   if(!confirm("Zerar a coleção? Isso apaga TODOS os perfumes e relógios. Não dá pra desfazer."))return;
   try{
