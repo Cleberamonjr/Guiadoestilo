@@ -501,6 +501,10 @@ header::after{
 @media (prefers-reduced-motion:reduce){
   .card,.profile-card,.top-actions .icon-btn{transform:none!important}
 }
+
+.profile-radar{display:flex;align-items:center;justify-content:center;min-height:310px;padding:6px 4px 0}
+.collection-radar-svg{display:block;width:min(100%,330px);height:auto;overflow:visible;filter:drop-shadow(0 10px 18px rgba(0,0,0,.2))}
+@media(max-width:560px){.profile-radar{min-height:285px;padding-inline:0}.collection-radar-svg{width:min(100%,310px)}}
 </style></head>
 <body>
 <div class="wrap">
@@ -539,7 +543,7 @@ header::after{
         <article class="profile-card">
           <h3>Perfil olfativo</h3>
           <p id="profileOlfactory">—</p>
-          <div class="profile-bars" id="profileBars"></div>
+          <div class="profile-radar" id="profileBars" aria-label="Radar do perfil olfativo da coleção"></div>
         </article>
         <article class="profile-card">
           <h3>Perfil psicocomportamental</h3>
@@ -1398,6 +1402,32 @@ function renderSuggest(r,owned){
 let tTimer;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove("show"),2600);}
 
 
+function collectionProfileRadarSvg(items,size){
+  const axes=items||[], n=axes.length, pad=42, R=size/2-pad, cx=size/2, cy=size/2;
+  const pt=(i,r)=>{const a=(-90+i*360/n)*Math.PI/180;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r];};
+  let svg='';
+  [1,.75,.5,.25].forEach(fr=>{
+    const pts=axes.map((_,i)=>pt(i,R*fr).map(x=>x.toFixed(1)).join(",")).join(" ");
+    svg+=`<polygon points="${pts}" fill="none" stroke="var(--radar-grid)" stroke-width="1"/>`;
+  });
+  axes.forEach((_,i)=>{
+    const [x,y]=pt(i,R);
+    svg+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--radar-grid)" stroke-width="1"/>`;
+  });
+  const vals=axes.map(x=>clamp(Number(x[1])||0,0,100));
+  const poly=vals.map((v,i)=>pt(i,R*v/100).map(x=>x.toFixed(1)).join(",")).join(" ");
+  svg+=`<polygon points="${poly}" fill="var(--radar-fill)" stroke="var(--gold-bright)" stroke-width="2"/>`;
+  vals.forEach((v,i)=>{
+    const [x,y]=pt(i,R*v/100);
+    svg+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.2" fill="var(--gold-bright)"/>`;
+  });
+  axes.forEach(([label,value],i)=>{
+    const [x,y]=pt(i,R+20);
+    const anchor=Math.abs(x-cx)<6?"middle":x>cx?"start":"end";
+    svg+=`<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" font-size="11" font-weight="600" fill="var(--muted)" text-anchor="${anchor}">${esc(label)}</text>`;
+  });
+  return `<svg class="collection-radar-svg" viewBox="0 0 ${size} ${size}" role="img" aria-label="Radar do perfil olfativo da coleção">${svg}</svg>`;
+}
 function renderCollectionProfile(){
   const owned=state.perfumes.filter(p=>p.status==="tenho");
   const countEl=$("#profileCount"), head=$("#profileHeadline"), olf=$("#profileOlfactory"), psych=$("#profilePsych");
@@ -1427,7 +1457,8 @@ function renderCollectionProfile(){
   const dominant=fams[0]?.[0]||"perfil diversificado";
   head.textContent='Predomínio de '+dominant.toLowerCase()+', com maior afinidade por '+(topOcc?.[0]||"uso versátil").toLowerCase()+'.';
   olf.textContent='Sua coleção combina '+(topType?.[0]||"vários estilos").toLowerCase()+' com '+(topOcc?.[0]||"versatilidade").toLowerCase()+', indicando um guarda-roupa olfativo construído para presença e contexto.';
-  $("#profileBars").innerHTML=metrics.slice(0,6).map(([k,v])=>'<div class="profile-bar"><span>'+esc(k)+'</span><div class="profile-bar-track"><div class="profile-bar-fill" style="width:'+v+'%"></div></div><b>'+v+'%</b></div>').join("");
+  const radarAxes=metrics.slice(0,6).map(([label,value])=>[label,value]);
+  $("#profileBars").innerHTML=collectionProfileRadarSvg(radarAxes,330);
   $("#profileFamilies").innerHTML=fams.slice(0,6).map(([k,v])=>'<span>'+esc(k)+' · '+v+'</span>').join("");
   const e=metrics.find(x=>x[0]==="Elegância")?.[1]||0, pr=metrics.find(x=>x[0]==="Presença")?.[1]||0, fr=metrics.find(x=>x[0]==="Frescor")?.[1]||0, se=metrics.find(x=>x[0]==="Sensualidade")?.[1]||0;
   const traits=[];
