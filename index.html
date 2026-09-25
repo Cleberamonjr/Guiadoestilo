@@ -784,9 +784,16 @@ async function initStatic(){
     let localP=null,localW=null;
     try{localP=JSON.parse(localStorage.getItem("gde:perfumes")||"null");}catch(e){}
     try{localW=JSON.parse(localStorage.getItem("gde:watches")||"null");}catch(e){}
+    // A previous version could have overwritten the live local keys with [].
+    // Prefer the non-empty backup copy as a recovery source; never delete it automatically.
+    if(!Array.isArray(localP)||!localP.length){
+      try{const b=JSON.parse(localStorage.getItem("gde:perfumes_backup")||"null");if(Array.isArray(b)&&b.length)localP=b;}catch(e){}
+    }
+    if(!Array.isArray(localW)||!localW.length){
+      try{const b=JSON.parse(localStorage.getItem("gde:watches_backup")||"null");if(Array.isArray(b)&&b.length)localW=b;}catch(e){}
+    }
     const cloudP=Array.isArray(ps)?ps:[], cloudW=Array.isArray(ws)?ws:[];
-    // Never replace a non-empty local collection with an empty cloud response.
-    // This protects the phone's collection during a temporary/RLS/network issue.
+    // Never replace a non-empty local/recovery collection with an empty cloud response.
     if(cloudP.length) state.perfumes=cloudP;
     else if(Array.isArray(localP)&&localP.length) state.perfumes=localP;
     else state.perfumes=[];
@@ -821,8 +828,17 @@ function goLocal(){ if(mode==="cloud")return; mode="local"; connecting=false; se
 function setSync(cloud,label){$("#sync").classList.toggle("cloud",cloud); $("#syncText").textContent=label||(cloud?"nuvem":"neste dispositivo");}
 function subscribeCloud(){
   connecting=false;
-  dbNS.collection("perfumes").onSnapshot(s=>{state.perfumes=s.docs.map(d=>({id:d.id,...d.data()})); pLoaded=true; renderPerfumes();},()=>{pLoaded=true;renderPerfumes();});
-  dbNS.collection("watches").onSnapshot(s=>{state.watches=s.docs.map(d=>({id:d.id,...d.data()})); wLoaded=true; renderWatches();},()=>{wLoaded=true;renderWatches();});
+  dbNS.collection("perfumes").onSnapshot(s=>{
+    const next=s.docs.map(d=>({id:d.id,...d.data()}));
+    // Do not let an empty cloud snapshot erase a non-empty local collection.
+    if(next.length || !state.perfumes.length){state.perfumes=next;saveLocal();}
+    pLoaded=true;renderPerfumes();
+  },()=>{pLoaded=true;renderPerfumes();});
+  dbNS.collection("watches").onSnapshot(s=>{
+    const next=s.docs.map(d=>({id:d.id,...d.data()}));
+    if(next.length || !state.watches.length){state.watches=next;saveLocal();}
+    wLoaded=true;renderWatches();
+  },()=>{wLoaded=true;renderWatches();});
 }
 function localSeeded(){try{return localStorage.getItem("gde:seeded")==="1";}catch(e){return false;}}
 function loadLocal(){
@@ -842,12 +858,17 @@ function saveLocal(){
 }
 
 async function dataAdd(coll,data){
-  if(mode==="cloud"){await dbNS.collection(coll).add(data);return;}
   if(!data.id)data.id="l"+Date.now()+Math.floor(Math.random()*1000);
+  // Persist locally first in every mode so a cloud/API failure cannot make a new perfume disappear.
   state[coll].unshift(data); saveLocal(); renderTab(coll);
+  if(mode==="cloud"){
+    try{await dbNS.collection(coll).add(data);}
+    catch(e){toast("Salvo no aparelho; sincronização pendente");}
+    return;
+  }
   if(mode==="supabase"){
     try{await sbUpsert(coll,data);}
-    catch(e){toast("Salvo no aparelho; sincronização pendente");}
+    catch(e){toast("Salvo no aparelho; sincronização pendente ("+(e&&e.message||"erro")+")");}
   }
 }
 async function dataUpdate(coll,id,data){
@@ -857,7 +878,7 @@ async function dataUpdate(coll,id,data){
     state[coll][i]={...state[coll][i],...data,id}; saveLocal(); renderTab(coll);
     if(mode==="supabase"){
       try{await sbUpsert(coll,state[coll][i]);}
-      catch(e){toast("Alteração salva no aparelho; sincronização pendente");}
+      catch(e){toast("Alteração salva no aparelho; sincronização pendente ("+(e&&e.message||"erro")+")");}
     }
   }
 }
