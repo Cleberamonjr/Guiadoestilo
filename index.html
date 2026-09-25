@@ -522,6 +522,14 @@ header::after{
 .product-nav-item:hover,.product-nav-item.active{background:var(--bg);border-color:var(--line);transform:translateY(-1px)}
 .legacy-tabs{display:none!important}
 @media(max-width:620px){.product-nav{grid-template-columns:repeat(4,1fr);gap:4px;padding:5px;top:4px}.product-nav-item{padding:8px 3px}.product-nav-item span{font-size:16px}.product-nav-item b{font-size:10.5px}.product-nav-item small{font-size:8.5px}.product-nav-item[data-view="watches"]{grid-column:span 4}.product-nav-item[data-view="watches"]{display:none}}
+</style><style id="detail-commercial-css">
+.detail-commercial-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.detail-impact,.detail-role{margin:0}
+.detail-impact p,.detail-role p{margin:7px 0 4px;line-height:1.45}
+.detail-impact small,.detail-role small{color:var(--muted);font-size:10.5px}
+.detail-actions{display:flex;gap:8px;flex-wrap:wrap}
+.detail-actions button{flex:1;min-width:130px}
+@media(max-width:560px){.detail-commercial-grid{grid-template-columns:1fr}.detail-actions{display:grid;grid-template-columns:1fr 1fr}.detail-actions .btn-primary{grid-column:1/-1}}
 </style></head>
 <body>
 <div class="wrap">
@@ -1336,18 +1344,34 @@ function openDetail(id){
   const notes=(i.notes||[]).length?i.notes.map(n=>`<span class="chip">${esc(n)}</span>`).join(""):'<span class="muted">—</span>';
   const seasons=(i.seasons||[]).length?i.seasons.join(" · "):"—";
   const metrics=curAxes().map(([k,l,c])=>`<div class="dm"><span style="color:${c}">${l}</span><b>${(i.radar&&i.radar[k])||0}</b></div>`).join("");
+  const owned=state.perfumes.filter(x=>x.status==="tenho");
+  const familyCount=owned.filter(x=>x.family===i.family).length;
+  const social=[];
+  const ev=Number(i.radar&&i.radar.elegancia||0), pr=Number(i.radar&&i.radar.projecao||0), se=Number(i.radar&&i.radar.romantico||0), fr=Number(i.radar&&i.radar.frescor||0), ve=Number(i.radar&&i.radar.versatilidade||0);
+  if(ev>=7)social.push("sofisticação");
+  if(pr>=7)social.push("presença");
+  if(se>=7)social.push("sensualidade");
+  if(fr>=7)social.push("frescor");
+  if(ve>=7)social.push("versatilidade");
+  const impactText=social.length?"Perfil associado a "+social.slice(0,3).join(", ")+".":"Perfil equilibrado, com comunicação dependente principalmente do contexto de uso.";
+  const collectionRole=familyCount>1?"Sua coleção já possui outros perfumes da mesma família; este reforça esse território.":owned.length?"Este perfume ocupa um território relativamente específico dentro da sua coleção.":"Adicione perfumes para começar a construir seu mapa de coleção.";
   const sources=(i.sources||[]).length?`<div class="dblock dsources"><div class="dlabel">Fontes</div>${i.sources.map(s=>`<a href="${esc(s.uri)}" target="_blank" rel="noopener">${esc(s.title||s.uri)}</a>`).join("")}</div>`:"";
   const layer=(i.layering||[]).length?`<div class="dblock"><div class="dlabel">Combina com (layering)</div><div class="notes">${i.layering.map(l=>`<span class="chip">${esc(l)}</span>`).join("")}</div></div>`:"";
   const rt=(i.rating||0)>0?`<div class="dbig"><span class="pf-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2 14.9 8l6.4.9-4.6 4.5 1 6.4L12 16.8 6.3 19.8l1-6.4L2.7 8.9 9.1 8 12 2.2Z"/></svg>${Number(i.rating).toFixed(1)}</span><span class="muted">/10</span></div>`:"";
   $("#dBody").innerHTML=`<div class="dhead"><div><div class="mk">${esc(i.brand||"—")}${i.concentration?" · "+esc(i.concentration):""}</div><h2>${esc(i.name)}</h2><div class="fam-tag"><span class="dot" style="background:${f.color}"></span>${f.name} <span class="occ-tag">Melhor: ${esc(occasionLabel(i))}</span>${badge}</div>${meta?`<div class="muted" style="font-size:12px;margin-top:6px">${meta}</div>`:""}</div><button class="kebab" onclick="closeSheet('d')" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
    <div class="dradarbox">${radarTabsHtml()}</div>
    <div class="dstats2">${rt}${bar("Doçura",doce,"#FFB74D")}${bar("Performance",perf,"#FF8A65")}</div>
+   <div class="detail-commercial-grid">
+     <div class="dblock detail-impact"><div class="dlabel">Impacto social</div><p>${esc(impactText)}</p><small>Leitura baseada no perfil olfativo do perfume, não em traços de personalidade.</small></div>
+     <div class="dblock detail-role"><div class="dlabel">Papel na sua coleção</div><p>${esc(collectionRole)}</p><small>${familyCount} perfume(s) da mesma família no seu acervo.</small></div>
+   </div>
    ${hasPyr?`<div class="dblock"><div class="dlabel">Pirâmide olfativa</div><div class="pyr">${prow("Topo",i.pyramid.top)}${prow("Coração",i.pyramid.heart)}${prow("Fundo",i.pyramid.base)}</div></div>`:`<div class="dblock"><div class="dlabel">Notas</div><div class="notes">${notes}</div></div>`}
    <div class="dblock"><div class="dlabel">Estações</div><div>${esc(seasons)}</div></div>
    ${i.comment?`<div class="dblock"><div class="dlabel">Observações</div><div>${esc(i.comment)}</div></div>`:""}${layer}${sources}
-   <div class="sheet-foot"><button class="btn-ghost" id="dAiBtn">Buscar no Fragrantica (IA)</button><button class="btn-primary" id="dEditBtn">Editar</button></div>`;
+   <div class="sheet-foot detail-actions"><button class="btn-ghost" id="dAiBtn">Atualizar dados com IA</button><button class="btn-ghost" id="dBuyBtn">Ver papel na coleção</button><button class="btn-primary" id="dEditBtn">Editar</button></div>`;
   $("#dEditBtn").onclick=()=>{closeSheet("d");openPerfume(id);};
   $("#dAiBtn").onclick=()=>aiUpdateExisting(id);
+  $("#dBuyBtn").onclick=()=>{closeSheet("d");openSheet("q");$("#q_name").value=i.name;$("#q_brand").value=i.brand||"";setTimeout(()=>$("#qRun").focus(),100)};
   paintRadarTab(i);
   document.querySelectorAll(".rtab").forEach(b=>b.onclick=()=>{detailGroup=b.dataset.g;paintRadarTab(i);});
   openSheet("d");
