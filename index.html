@@ -781,12 +781,30 @@ async function initStatic(){
   try{
     const [ps,ws]=await Promise.all([sbSelect("perfumes"),sbSelect("watches")]);
     mode="supabase";connecting=false;setSync(true,"nuvem");
-    state.perfumes=Array.isArray(ps)?ps:[];state.watches=Array.isArray(ws)?ws:[];
-    if(!sbInited()){
-      if(!state.perfumes.length){let base=null;try{const ls=JSON.parse(localStorage.getItem("gde:perfumes")||"null");if(Array.isArray(ls)&&ls.length)base=ls;}catch(e){}state.perfumes=base||JSON.parse(JSON.stringify(SEED));await Promise.all(state.perfumes.map(p=>sbUpsert("perfumes",p).catch(()=>{})));}
-      if(!state.watches.length){let lw=null;try{const l=JSON.parse(localStorage.getItem("gde:watches")||"null");if(Array.isArray(l)&&l.length)lw=l;}catch(e){}if(lw&&lw.length){state.watches=lw;await Promise.all(lw.map(w=>sbUpsert("watches",w).catch(()=>{})));}}
-      try{localStorage.setItem("gde:sbInit","1");}catch(e){}
+    let localP=null,localW=null;
+    try{localP=JSON.parse(localStorage.getItem("gde:perfumes")||"null");}catch(e){}
+    try{localW=JSON.parse(localStorage.getItem("gde:watches")||"null");}catch(e){}
+    const cloudP=Array.isArray(ps)?ps:[], cloudW=Array.isArray(ws)?ws:[];
+    // Never replace a non-empty local collection with an empty cloud response.
+    // This protects the phone's collection during a temporary/RLS/network issue.
+    if(cloudP.length) state.perfumes=cloudP;
+    else if(Array.isArray(localP)&&localP.length) state.perfumes=localP;
+    else state.perfumes=[];
+    if(cloudW.length) state.watches=cloudW;
+    else if(Array.isArray(localW)&&localW.length) state.watches=localW;
+    else state.watches=[];
+    // If the cloud is empty but local data exists, restore that data to Supabase.
+    if(!cloudP.length && Array.isArray(localP)&&localP.length){
+      await Promise.all(localP.map(p=>sbUpsert("perfumes",p).catch(()=>{})));
     }
+    if(!cloudW.length && Array.isArray(localW)&&localW.length){
+      await Promise.all(localW.map(w=>sbUpsert("watches",w).catch(()=>{})));
+    }
+    if(!state.perfumes.length && !sbInited()){
+      state.perfumes=JSON.parse(JSON.stringify(SEED));
+      await Promise.all(state.perfumes.map(p=>sbUpsert("perfumes",p).catch(()=>{})));
+    }
+    try{localStorage.setItem("gde:sbInit","1");}catch(e){}
     saveLocal();pLoaded=wLoaded=true;renderAll();return true;
   }catch(e){return false;}
 }
@@ -814,10 +832,35 @@ function loadLocal(){
   if(!Array.isArray(state.perfumes))state.perfumes=[];
   if(!Array.isArray(state.watches))state.watches=[];
 }
-function saveLocal(){try{localStorage.setItem("gde:perfumes",JSON.stringify(state.perfumes));localStorage.setItem("gde:watches",JSON.stringify(state.watches));}catch(e){}}
+function saveLocal(){
+  try{
+    if(Array.isArray(state.perfumes)&&state.perfumes.length) localStorage.setItem("gde:perfumes_backup",JSON.stringify(state.perfumes));
+    if(Array.isArray(state.watches)&&state.watches.length) localStorage.setItem("gde:watches_backup",JSON.stringify(state.watches));
+    localStorage.setItem("gde:perfumes",JSON.stringify(state.perfumes));
+    localStorage.setItem("gde:watches",JSON.stringify(state.watches));
+  }catch(e){}
+}
 
-async function dataAdd(coll,data){ if(mode==="cloud"){await dbNS.collection(coll).add(data);} else{ if(!data.id)data.id="l"+Date.now()+Math.floor(Math.random()*1000); state[coll].unshift(data); saveLocal(); renderTab(coll); if(mode==="supabase")sbUpsert(coll,data).catch(()=>toast("Sem conexão — salvo no aparelho")); } }
-async function dataUpdate(coll,id,data){ if(mode==="cloud"){const {id:_,...body}=data; await dbNS.doc(coll+"/"+id).set(body);} else{const i=state[coll].findIndex(x=>x.id===id); if(i>=0){state[coll][i]={...state[coll][i],...data,id}; saveLocal(); renderTab(coll); if(mode==="supabase")sbUpsert(coll,state[coll][i]).catch(()=>toast("Sem conexão — salvo no aparelho"));}} }
+async function dataAdd(coll,data){
+  if(mode==="cloud"){await dbNS.collection(coll).add(data);return;}
+  if(!data.id)data.id="l"+Date.now()+Math.floor(Math.random()*1000);
+  state[coll].unshift(data); saveLocal(); renderTab(coll);
+  if(mode==="supabase"){
+    try{await sbUpsert(coll,data);}
+    catch(e){toast("Salvo no aparelho; sincronização pendente");}
+  }
+}
+async function dataUpdate(coll,id,data){
+  if(mode==="cloud"){const {id:_,...body}=data; await dbNS.doc(coll+"/"+id).set(body);return;}
+  const i=state[coll].findIndex(x=>x.id===id);
+  if(i>=0){
+    state[coll][i]={...state[coll][i],...data,id}; saveLocal(); renderTab(coll);
+    if(mode==="supabase"){
+      try{await sbUpsert(coll,state[coll][i]);}
+      catch(e){toast("Alteração salva no aparelho; sincronização pendente");}
+    }
+  }
+}
 async function dataDelete(coll,id){ if(mode==="cloud"){await dbNS.doc(coll+"/"+id).delete();} else{state[coll]=state[coll].filter(x=>x.id!==id); saveLocal(); renderTab(coll); if(mode==="supabase")sbDelete(coll,id).catch(()=>{});} }
 function renderTab(coll){coll==="perfumes"?renderPerfumes():renderWatches();}
 function renderAll(){renderPerfumes();renderWatches();}
