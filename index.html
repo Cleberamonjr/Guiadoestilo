@@ -242,6 +242,27 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .cmp-opinion p{margin:0 0 7px;font-size:13px;color:var(--ink-soft);line-height:1.45}
 .cmp-opinion p:last-child{margin-bottom:0}
 .cmp-opinion .cvd{font-weight:700;color:var(--ink);font-size:14px}
+.profile-dashboard{display:grid;gap:14px;margin:0 0 20px}
+.profile-hero,.profile-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.profile-hero{padding:20px 22px;display:flex;justify-content:space-between;gap:18px;align-items:center}
+.profile-kicker{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--gold-bright);font-weight:700}
+.profile-title{font-family:var(--serif);font-size:27px;font-weight:600;line-height:1.05;margin:4px 0 5px}
+.profile-sub{color:var(--muted);font-size:13px;margin:0}
+.profile-count{font-family:var(--serif);font-size:48px;line-height:.8;font-weight:600;color:var(--gold-bright);white-space:nowrap}
+.profile-count small{display:block;font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.2;text-align:right;margin-top:8px}
+.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.profile-card{padding:17px 18px}
+.profile-card h3{font-family:var(--serif);font-size:20px;margin:0 0 5px}
+.profile-card p{font-size:13px;color:var(--ink-soft);margin:0}
+.profile-bars{display:grid;gap:9px;margin-top:13px}
+.profile-bar{display:grid;grid-template-columns:92px 1fr 38px;gap:8px;align-items:center;font-size:11.5px;color:var(--muted)}
+.profile-bar-track{height:7px;background:var(--surface-2);border-radius:9px;overflow:hidden}
+.profile-bar-fill{height:100%;background:var(--gold-bright);border-radius:9px}
+.profile-bar b{font-size:12px;color:var(--ink-soft);text-align:right}
+.profile-families{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.profile-families span{font-size:11.5px;padding:5px 8px;border-radius:8px;background:var(--surface-2);color:var(--ink-soft)}
+.profile-note{font-size:10.5px!important;color:var(--muted)!important;margin-top:11px!important}
+@media(max-width:620px){.profile-hero{align-items:flex-start}.profile-grid{grid-template-columns:1fr}.profile-count{font-size:40px}.profile-bar{grid-template-columns:82px 1fr 34px}}
 </style>
 <style id="collection-ai-search-css">
 .ai-search-result{margin-top:16px}
@@ -282,6 +303,29 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
       <div class="count"><div class="num" id="pCount">0</div><div class="lbl"><b id="pWord">frascos</b><span class="w">na coleção</span><div id="pWish"></div></div></div>
       <div><p class="p-ttl">Perfil olfativo</p><div class="fam-bar" id="famBar"></div><div class="fam-legend" id="famLegend"></div></div>
     </div>
+    <section class="profile-dashboard" id="profileDashboard" aria-label="Perfil da coleção">
+      <div class="profile-hero">
+        <div>
+          <div class="profile-kicker">Leitura da sua coleção</div>
+          <h2 class="profile-title">Seu DNA olfativo</h2>
+          <p class="profile-sub" id="profileHeadline">Analisando os perfumes que você possui…</p>
+        </div>
+        <div class="profile-count" id="profileCount">0<small>perfumes na coleção</small></div>
+      </div>
+      <div class="profile-grid">
+        <article class="profile-card">
+          <h3>Perfil olfativo</h3>
+          <p id="profileOlfactory">—</p>
+          <div class="profile-bars" id="profileBars"></div>
+        </article>
+        <article class="profile-card">
+          <h3>Perfil psicocomportamental</h3>
+          <p id="profilePsych">—</p>
+          <p class="profile-note">Interpretação de preferência e estilo baseada na coleção; não é diagnóstico psicológico ou clínico.</p>
+          <div class="profile-families" id="profileFamilies"></div>
+        </article>
+      </div>
+    </section>
     <section class="occasion-advisor" id="occasionAdvisor" aria-label="Consultor de ocasião">
       <div class="oa-kicker">Consultor da sua coleção</div>
       <h2>Para qual ocasião você vai usar?</h2>
@@ -601,6 +645,7 @@ function renderPerfumes(){
   const loading=(mode!=="local"&&!pLoaded);
   if(loading){$("#pGrid").innerHTML="";$("#pEmpty").hidden=true;$("#pSummary").hidden=true;$("#pControls").hidden=true;return;}
   const has=state.perfumes.length>0;
+  renderCollectionProfile();
   $("#pEmpty").hidden=has;$("#pSummary").hidden=!has;$("#pControls").hidden=!has;
   const owned=state.perfumes.filter(i=>i.status==="tenho");
   $("#pCount").textContent=owned.length;$("#pWord").textContent=owned.length===1?"frasco":"frascos";
@@ -1130,6 +1175,43 @@ function renderSuggest(r,owned){
 let tTimer;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove("show"),2600);}
 
 
+function renderCollectionProfile(){
+  const owned=state.perfumes.filter(p=>p.status==="tenho");
+  const countEl=$("#profileCount"), head=$("#profileHeadline"), olf=$("#profileOlfactory"), psych=$("#profilePsych");
+  if(!countEl)return;
+  countEl.innerHTML=owned.length+'<small>perfumes na coleção</small>';
+  if(!owned.length){
+    head.textContent="Adicione perfumes para construir seu mapa olfativo.";
+    olf.textContent="Ainda não há dados suficientes.";
+    psych.textContent="Ainda não há dados suficientes.";
+    $("#profileBars").innerHTML="";
+    $("#profileFamilies").innerHTML="";
+    return;
+  }
+  const avg=(key,gid="tipo")=>Math.round(owned.reduce((s,p)=>s+(groupValues(p,gid)[key]||0),0)/owned.length*10);
+  const metrics=[
+    ["Elegância",Math.round(owned.reduce((s,p)=>s+(p.radar?.elegancia||0),0)/owned.length*10)],
+    ["Versatilidade",Math.round(owned.reduce((s,p)=>s+(p.radar?.versatilidade||0),0)/owned.length*10)],
+    ["Presença",Math.round(owned.reduce((s,p)=>s+(p.radar?.projecao||0),0)/owned.length*10)],
+    ["Sensualidade",Math.round(owned.reduce((s,p)=>s+(p.radar?.romantico||0),0)/owned.length*10)],
+    ["Frescor",Math.round(owned.reduce((s,p)=>s+(p.radar?.frescor||0),0)/owned.length*10)],
+    ["Doçura",Math.round(owned.reduce((s,p)=>s+(p.radar?.doce||0),0)/owned.length*10)]
+  ].map(x=>[x[0],clamp(x[1],0,100)]).sort((a,b)=>b[1]-a[1]);
+  const topType=Object.entries(RGROUPS[0].axes.reduce((acc,[k,l])=>{acc[l]=owned.reduce((s,p)=>s+(groupValues(p,"tipo")[k]||0),0)/owned.length;return acc;},{})).sort((a,b)=>b[1]-a[1])[0];
+  const topOcc=Object.entries(RGROUPS[1].axes.reduce((acc,[k,l])=>{acc[l]=owned.reduce((s,p)=>s+(groupValues(p,"ocasiao")[k]||0),0)/owned.length;return acc;},{})).sort((a,b)=>b[1]-a[1])[0];
+  const fam={};owned.forEach(p=>{const f=famById(p.family);fam[f.name]=(fam[f.name]||0)+1;});
+  const fams=Object.entries(fam).sort((a,b)=>b[1]-a[1]);
+  const dominant=fams[0]?.[0]||"perfil diversificado";
+  head.textContent='Predomínio de '+dominant.toLowerCase()+', com maior afinidade por '+(topOcc?.[0]||"uso versátil").toLowerCase()+'.';
+  olf.textContent='Sua coleção combina '+(topType?.[0]||"vários estilos").toLowerCase()+' com '+(topOcc?.[0]||"versatilidade").toLowerCase()+', indicando um guarda-roupa olfativo construído para presença e contexto.';
+  $("#profileBars").innerHTML=metrics.slice(0,6).map(([k,v])=>'<div class="profile-bar"><span>'+esc(k)+'</span><div class="profile-bar-track"><div class="profile-bar-fill" style="width:'+v+'%"></div></div><b>'+v+'%</b></div>').join("");
+  $("#profileFamilies").innerHTML=fams.slice(0,6).map(([k,v])=>'<span>'+esc(k)+' · '+v+'</span>').join("");
+  const e=metrics.find(x=>x[0]==="Elegância")?.[1]||0, pr=metrics.find(x=>x[0]==="Presença")?.[1]||0, fr=metrics.find(x=>x[0]==="Frescor")?.[1]||0, se=metrics.find(x=>x[0]==="Sensualidade")?.[1]||0;
+  const traits=[];
+  if(e>=70)traits.push("sofisticação e controle de imagem"); if(pr>=70)traits.push("presença e impacto"); if(se>=70)traits.push("expressividade e magnetismo"); if(fr>=70)traits.push("busca por leveza e estímulo");
+  if(!traits.length)traits.push("equilíbrio entre identidade e contexto");
+  psych.textContent='O padrão da coleção sugere preferência por '+traits.slice(0,3).join(", ")+'. Isso descreve seu comportamento de escolha olfativa — não permite inferir personalidade, saúde mental ou traços clínicos com validade científica.';
+}
 function renderOccasionAdvisor(r,owned){
   const byId={};owned.forEach(p=>byId[p.id]=p);
   const p=byId[r.id]||owned.find(x=>x.name===r.name);
@@ -1157,7 +1239,7 @@ async function runOccasionAdvisor(){
 }
 $("#oaRun").onclick=runOccasionAdvisor;
 $("#oaOccasion").addEventListener("keydown",e=>{if(e.key==="Enter")runOccasionAdvisor();});
-\n/* Collection purchase advisor */
+/* Collection purchase advisor */
 function normalizeText(x){return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();}
 function collectionSearchPrompt(name,brand,owned){
   const compact=owned.slice(0,100).map(p=>({
