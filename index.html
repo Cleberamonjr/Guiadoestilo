@@ -861,28 +861,36 @@ function saveLocal(){
 }
 
 async function dataAdd(coll,data){
+  if(!data||typeof data!=="object")throw new Error("registro_invalido");
   if(!data.id)data.id="l"+Date.now()+Math.floor(Math.random()*1000);
-  // Persist locally first in every mode so a cloud/API failure cannot make a new perfume disappear.
-  state[coll].unshift(data); saveLocal(); renderTab(coll);
-  if(mode==="cloud"){
-    try{await dbNS.collection(coll).add(data);}
-    catch(e){toast("Salvo no aparelho; sincronização pendente");}
-    return;
+  if(!Array.isArray(state[coll]))state[coll]=[];
+  state[coll].unshift(data);
+  saveLocal();
+  try{renderTab(coll);}catch(e){}
+  if(mode==="cloud" && dbNS && typeof dbNS.collection==="function"){
+    try{await dbNS.collection(coll).add(data);return;}
+    catch(e){toast("Salvo no aparelho. Nuvem indisponível; sincronização pendente.");return;}
   }
-  if(mode==="supabase"){
-    try{await sbUpsert(coll,data);}
-    catch(e){toast("Salvo no aparelho; sincronização pendente ("+(e&&e.message||"erro")+")");}
+  if(mode==="supabase" && SB_ON){
+    try{await sbUpsert(coll,data);return;}
+    catch(e){toast("Salvo no aparelho. Nuvem indisponível; sincronização pendente.");return;}
   }
 }
 async function dataUpdate(coll,id,data){
-  if(mode==="cloud"){const {id:_,...body}=data; await dbNS.doc(coll+"/"+id).set(body);return;}
+  if(!Array.isArray(state[coll]))state[coll]=[];
   const i=state[coll].findIndex(x=>x.id===id);
-  if(i>=0){
-    state[coll][i]={...state[coll][i],...data,id}; saveLocal(); renderTab(coll);
-    if(mode==="supabase"){
-      try{await sbUpsert(coll,state[coll][i]);}
-      catch(e){toast("Alteração salva no aparelho; sincronização pendente ("+(e&&e.message||"erro")+")");}
-    }
+  if(i<0)throw new Error("registro_nao_encontrado");
+  state[coll][i]={...state[coll][i],...data,id};
+  saveLocal();
+  try{renderTab(coll);}catch(e){}
+  if(mode==="cloud" && dbNS && typeof dbNS.doc==="function"){
+    try{const {id:_,...body}=state[coll][i];await dbNS.doc(coll+"/"+id).set(body);}
+    catch(e){toast("Alteração salva no aparelho. Nuvem indisponível; sincronização pendente.");}
+    return;
+  }
+  if(mode==="supabase" && SB_ON){
+    try{await sbUpsert(coll,state[coll][i]);}
+    catch(e){toast("Alteração salva no aparelho. Nuvem indisponível; sincronização pendente.");}
   }
 }
 async function dataDelete(coll,id){ if(mode==="cloud"){await dbNS.doc(coll+"/"+id).delete();} else{state[coll]=state[coll].filter(x=>x.id!==id); saveLocal(); renderTab(coll); if(mode==="supabase")sbDelete(coll,id).catch(()=>{});} }
@@ -1069,12 +1077,27 @@ function openPerfume(id){
   openSheet("p");setTimeout(()=>$("#f_name").focus(),120);
 }
 $("#pSave").onclick=async()=>{
+  const btn=$("#pSave");
   const name=$("#f_name").value.trim();
   if(!name){$("#f_name").focus();$("#f_name").style.borderColor="var(--danger)";toast("Dê um nome ao perfume");return;}
-  $("#f_name").style.borderColor="";addNote(notesInput.value);
-  const rec={...pDraft,name,brand:$("#f_brand").value.trim(),concentration:$("#f_conc").value,family:$("#f_fam").value,size_ml:$("#f_size").value?Number($("#f_size").value):null,rating:Number($("#f_rating").value),comment:$("#f_comment").value.trim()};
-  try{ if(pEdit){await dataUpdate("perfumes",pEdit,rec);}else{rec.created_at=Date.now();await dataAdd("perfumes",rec);} closeSheet("p");toast(pEdit?"Perfume atualizado":"Perfume salvo"); }catch(e){toast("Erro ao salvar");}
+  $("#f_name").style.borderColor="";
+  try{
+    if(typeof notesInput!=="undefined" && notesInput && notesInput.value) addNote(notesInput.value);
+    const rec={...pDraft,name,brand:$("#f_brand").value.trim(),concentration:$("#f_conc").value,
+      family:$("#f_fam").value,size_ml:$("#f_size").value?Number($("#f_size").value):null,
+      rating:Number($("#f_rating").value)||0,comment:$("#f_comment").value.trim()};
+    btn.disabled=true;btn.textContent=pEdit?"Salvando alterações…":"Salvando…";
+    if(pEdit) await dataUpdate("perfumes",pEdit,rec);
+    else{rec.created_at=Date.now();await dataAdd("perfumes",rec);}
+    closeSheet("p");toast(pEdit?"Perfume atualizado":"Perfume salvo com sucesso");
+  }catch(e){
+    console.error("Guia do Estilo: erro ao salvar perfume",e);
+    toast("Não foi possível salvar o perfume. Seus dados locais foram preservados.");
+  }finally{
+    btn.disabled=false;btn.textContent=pEdit?"Salvar alterações":"Salvar perfume";
+  }
 };
+
 
 function openWatch(id){
   wEdit=id||null;pendingPhoto=null;if(pendingPhotoUrl){URL.revokeObjectURL(pendingPhotoUrl);pendingPhotoUrl=null;}
