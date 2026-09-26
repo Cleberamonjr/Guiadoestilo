@@ -537,6 +537,20 @@ header::after{
 .drawer-head{display:flex;justify-content:space-between;gap:16px;padding:4px 2px 18px;border-bottom:1px solid var(--line)}.drawer-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--gold);font-weight:800}.drawer-head h2{font-family:var(--serif);font-size:29px;line-height:1;margin:5px 0}.drawer-head p{margin:0;color:var(--muted);font-size:12px}.drawer-close{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink-soft);display:grid;place-items:center}.drawer-close svg{width:18px;height:18px}
 .drawer-section{padding:18px 0 4px}.drawer-label{font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);font-weight:800;margin:0 4px 8px}.drawer-item{width:100%;display:grid;grid-template-columns:42px 1fr;gap:11px;align-items:center;text-align:left;border:1px solid transparent;background:transparent;color:var(--ink);border-radius:14px;padding:11px 10px;margin-bottom:5px;transition:background .16s,border-color .16s,transform .16s}.drawer-item:hover,.drawer-item:focus-visible{background:var(--bg);border-color:var(--line);transform:translateX(-2px)}.drawer-icon{width:38px;height:38px;border-radius:11px;background:var(--surface-2);color:var(--gold-bright);display:grid;place-items:center;font-size:17px;font-weight:700}.drawer-item b{display:block;font-size:13px}.drawer-item small{display:block;color:var(--muted);font-size:10.5px;margin-top:2px;line-height:1.35}.drawer-footer{display:flex;gap:8px;align-items:flex-start;margin:18px 4px 4px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--muted);font-size:10.5px;line-height:1.45}.sync-dot{width:7px;height:7px;border-radius:50%;background:#4FB07E;flex:0 0 auto;margin-top:4px}
 @media(max-width:560px){.app-drawer{width:min(390px,94vw)}}
+</style><style id="style-vision-ui-css">
+.style-vision{position:relative;overflow:hidden;margin:0 0 18px;padding:20px;border:1px solid var(--gold-line);border-radius:20px;background:linear-gradient(135deg,var(--surface),var(--bg));box-shadow:var(--shadow)}
+.style-vision:before{content:"";position:absolute;width:230px;height:230px;right:-100px;top:-120px;border-radius:50%;border:1px solid var(--gold-line);opacity:.55}
+.style-vision-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(230px,.9fr) minmax(280px,1.1fr);gap:18px;align-items:stretch}
+.style-vision-copy{display:flex;flex-direction:column;justify-content:center}.style-vision-kicker{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-weight:800}.style-vision h2{font-family:var(--serif);font-size:30px;line-height:1.03;margin:5px 0 7px}.style-vision p{margin:0;color:var(--muted);font-size:12.5px;max-width:430px}
+.style-vision-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px}.style-vision-pills span{font-size:10.5px;color:var(--ink-soft);padding:5px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
+.style-photo-zone{position:relative;min-height:230px;border:1.5px dashed var(--gold-line);border-radius:16px;background:var(--surface-2);overflow:hidden;display:flex;align-items:center;justify-content:center}.style-photo-zone.has-photo{border-style:solid}
+.style-photo-zone input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:3}.style-photo-placeholder{text-align:center;padding:24px;pointer-events:none}.style-photo-placeholder .cam{width:54px;height:54px;border-radius:16px;margin:0 auto 10px;background:var(--surface);color:var(--gold-bright);display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}.style-photo-placeholder b{display:block;font-size:14px}.style-photo-placeholder small{display:block;color:var(--muted);font-size:10.5px;margin-top:4px}
+.style-photo-preview{display:none;width:100%;height:100%;min-height:230px;object-fit:cover}.style-photo-zone.has-photo .style-photo-preview{display:block}.style-photo-zone.has-photo .style-photo-placeholder{display:none}
+.style-photo-actions{display:flex;gap:8px;margin-top:9px}.style-photo-actions button{flex:1;height:42px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);font-weight:700;font-size:12.5px}.style-photo-actions .style-analyze{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}.style-photo-actions button:disabled{opacity:.55}
+.style-result{margin-top:14px;position:relative;z-index:1}.style-result-card{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:15px}.style-result-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.style-score-wrap{display:flex;align-items:baseline;gap:5px}.style-score{font-family:var(--serif);font-size:52px;line-height:.9;color:var(--gold-bright);font-weight:600}.style-score-wrap small{font-size:12px;color:var(--muted)}.style-result-title{font-family:var(--serif);font-size:21px;font-weight:600}.style-result-sub{font-size:11.5px;color:var(--muted);margin-top:3px}
+.style-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.style-mini{background:var(--bg);border:1px solid var(--line-soft);border-radius:12px;padding:10px}.style-mini b{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px}.style-mini p{font-size:11.5px!important;color:var(--ink-soft)!important}.style-tip{margin-top:10px;padding:10px 12px;border-left:3px solid var(--gold);background:var(--bg);border-radius:0 10px 10px 0;font-size:12px;color:var(--ink-soft)}.style-tip b{color:var(--ink)}
+@media(max-width:700px){.style-vision-grid{grid-template-columns:1fr}.style-photo-zone{min-height:210px}.style-photo-preview{min-height:210px}}
+@media(max-width:560px){.style-vision{padding:16px;border-radius:17px}.style-vision h2{font-size:27px}.style-columns{grid-template-columns:1fr}}
 </style></head>
 <body>
 <div class="wrap">
@@ -577,6 +591,28 @@ header::after{
       <div class="count"><div class="num" id="pCount">0</div><div class="lbl"><b id="pWord">frascos</b><span class="w">na coleção</span><div id="pWish"></div></div></div>
 
     </div>
+    <section class="style-vision" id="styleVision" aria-label="Análise de estilo por foto">
+      <div class="style-vision-grid">
+        <div class="style-vision-copy">
+          <div class="style-vision-kicker">Style Vision · IA</div>
+          <h2>Seu estilo, visto pela IA.</h2>
+          <p>Envie uma foto do look e receba uma leitura objetiva de 0 a 10, pontos fortes, ajustes e recomendações para diferentes ocasiões — conectadas ao seu acervo.</p>
+          <div class="style-vision-pills"><span>Nota de estilo</span><span>Ocasião</span><span>Proporção</span><span>Cor &amp; coordenação</span></div>
+        </div>
+        <div>
+          <div class="style-photo-zone" id="homeStyleZone">
+            <img class="style-photo-preview" id="homeStylePreview" alt="Prévia do look enviado">
+            <div class="style-photo-placeholder"><div class="cam">⌁</div><b>Toque para tirar ou escolher uma foto</b><small>Câmera ou galeria · a análise considera apenas o visual</small></div>
+            <input type="file" id="homeStylePhoto" accept="image/*" capture="environment" aria-label="Foto do look">
+          </div>
+          <div class="style-photo-actions">
+            <button type="button" id="homeStyleClear">Trocar foto</button>
+            <button type="button" class="style-analyze" id="homeStyleAnalyze">Analisar meu estilo</button>
+          </div>
+        </div>
+      </div>
+      <div class="style-result" id="homeStyleResult" aria-live="polite"></div>
+    </section>
     <section class="profile-dashboard" id="profileDashboard" aria-label="Perfil da coleção">
       <div class="profile-hero">
         <div>
@@ -2199,6 +2235,8 @@ function renderCompare(){
 }
 $("#compareBtn").onclick=openCompare;
 initSuggest();
+initHomeStyleVision();
+initAppDrawer();
 renderAll();
 initCaps();
 </script>
@@ -2241,7 +2279,72 @@ initCaps();
   }
 })();
 </script>
-<script id="product-navigation-js">
+<script id="style-vision-js">/* === Style Vision home experience === */
+let homeStyleBlob=null,homeStyleUrl=null;
+function resetHomeStylePhoto(){
+  homeStyleBlob=null;
+  if(homeStyleUrl){try{URL.revokeObjectURL(homeStyleUrl);}catch(e){}homeStyleUrl=null;}
+  const input=$("#homeStylePhoto"),zone=$("#homeStyleZone"),preview=$("#homeStylePreview"),result=$("#homeStyleResult");
+  if(input)input.value="";
+  if(zone)zone.classList.remove("has-photo");
+  if(preview)preview.removeAttribute("src");
+  if(result)result.innerHTML="";
+}
+function renderHomeStyleResult(r,owned){
+  const score=clamp(Number(r&&r.style_score)||0,0,10);
+  const title=r&&r.title?r.title:"Leitura do seu look";
+  const strengths=Array.isArray(r&&r.strengths)?r.strengths.slice(0,4):[];
+  const improvements=Array.isArray(r&&r.improvements)?r.improvements.slice(0,4):[];
+  const occasions=(r&&r.occasions&&typeof r.occasions==="object")?r.occasions:{};
+  const p=owned.find(x=>x.id===r?.perfume_id)||owned.find(x=>normalizeText(x.name)===normalizeText(r?.perfume_name||""));
+  let html='<div class="style-result-card"><div class="style-result-top"><div><div class="style-result-title">'+esc(title)+'</div><div class="style-result-sub">Leitura visual · não é avaliação da pessoa</div></div><div class="style-score-wrap"><span class="style-score">'+score.toFixed(1)+'</span><small>/10</small></div></div>';
+  html+='<div class="style-columns"><div class="style-mini"><b>Pontos fortes</b><p>'+esc(strengths.join(" · ")||"Boa base visual identificada.")+'</p></div><div class="style-mini"><b>Ajustes de maior impacto</b><p>'+esc(improvements.join(" · ")||"Nenhum ajuste prioritário identificado.")+'</p></div></div>';
+  [["trabalho","Trabalho"],["encontro","Encontro"],["dia","Dia a dia"],["noite","Noite / evento"]].forEach(([k,l])=>{const o=occasions[k];if(o)html+='<div class="style-tip"><b>'+l+' · '+clamp(Number(o.score)||0,0,10).toFixed(1)+'/10:</b> '+esc(o.tip||"")+'</div>';});
+  if(p)html+='<div class="style-tip"><b>Fragrância sugerida do seu acervo:</b> '+esc(p.name)+(p.brand?" · "+esc(p.brand):"")+(r.perfume_reason?" — "+esc(r.perfume_reason):"")+'</div>';
+  html+='</div>';
+  $("#homeStyleResult").innerHTML=html;
+}
+async function runHomeStyleVision(){
+  if(!homeStyleBlob){toast("Envie uma foto do look primeiro");return;}
+  const owned=state.perfumes.filter(p=>p.status==="tenho");
+  const btn=$("#homeStyleAnalyze"),result=$("#homeStyleResult");
+  btn.disabled=true;btn.textContent="Analisando look…";result.innerHTML='<div class="id-note show">A IA está lendo proporção visual, cores, coordenação, contexto e ocasião.</div>';
+  const now=new Date(),h=now.getHours(),periodo=h<12?"manhã":h<18?"tarde":"noite";
+  const list=owned.slice(0,60).map(p=>({id:p.id,nome:p.name,marca:p.brand,familia:p.family,notas:(p.notes||[]).slice(0,8),radar:p.radar||{},estacoes:p.seasons||[],ocasiao:p.best_occasion||""}));
+  const prompt='Você é um personal stylist e consultor de imagem. Analise SOMENTE o look/roupa visível na FOTO; não avalie beleza, corpo, idade, raça, gênero, identidade ou valor da pessoa. Horário local: '+h+'h ('+periodo+'). Dê uma nota de estilo de 0 a 10 baseada exclusivamente em coerência visual do look: caimento/proporção aparente da roupa, coordenação de cores, combinação de peças, adequação ao contexto inferível e acabamento visual. A nota NÃO é uma nota da pessoa. Retorne SOMENTE JSON válido: {"style_score":0,"title":"","strengths":[],"improvements":[],"occasions":{"trabalho":{"score":0,"tip":""},"encontro":{"score":0,"tip":""},"dia":{"score":0,"tip":""},"noite":{"score":0,"tip":""}},"perfume_id":"","perfume_name":"","perfume_reason":""}. Escolha perfume_id apenas entre os IDs da coleção abaixo; se a coleção estiver vazia, deixe vazio. Não invente perfume. Seja específico e acionável, sem comentários sobre atributos pessoais. Coleção: '+JSON.stringify(list);
+  try{const out=await aiVision(prompt,homeStyleBlob);renderHomeStyleResult(out.data||{},owned);}
+  catch(e){result.innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
+  finally{btn.disabled=false;btn.textContent="Analisar meu estilo";}
+}
+function initHomeStyleVision(){
+  const input=$("#homeStylePhoto"),zone=$("#homeStyleZone"),preview=$("#homeStylePreview");
+  if(!input)return;
+  input.addEventListener("change",async e=>{
+    const f=e.target.files&&e.target.files[0];if(!f)return;
+    try{const b=await compress(f,1280,.85);homeStyleBlob=b;if(homeStyleUrl)try{URL.revokeObjectURL(homeStyleUrl);}catch(_){ }homeStyleUrl=URL.createObjectURL(b);preview.src=homeStyleUrl;zone.classList.add("has-photo");$("#homeStyleResult").innerHTML="";}catch(err){toast("Não consegui ler a imagem");}
+  });
+  $("#homeStyleClear").onclick=()=>{resetHomeStylePhoto();setTimeout(()=>input.click(),40);};
+  $("#homeStyleAnalyze").onclick=runHomeStyleVision;
+}
+</script><script id="product-navigation-js">
+function openAppDrawer(){
+  const d=$("#appDrawer"),b=$("#drawerBackdrop"),m=$("#menuBtn");if(!d||!b)return;
+  b.hidden=false;requestAnimationFrame(()=>{b.classList.add("open");d.classList.add("open");});
+  d.setAttribute("aria-hidden","false");if(m)m.setAttribute("aria-expanded","true");document.body.style.overflow="hidden";
+}
+function closeAppDrawer(){
+  const d=$("#appDrawer"),b=$("#drawerBackdrop"),m=$("#menuBtn");if(!d||!b)return;
+  d.classList.remove("open");b.classList.remove("open");d.setAttribute("aria-hidden","true");if(m)m.setAttribute("aria-expanded","false");document.body.style.overflow="";
+  setTimeout(()=>{if(!d.classList.contains("open"))b.hidden=true;},230);
+}
+function initAppDrawer(){
+  $("#menuBtn")?.addEventListener("click",openAppDrawer);
+  $("#drawerClose")?.addEventListener("click",closeAppDrawer);
+  $("#drawerBackdrop")?.addEventListener("click",closeAppDrawer);
+  $("#appDrawer")?.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.id!=="drawerClose")setTimeout(closeAppDrawer,90);});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAppDrawer();});
+}
+
 function setProductNav(view){
   document.querySelectorAll(".product-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
 }
