@@ -588,6 +588,16 @@ header::after{
           <p class="profile-note">Leitura baseada no DNA olfativo da coleção e em associações perceptivas; não é diagnóstico psicológico.</p>
           <div class="profile-families" id="profileFamilies"></div>
         </article>
+        <article class="profile-card">
+          <h3>Seu gosto real</h3>
+          <p id="profileTaste">—</p>
+          <div class="profile-families" id="profileTasteTags"></div>
+        </article>
+        <article class="profile-card">
+          <h3>Lacunas da coleção</h3>
+          <p id="profileGaps">—</p>
+          <div class="profile-families" id="profileGapTags"></div>
+        </article>
       </div>
     </section>
     <section class="occasion-advisor" id="occasionAdvisor" aria-label="Consultor de ocasião">
@@ -708,7 +718,11 @@ header::after{
 <div class="sheet" id="qSheet" role="dialog" aria-modal="true">
   <h2>Pesquisar perfume</h2>
   <div class="id-note show" style="margin-top:0">Digite um perfume que você está pensando em comprar. A IA compara o perfil dele com os perfumes que você já tem e procura sinais de redundância, lacunas e diferenciação.</div>
-  <div class="row2">
+  <div class="field"><label>Objetivo da compra</label><select id="q_mode">
+    <option value="candidate">Estou pensando em um perfume específico</option>
+    <option value="suggest">Quero sugestões que combinem comigo e preencham lacunas</option>
+  </select></div>
+  <div class="row2" id="qCandidateFields">
     <div class="field"><label>Nome do perfume <span class="req">*</span></label><input type="text" id="q_name" placeholder="Ex.: Dior Homme 2020" autocomplete="off"></div>
     <div class="field"><label>Marca / casa (opcional)</label><input type="text" id="q_brand" placeholder="Ex.: Dior" autocomplete="off"></div>
   </div>
@@ -1771,6 +1785,65 @@ function collectionProfileRadarSvg(items,size){
   });
   return `<svg class="collection-radar-svg" viewBox="0 0 ${size} ${size}" role="img" aria-label="Radar do perfil olfativo da coleção">${svg}</svg>`;
 }
+/* Deterministic fragrance DNA: factual notes/pyramid first; radar is never treated as a factual note source. */
+const DNA_AXES=[
+  ["gourmand","Gourmand",["baunilha","vanilla","caramelo","caramel","praliné","praline","mel","honey","tâmara","date","chocolate","cacau","café","coffee","açúcar","sugar","tonka","fava tonka","chestnut","castanha"]],
+  ["ambarado","Âmbar","["+"âmbar","amber","ambroxan","benjoim","benzoin","resina","resin","lábdano","labdanum","incenso","olíbano","frankincense"]+"],
+  ["amadeirado","Amadeirado",["sândalo","sandalwood","cedro","cedar","vetiver","oud","agarwood","patchouli","madeira","wood","guaiac","cashmere","cashmeran"]],
+  ["floral","Floral",["rosa","rose","jasmim","jasmine","íris","iris","violeta","violet","lavanda","lavender","gerânio","geranium","ylang","tuberosa","tuberose","peônia","peony","flor de laranjeira","orange blossom"]],
+  ["frutado","Frutado",["abacaxi","pineapple","maçã","apple","pêssego","peach","pera","pear","ameixa","plum","morango","strawberry","frutas vermelhas","red fruits","manga","mango","coco","coconut","figo","fig"]],
+  ["citrico","Cítrico",["bergamota","bergamot","limão","lemon","laranja","orange","mandarina","mandarin","toranja","grapefruit","lime","limão siciliano","yuzu","neroli"]],
+  ["especiado","Especiado",["canela","cinnamon","cardamomo","cardamom","açafrão","saffron","pimenta","pepper","gengibre","ginger","noz-moscada","nutmeg","cravo","clove"]],
+  ["aquatico","Aquático",["notas marinhas","marine","sea salt","sal marinho","algas","seaweed","brisa marinha","water","aquatic","calone"]],
+  ["couro","Couro",["couro","leather","suede","camurça","castóreo","birch tar"]],
+  ["verde","Verde / aromático",["folhas verdes","green leaves","folha","green","sálvia","sage","manjericão","basil","alecrim","rosemary","hortelã","mint","chá verde","green tea"]],
+  ["almiscarado","Almíscar",["almíscar","musk","white musk","musk branco"]],
+  ["fumado","Incenso / fumado",["incenso","incense","olíbano","frankincense","mirra","myrrh","fumaça","smoke","tabaco","tobacco"]]
+];
+function factualPerfumeText(p){
+  const pyr=p.pyramid_sources&&p.pyramid_sources.fragrantica||p.pyramid||{};
+  const arr=[...(pyr.top||[]),...(pyr.heart||[]),...(pyr.base||[]),...(p.notes||[])].map(normalizeText);
+  return arr.filter(Boolean);
+}
+function perfumeDNAVector(p){
+  const text=factualPerfumeText(p), fam=normalizeText(p.family);
+  return DNA_AXES.map(([id,label,words])=>{
+    let hits=0;
+    words.forEach(w=>{const nw=normalizeText(w);if(text.some(n=>n===nw||n.includes(nw)||nw.includes(n)))hits++;});
+    if((id==="gourmand"&&fam==="gourmand")||(id==="ambarado"&&fam==="ambar")||(id==="amadeirado"&&fam==="amadeirado")||(id==="couro"&&fam==="couro")||(id==="especiado"&&fam==="especiado")||(id==="floral"&&fam==="floral")||(id==="citrico"&&fam==="citrico")||(id==="aquatico"&&fam==="aquatico")||(id==="frutado"&&fam==="frutado")) hits+=2;
+    return {id,label,score:clamp(Math.round(Math.min(10,hits/Math.max(1,words.length)*22)),0,10)};
+  });
+}
+function collectionTasteProfile(owned){
+  const axes=DNA_AXES.map(([id,label])=>({id,label,score:0,count:0,weighted:0}));
+  owned.forEach(p=>{
+    const rating=Number(p.rating)||0, weight=rating>=8?1.15:rating>=7?1:0.8;
+    perfumeDNAVector(p).forEach((x,i)=>{if(x.score>0){axes[i].count++;axes[i].weighted+=x.score*weight;}});
+  });
+  axes.forEach(a=>{a.score=a.weighted/(owned.length||1);});
+  const liked=axes.slice().sort((a,b)=>b.score-a.score);
+  const hated=axes.slice().sort((a,b)=>a.score-b.score);
+  const top=liked.filter(x=>x.score>=2).slice(0,5);
+  return {axes,top,low:hated.slice(0,4)};
+}
+function collectionGapProfile(owned,taste){
+  const familyCounts={};
+  owned.forEach(p=>{const f=normalizeText(p.family);if(f)familyCounts[f]=(familyCounts[f]||0)+1;});
+  const dna=taste.axes.map(x=>({id:x.id,label:x.label,coverage:x.score}));
+  return dna.slice().sort((a,b)=>a.coverage-b.coverage).slice(0,5).map(x=>({...x,count:DNA_AXES.find(a=>a[0]===x.id)?owned.filter(p=>perfumeDNAVector(p).find(v=>v.id===x.id)?.score>=5).length:0}));
+}
+function tasteSummary(owned){
+  const t=collectionTasteProfile(owned);
+  return t.top.map(x=>x.label+" "+Math.round(x.score*10)+"%").join(" · ")||"perfil ainda em formação";
+}
+function purchaseProfilePayload(owned){
+  const taste=collectionTasteProfile(owned), gaps=collectionGapProfile(owned,taste);
+  return {
+    taste:taste.top.slice(0,6).map(x=>({id:x.id,axis:x.label,strength:Math.round(x.score*10)})),
+    gaps:gaps.slice(0,6).map(x=>({id:x.id,axis:x.label,coverage:Math.round(x.coverage*10),owned:x.count})),
+    favorites:owned.slice().sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)).slice(0,8).map(p=>({name:p.name,brand:p.brand,rating:p.rating,dna:perfumeDNAVector(p).filter(x=>x.score>=5).map(x=>x.label)}))
+  };
+}
 function renderCollectionProfile(){
   const owned=state.perfumes.filter(p=>p.status==="tenho");
   const countEl=$("#profileCount"), head=$("#profileHeadline"), olf=$("#profileOlfactory"), psych=$("#profilePsych");
@@ -1782,6 +1855,10 @@ function renderCollectionProfile(){
     psych.textContent="Ainda não há dados suficientes.";
     $("#profileBars").innerHTML="";
     $("#profileFamilies").innerHTML="";
+    $("#profileTaste").textContent="Ainda não há dados suficientes.";
+    $("#profileTasteTags").innerHTML="";
+    $("#profileGaps").textContent="Ainda não há dados suficientes.";
+    $("#profileGapTags").innerHTML="";
     return;
   }
   const avg=(key,gid="tipo")=>Math.round(owned.reduce((s,p)=>s+(groupValues(p,gid)[key]||0),0)/owned.length*10);
@@ -1815,6 +1892,17 @@ function renderCollectionProfile(){
   if(se>=70)socialMap.push("magnetismo");
   if(!socialMap.length)socialMap.push("equilíbrio e adaptação ao contexto");
   psych.textContent='Sua coleção apresenta maior potencial de comunicação de '+socialMap.slice(0,3).join(", ")+'. Em termos de percepção, esse conjunto tende a construir uma imagem '+(ranked[0]?.[0]||"equilibrada").toLowerCase()+' e orientada ao contexto.';
+  const taste=collectionTasteProfile(owned), gaps=collectionGapProfile(owned,taste);
+  const tasteTop=taste.top.filter(x=>x.score>=1.5).slice(0,4);
+  $("#profileTaste").textContent=tasteTop.length
+    ? "Maior afinidade factual com "+tasteTop.map(x=>x.label.toLowerCase()).join(", ")+". O peso aumenta quando esses territórios aparecem em perfumes melhor avaliados."
+    : "Ainda faltam notas/pirâmides suficientes para inferir seu gosto.";
+  $("#profileTasteTags").innerHTML=tasteTop.map(x=>'<span>'+esc(x.label)+' · '+Math.round(x.score*10)+'%</span>').join("");
+  const gapTop=gaps.filter(x=>x.coverage<2.5).slice(0,4);
+  $("#profileGaps").textContent=gapTop.length
+    ? "Territórios pouco representados: "+gapTop.map(x=>x.label.toLowerCase()).join(", ")+". Eles entram como candidatos a preencher lacunas, sem ignorar seu gosto."
+    : "A coleção cobre bem os principais territórios identificados.";
+  $("#profileGapTags").innerHTML=gapTop.map(x=>'<span>'+esc(x.label)+' · '+Math.round(x.coverage*10)+'%</span>').join("");
 }
 function renderOccasionAdvisor(r,owned){
   const byId={};owned.forEach(p=>byId[p.id]=p);
@@ -1845,61 +1933,79 @@ $("#oaRun").onclick=runOccasionAdvisor;
 $("#oaOccasion").addEventListener("keydown",e=>{if(e.key==="Enter")runOccasionAdvisor();});
 /* Collection purchase advisor */
 function normalizeText(x){return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();}
-function collectionSearchPrompt(name,brand,owned){
+function collectionSearchPrompt(name,brand,owned,mode){
+  const profile=purchaseProfilePayload(owned);
   const compact=owned.slice(0,100).map(p=>({
     id:p.id,nome:p.name,marca:p.brand,familia:p.family,concentracao:p.concentration,
-    notas:(p.notes||[]).slice(0,12),estacoes:p.seasons||[],ocasiao:p.best_occasion||"",
-    radar:p.radar||{},rating:p.rating||0,observacoes:p.comment||""
+    notas:(p.notes||[]).slice(0,12),pyramid:p.pyramid_sources?.fragrantica||p.pyramid||{},
+    estacoes:p.seasons||[],ocasiao:p.best_occasion||"",rating:p.rating||0
   }));
-  return 'Você é um consultor de curadoria de coleção de perfumes. Pesquise o perfume candidato em fontes confiáveis, priorizando Fragrantica, Parfumo e site oficial. Compare-o SOMENTE com a coleção REAL fornecida. Não invente dados. '+
-  'Calcule uma diversidade estimada de 0 a 100: 0 = praticamente ocupa o mesmo espaço olfativo/uso que perfumes existentes; 100 = acrescenta um espaço claramente novo. '+
-  'Calcule redundância estimada de 0 a 100, considerando família, notas, acordes, radar/perfil, estação, ocasião e desempenho. '+
-  'Identifique até 5 perfumes existentes mais próximos, explique a sobreposição e qual percentual aproximado do perfil se repete. '+
-  'Depois determine se o candidato cria uma lacuna relevante de coleção. A resposta deve informar fatos e estimativas, não uma ordem de compra. '+
-  'Responda SOMENTE JSON válido: '+
-  '{"candidate":{"name":"","brand":"","family":"","concentration":"","notes":[],"seasons":[],"best_occasion":"","rating":0,"comment":"","sources":[{"title":"","uri":""}]},"verdict":"ADICIONA_DIVERSIDADE|PARCIALMENTE_REDUNDANTE|MUITO_REDUNDANTE|DADOS_INSUFICIENTES","confidence":0,"diversity_score":0,"redundancy_score":0,"collection_coverage":0,"summary":"","space_added":"","closest":[{"id":"","name":"","reason":"","overlap":0}],"gaps":[],"risks":[],"purchase_case":"","sources":[{"title":"","uri":""}]}. '+
-  'diversity_score, redundancy_score e collection_coverage são estimativas analíticas de 0 a 100; não são notas de qualidade. '+
-  'Coleção atual: '+JSON.stringify(compact)+'. Candidato: '+JSON.stringify({name,brand});
+  const identity=mode==="candidate"
+    ? 'Analise o candidato específico "'+name+'" da marca "'+(brand||"não informada")+'".'
+    : 'Não existe candidato específico. Sugira até 3 perfumes reais que possam ser pesquisados/comprados e que preencham lacunas da coleção sem abandonar o gosto demonstrado.';
+  return 'Você é um consultor de curadoria de perfumaria. '+identity+
+  ' Use o PERFIL DE GOSTO calculado localmente como sinal principal, mas trate-o como preferência inferida, não como fato químico. '+
+  'A pirâmide/notas factual de cada perfume deve permanecer separada das estimativas de radar. Priorize Fragrantica e site oficial da marca; Parfumo é terceira fonte. Não invente notas, concentração, ano ou família. '+
+  'Para cada candidato, compare: (1) compatibilidade com o gosto, especialmente os territórios com maior força/avaliação; (2) lacuna que ele preenche; (3) redundância com a coleção; (4) ponte com o DNA já apreciado. '+
+  'Importante: preencher uma lacuna NÃO significa escolher algo totalmente distante do gosto. Procure uma ponte: novidade suficiente + elementos que o usuário já demonstra gostar. '+
+  'Não transforme a análise em nota de qualidade. Retorne SOMENTE JSON válido: '+
+  '{"candidates":[{"name":"","brand":"","concentration":"","family":"","notes":[],"pyramid":{"top":[],"heart":[],"base":[]},"fit_score":0,"gap_score":0,"redundancy_score":0,"bridge":"","gap":"","summary":"","sources":[{"title":"","uri":""}]}],"collection_reading":{"taste":[],"gaps":[],"method":""},"sources":[{"title":"","uri":""}]}. '+
+  'fit_score, gap_score e redundancy_score são estimativas de compatibilidade/diversidade, não qualidade. '+
+  'Perfil de gosto: '+JSON.stringify(profile.taste)+'. Lacunas: '+JSON.stringify(profile.gaps)+'. Favoritos por rating: '+JSON.stringify(profile.favorites)+
+  '. Coleção real: '+JSON.stringify(compact)+'.';
 }
 function renderCollectionSearch(r,owned){
-  if(!r||!r.candidate){$("#qResult").innerHTML='<div class="id-note show">A IA não retornou dados suficientes.</div>';return;}
-  const v=r.verdict||"DADOS_INSUFICIENTES";
-  const labels={ADICIONA_DIVERSIDADE:"Adiciona diversidade",PARCIALMENTE_REDUNDANTE:"Parcialmente redundante",MUITO_REDUNDANTE:"Muito redundante",DADOS_INSUFICIENTES:"Dados insuficientes"};
-  const div=clamp(r.diversity_score||0,0,100), red=clamp(r.redundancy_score||0,0,100), cov=clamp(r.collection_coverage||0,0,100);
-  const list=(arr,empty)=>Array.isArray(arr)&&arr.length?'<ul class="ai-search-list">'+arr.slice(0,5).map(x=>'<li>'+esc(typeof x==="string"?x:(x.reason||x.name||""))+'</li>').join("")+'</ul>':'<p>'+empty+'</p>';
-  let html='<div class="ai-search-head"><div><div class="ai-search-verdict">'+esc(labels[v]||v)+'</div><div class="ai-search-sub">'+esc(r.summary||"")+'</div></div><div class="ai-search-badge">Confiança '+clamp(r.confidence||0,0,100)+'%</div></div>';
+  if(!r||!Array.isArray(r.candidates)||!r.candidates.length){
+    $("#qResult").innerHTML='<div class="id-note show">A IA não retornou candidatos suficientes.</div>';return;
+  }
+  const reading=r.collection_reading||{}, src=(r.sources||[]).filter(x=>x&&x.uri).slice(0,5);
+  let html='';
+  if(Array.isArray(reading.taste)&&reading.taste.length) html+='<div class="ai-search-box"><div class="dlabel">Seu gosto detectado</div><p>'+reading.taste.slice(0,5).map(esc).join(" · ")+'</p></div>';
+  if(Array.isArray(reading.gaps)&&reading.gaps.length) html+='<div class="ai-search-box"><div class="dlabel">Lacunas priorizadas</div><p>'+reading.gaps.slice(0,5).map(esc).join(" · ")+'</p></div>';
   html+='<div class="ai-search-grid">';
-  html+='<div class="ai-search-box"><div class="dlabel">Diversidade adicionada</div><p><b>'+div+'%</b><br><span class="ai-search-sub">Quanto o candidato amplia o espaço olfativo/uso da coleção.</span></p></div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Redundância estimada</div><p><b>'+red+'%</b><br><span class="ai-search-sub">Quanto ele se sobrepõe ao que você já possui.</span></p></div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Cobertura da coleção</div><p><b>'+cov+'%</b><br><span class="ai-search-sub">Estimativa de quanto do perfil do candidato já é representado por sua coleção.</span></p></div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Espaço que ele acrescenta</div><p>'+esc(r.space_added||"Não identificado.")+'</p></div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Perfumes mais próximos</div>';
-  if(Array.isArray(r.closest)&&r.closest.length) html+='<ul class="ai-search-list">'+r.closest.slice(0,5).map(x=>'<li><b>'+esc(x.name||"")+'</b> · sobreposição '+clamp(x.overlap||0,0,100)+'% — '+esc(x.reason||"")+'</li>').join("")+'</ul>';
-  else html+='<p>Nenhum semelhante identificado.</p>';
+  r.candidates.slice(0,3).forEach((c,idx)=>{
+    html+='<div class="ai-search-box"><div class="dlabel">Candidato '+(idx+1)+'</div>';
+    html+='<h3 style="margin:2px 0 4px;font-family:var(--serif);font-size:23px">'+esc(c.name||"")+'</h3>';
+    html+='<p class="ai-search-sub">'+esc(c.brand||"")+(c.concentration?" · "+esc(c.concentration):"")+(c.family?" · "+esc(c.family):"")+'</p>';
+    html+='<p>'+esc(c.summary||"")+'</p>';
+    html+='<div class="ai-search-sub"><b>Compatibilidade com seu gosto:</b> '+clamp(c.fit_score||0,0,100)+'% · <b>Lacuna:</b> '+clamp(c.gap_score||0,0,100)+'% · <b>Redundância:</b> '+clamp(c.redundancy_score||0,0,100)+'%</div>';
+    html+='<p><b>Ponte com seu gosto:</b> '+esc(c.bridge||"Não informada.")+'</p>';
+    html+='<p><b>Espaço acrescentado:</b> '+esc(c.gap||"Não identificado.")+'</p>';
+    if(Array.isArray(c.notes)&&c.notes.length)html+='<div class="notes">'+c.notes.slice(0,8).map(n=>'<span class="chip">'+esc(n)+'</span>').join("")+'</div>';
+    html+='</div>';
+  });
   html+='</div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Lacunas que pode preencher</div>'+list(r.gaps,"Nenhuma lacuna clara foi identificada.")+'</div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Riscos de redundância</div>'+list(r.risks,"Nenhum risco relevante informado.")+'</div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Caso de compra</div><p>'+esc(r.purchase_case||"")+'</p></div>';
-  html+='<div class="ai-search-box"><div class="dlabel">Perfume pesquisado</div><p><b>'+esc(r.candidate.brand||"")+'</b> · '+esc(r.candidate.name||"")+'<br>'+esc(r.candidate.family||"")+(r.candidate.concentration?" · "+esc(r.candidate.concentration):"")+'<br>'+esc((r.candidate.notes||[]).slice(0,8).join(", ")||"Notas não informadas")+'</p></div>';
-  html+='</div>';
-  const src=(r.sources||r.candidate.sources||[]).filter(x=>x&&x.uri).slice(0,5);
-  html+='<div class="ai-search-foot">Fontes consultadas: '+(src.length?src.map(x=>'<a href="'+esc(x.uri)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||x.uri)+'</a>').join(" · "):"o provedor não retornou URLs de fonte")+'</div>';
+  if(reading.method)html+='<div class="ai-search-foot">'+esc(reading.method)+'</div>';
+  const allSources=[...src,...r.candidates.flatMap(c=>Array.isArray(c.sources)?c.sources:[])].filter((x,i,a)=>x&&x.uri&&a.findIndex(y=>y.uri===x.uri)===i).slice(0,8);
+  html+='<div class="ai-search-foot">Fontes consultadas: '+(allSources.length?allSources.map(x=>'<a href="'+esc(x.uri)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||x.uri)+'</a>').join(" · "):"o provedor não retornou URLs de fonte")+'</div>';
   $("#qResult").innerHTML=html;
 }
+function syncPurchaseMode(){
+  const mode=$("#q_mode").value;
+  const fields=$("#qCandidateFields");
+  if(fields)fields.hidden=mode!=="candidate";
+  $("#q_name").required=mode==="candidate";
+}
 async function runCollectionSearch(){
+  const mode=$("#q_mode").value;
   const name=$("#q_name").value.trim(),brand=$("#q_brand").value.trim();
-  if(!name){toast("Digite o nome do perfume");return;}
+  if(mode==="candidate"&&!name){toast("Digite o nome do perfume");return;}
   const owned=state.perfumes.filter(p=>p.status==="tenho");
   if(!owned.length){toast("Sua coleção está vazia");return;}
-  const btn=$("#qRun");btn.disabled=true;btn.textContent="Pesquisando e comparando…";$("#qResult").innerHTML="";
-  try{const out=await aiComplete(collectionSearchPrompt(name,brand,owned));renderCollectionSearch(out.data,owned);}
-  catch(e){$("#qResult").innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
+  const btn=$("#qRun");btn.disabled=true;btn.textContent=mode==="candidate"?"Comparando com seu gosto…":"Encontrando lacunas…";$("#qResult").innerHTML="";
+  try{
+    const out=await aiComplete(collectionSearchPrompt(name,brand,owned,mode));
+    renderCollectionSearch(out.data,owned);
+  }catch(e){$("#qResult").innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
   finally{btn.disabled=false;btn.textContent="Analisar minha coleção";}
 }
-$("#collectionSearchBtn").onclick=()=>{$("#q_name").value="";$("#q_brand").value="";$("#qResult").innerHTML="";openSheet("q");setTimeout(()=>$("#q_name").focus(),100);};
+$("#collectionSearchBtn").onclick=()=>{
+  $("#q_name").value="";$("#q_brand").value="";$("#qResult").innerHTML="";
+  $("#q_mode").value="candidate";syncPurchaseMode();openSheet("q");setTimeout(()=>$("#q_name").focus(),100);
+};
+$("#q_mode").addEventListener("change",syncPurchaseMode);
 $("#qRun").onclick=runCollectionSearch;
 $("#q_name").addEventListener("keydown",e=>{if(e.key==="Enter")runCollectionSearch();});
-
 const COMP_B="#EFC13A";
 const clamp01=x=>Math.max(0,Math.min(1,x));
 function famGroupOf(f){f=f||"";if(["ambar","gourmand","especiado","couro"].includes(f))return "quente";if(["amadeirado","chipre"].includes(f))return "amadeirado";if(["citrico","aquatico","aromatico"].includes(f))return "fresco";if(f==="floral")return "floral";return "outro";}
