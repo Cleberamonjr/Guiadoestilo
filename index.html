@@ -1247,7 +1247,7 @@ async function openaiJSON(prompt){
   const base=(cfg.baseUrl||"https://api.openai.com/v1").replace(/\/$/,"");
   let res;
   try{
-    res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"gpt-4o-mini",temperature:0.3,messages:[{role:"user",content:prompt}]})});
+    res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"gpt-4o-mini",temperature:0,messages:[{role:"user",content:prompt}]})});
   }catch(e){e.code="network";throw e;}
   if(!res.ok)await readApiError(res);
   const j=await res.json();let txt=(j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||"";
@@ -1258,7 +1258,7 @@ async function geminiJSON(prompt,cfg){
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
   const model=(cfg.model||"gemini-2.5-flash").replace(/^models\//,"");
   const url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent";
-  const body={contents:[{parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.2,responseMimeType:"application/json"}};
+  const body={contents:[{parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0,responseMimeType:"application/json"}};
   let res;
   try{res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key},body:JSON.stringify(body)});}catch(e){e.code="network";throw e;}
   if(!res.ok)await readApiError(res);
@@ -1274,7 +1274,7 @@ async function glmJSON(prompt,cfg){
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
   const base=(cfg.baseUrl||"https://api.z.ai/api/paas/v4").replace(/\/$/,"");
   const model=cfg.model||"glm-4.6";
-  const body={model,temperature:0.2,messages:[{role:"user",content:prompt}]};
+  const body={model,temperature:0,messages:[{role:"user",content:prompt}]};
   let res;
   try{res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify(body)});}catch(e){e.code="network";throw e;}
   if(!res.ok)await readApiError(res);
@@ -1523,7 +1523,18 @@ $("#bulkBtn").onclick=async()=>{
   const btn=$("#bulkBtn");btn.disabled=true;let done=0,fail=0;
   for(let k=0;k<list.length;k++){
     btn.textContent="Buscando "+(k+1)+"/"+list.length+"…";
-    try{const cached=getCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"");const outData=cached&&cached.data?cached.data:(await aiComplete(perfumePrompt(list[k].brand,list[k].name,list[k].concentration||""))).data;if(!cached){const fresh=await aiComplete(perfumePrompt(list[k].brand,list[k].name,list[k].concentration||""));outData={...fresh.data,sources:[...(Array.isArray(fresh.data&&fresh.data.sources)?fresh.data.sources:[]),...(Array.isArray(fresh.sources)?fresh.sources:[])]};saveCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"",outData);}const upd=mergeAiInto(JSON.parse(JSON.stringify(list[k])),outData,[]);await dataUpdate("perfumes",list[k].id,upd);done++;}catch(e){fail++;}
+    try{
+      const conc=list[k].concentration||"";
+      const cached=getCachedPerfumeAuthority(list[k].brand,list[k].name,conc);
+      let outData=cached&&cached.data?cached.data:null;
+      if(!outData){
+        const fresh=await aiComplete(perfumePrompt(list[k].brand,list[k].name,conc));
+        outData={...fresh.data,sources:[...(Array.isArray(fresh.data&&fresh.data.sources)?fresh.data.sources:[]),...(Array.isArray(fresh.sources)?fresh.sources:[])]};
+        saveCachedPerfumeAuthority(list[k].brand,list[k].name,conc,outData);
+      }
+      const upd=mergeAiInto(JSON.parse(JSON.stringify(list[k])),outData,[]);
+      await dataUpdate("perfumes",list[k].id,upd);done++;
+    }catch(e){fail++;}
     await new Promise(r=>setTimeout(r,350));
   }
   btn.disabled=false;btn.textContent="Conferir ficha canônica p/ toda a coleção";
