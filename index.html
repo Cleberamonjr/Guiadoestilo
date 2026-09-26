@@ -1326,7 +1326,15 @@ function applyAiResult(r,sources){
   if(r.gender)pDraft.gender=String(r.gender);
   if(r.perfumer)pDraft.perfumer=String(r.perfumer);
   if(r.year)pDraft.year=String(r.year);
-  if(r.pyramid&&typeof r.pyramid==="object")pDraft.pyramid={top:arrStr(r.pyramid.top),heart:arrStr(r.pyramid.heart),base:arrStr(r.pyramid.base)};
+  if(r.pyramid&&typeof r.pyramid==="object"){
+    const fr=normalizePyramid(r.pyramid.fragrantica||r.pyramid.canonical||r.pyramid);
+    const br=normalizePyramid(r.pyramid.brand);
+    pDraft.pyramid=fr;
+    pDraft.pyramid_sources={fragrantica:fr,brand:br};
+  }
+  if(r.source_comparison)pDraft.source_comparison=String(r.source_comparison);
+  if(r.source_confidence)pDraft.source_confidence=String(r.source_confidence);
+  pDraft.authoritative_lookup_key=perfumeIdentityKey(pDraft.brand||brand,pDraft.name||name,pDraft.concentration||"");
   if(r.best_occasion)pDraft.best_occasion=String(r.best_occasion);
   if(Array.isArray(r.notes)&&r.notes.length){pDraft.notes=r.notes.slice(0,12).map(String);renderNotes();}
   if(Array.isArray(r.seasons)){pDraft.seasons=r.seasons.filter(s=>SEASONS.includes(s));syncChips("#seaChips",pDraft.seasons);}
@@ -1391,7 +1399,7 @@ async function aiFillPerfume(){
     if(cached&&cached.data){outData=cached.data;fromCache=true;}
     else{
       const out=await aiComplete(perfumePrompt(brand,name,conc));
-      outData=out.data;
+      outData={...out.data,sources:[...(Array.isArray(out.data&&out.data.sources)?out.data.sources:[]),...(Array.isArray(out.sources)?out.sources:[])]};
       saveCachedPerfumeAuthority(brand,name,conc,outData);
     }
     applyAiResult(outData,[]);
@@ -1515,7 +1523,7 @@ $("#bulkBtn").onclick=async()=>{
   const btn=$("#bulkBtn");btn.disabled=true;let done=0,fail=0;
   for(let k=0;k<list.length;k++){
     btn.textContent="Buscando "+(k+1)+"/"+list.length+"…";
-    try{const cached=getCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"");const outData=cached&&cached.data?cached.data:(await aiComplete(perfumePrompt(list[k].brand,list[k].name,list[k].concentration||""))).data;if(!cached)saveCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"",outData);const upd=mergeAiInto(JSON.parse(JSON.stringify(list[k])),outData,[]);await dataUpdate("perfumes",list[k].id,upd);done++;}catch(e){fail++;}
+    try{const cached=getCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"");const outData=cached&&cached.data?cached.data:(await aiComplete(perfumePrompt(list[k].brand,list[k].name,list[k].concentration||""))).data;if(!cached){const fresh=await aiComplete(perfumePrompt(list[k].brand,list[k].name,list[k].concentration||""));outData={...fresh.data,sources:[...(Array.isArray(fresh.data&&fresh.data.sources)?fresh.data.sources:[]),...(Array.isArray(fresh.sources)?fresh.sources:[])]};saveCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"",outData);}const upd=mergeAiInto(JSON.parse(JSON.stringify(list[k])),outData,[]);await dataUpdate("perfumes",list[k].id,upd);done++;}catch(e){fail++;}
     await new Promise(r=>setTimeout(r,350));
   }
   btn.disabled=false;btn.textContent="Conferir ficha canônica p/ toda a coleção";
@@ -1648,7 +1656,7 @@ async function aiUpdateExisting(id){
     let data= cached&&cached.data ? cached.data : null;
     if(!data){
       const out=await aiComplete(perfumePrompt(i.brand,i.name,conc));
-      data=out.data;
+      data={...out.data,sources:[...(Array.isArray(out.data&&out.data.sources)?out.data.sources:[]),...(Array.isArray(out.sources)?out.sources:[])]};
       saveCachedPerfumeAuthority(i.brand,i.name,conc,data);
     }
     const upd=mergeAiInto(JSON.parse(JSON.stringify(i)),data,[]);
