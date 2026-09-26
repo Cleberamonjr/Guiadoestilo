@@ -1334,7 +1334,7 @@ function applyAiResult(r,sources){
   }
   if(r.source_comparison)pDraft.source_comparison=String(r.source_comparison);
   if(r.source_confidence)pDraft.source_confidence=String(r.source_confidence);
-  pDraft.authoritative_lookup_key=perfumeIdentityKey(pDraft.brand||brand,pDraft.name||name,pDraft.concentration||"");
+  pDraft.authoritative_lookup_key=perfumeIdentityKey(pDraft.brand||$("#f_brand").value,pDraft.name||$("#f_name").value,pDraft.concentration||"");
   if(r.best_occasion)pDraft.best_occasion=String(r.best_occasion);
   if(Array.isArray(r.notes)&&r.notes.length){pDraft.notes=r.notes.slice(0,12).map(String);renderNotes();}
   if(Array.isArray(r.seasons)){pDraft.seasons=r.seasons.filter(s=>SEASONS.includes(s));syncChips("#seaChips",pDraft.seasons);}
