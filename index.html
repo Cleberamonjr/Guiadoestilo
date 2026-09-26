@@ -1966,8 +1966,15 @@ function purchaseIdentityKey(name,brand){
 }
 function purchaseIsOwned(candidate,owned){
   if(!candidate||!candidate.name)return false;
-  const key=purchaseIdentityKey(candidate.name,candidate.brand);
-  return owned.some(p=>purchaseIdentityKey(p.name,p.brand)===key);
+  const cn=normalizeText(candidate.name), cb=normalizeText(candidate.brand);
+  if(!cn)return false;
+  return owned.some(p=>{
+    const pn=normalizeText(p.name), pb=normalizeText(p.brand);
+    if(!pn)return false;
+    if(pn===cn)return true;
+    if((pn.includes(cn)||cn.includes(pn))&&(!cb||!pb||pb.includes(cb)||cb.includes(pb)))return true;
+    return false;
+  });
 }
 function purchaseText(candidate){
   const pyr=candidate&&candidate.pyramid||{};
@@ -1983,7 +1990,10 @@ function purchaseRedundancyScore(candidate,owned){
     const sameFamily=normalizeText(candidate.family)===normalizeText(p.family)&&normalizeText(candidate.family)!=="";
     max=Math.max(max,Math.min(1,inter/uni+(sameFamily?.18:0)));
   });
-  return Math.round(max*100);
+  const cf=normalizeText(candidate.family);
+  const famCount=cf?owned.filter(p=>normalizeText(p.family)===cf).length:0;
+  const sat=Math.min(0.55,famCount*0.1);
+  return Math.round(Math.min(1,Math.max(max,sat))*100);
 }
 function sanitizePurchaseResults(r,owned){
   if(!r||!Array.isArray(r.candidates))return r;
