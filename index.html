@@ -2061,7 +2061,8 @@ async function runCollectionSearch(){
   const btn=$("#qRun");btn.disabled=true;btn.textContent=mode==="candidate"?"Comparando com seu gosto…":"Encontrando lacunas…";$("#qResult").innerHTML="";
   try{
     const out=await aiComplete(collectionSearchPrompt(name,brand,owned,mode));
-    renderCollectionSearch(out.data,owned);
+    const clean=sanitizePurchaseResults(out.data||{},owned);
+    renderCollectionSearch(clean,owned);
   }catch(e){$("#qResult").innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
   finally{btn.disabled=false;btn.textContent="Analisar minha coleção";}
 }
