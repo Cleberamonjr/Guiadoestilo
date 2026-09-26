@@ -956,10 +956,35 @@ window.switchTab=switchTab;
 
 function characteristicValue(p,key){
   const r=p.radar||{};
-  if(["verao","primavera","outono","inverno"].includes(key)) return (p.seasons||[]).some(s=>normalizeText(s)===normalizeText({verao:"Verão",primavera:"Primavera",outono:"Outono",inverno:"Inverno"}[key]))?10:0;
+  const fam=String(p.family||"").toLowerCase();
+  const notes=(p.notes||[]).map(normalizeText);
+  const hasAny=(words)=>words.some(w=>notes.some(n=>n.includes(normalizeText(w))));
+  const explicit=Number(r[key]);
+  if(Number.isFinite(explicit)&&explicit>0)return clamp(explicit,0,10);
+  if(["verao","primavera","outono","inverno"].includes(key)){
+    return (p.seasons||[]).some(s=>normalizeText(s)===normalizeText({verao:"Verão",primavera:"Primavera",outono:"Outono",inverno:"Inverno"}[key]))?10:0;
+  }
   if(["trabalho","encontro","festa","esporte"].includes(key)) return groupValues(p,"ocasiao")[key]||0;
-  if(key==="amadeirado") return groupValues(p,"tipo").amadeirado||0;
-  return Number(r[key]||0);
+  if(key==="amadeirado"){
+    return fam==="amadeirado"||fam==="chipre"||hasAny(["sândalo","cedro","vetiver","madeira","madeiras","oud","patchouli"])?9:groupValues(p,"tipo").amadeirado||0;
+  }
+  if(key==="doce"){
+    return ["gourmand","ambar","especiado"].includes(fam)||hasAny(["baunilha","mel","caramelo","praliné","tonka","tâmara","chocolate","açúcar"])?8:0;
+  }
+  if(key==="frescor"){
+    return ["aquatico","citrico","aromatico"].includes(fam)||hasAny(["cítrico","limão","bergamota","menta","hortelã","notas marinhas","aquático"])?8:0;
+  }
+  if(key==="citrico"){
+    return fam==="citrico"||hasAny(["cítrico","limão","bergamota","laranja","toranja","grapefruit"])?8:0;
+  }
+  if(key==="maritimo"){
+    return fam==="aquatico"||hasAny(["notas marinhas","marinho","aquático","algas","brisa marinha"])?8:0;
+  }
+  if(key==="projecao")return Number(r.projecao||0);
+  if(key==="longevidade")return Number(r.longevidade||0);
+  if(key==="versatilidade")return Number(r.versatilidade||0);
+  if(key==="elegancia")return Number(r.elegancia||0);
+  return 0;
 }
 function strictCharacteristicMatch(p,key){return characteristicValue(p,key)>=7;}
 function localOccasionScore(p,occasion){
