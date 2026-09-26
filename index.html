@@ -1987,14 +1987,15 @@ function purchaseRedundancyScore(candidate,owned){
 }
 function sanitizePurchaseResults(r,owned){
   if(!r||!Array.isArray(r.candidates))return r;
-  const seen=new Set();
+  const seen=new Set(); let excludedOwned=0, excludedRedundant=0;
   r.candidates=r.candidates.filter(c=>{
     if(!c||!c.name)return false;
     const key=purchaseIdentityKey(c.name,c.brand);
-    if(seen.has(key)||purchaseIsOwned(c,owned))return false;
+    if(seen.has(key))return false;
+    if(purchaseIsOwned(c,owned)){excludedOwned++;return false;}
     seen.add(key);
     c.redundancy_score=purchaseRedundancyScore(c,owned);
-    if(c.redundancy_score>=65)return false;
+    if(c.redundancy_score>=65){excludedRedundant++;return false;}
     c.dupe=c.dupe||{};
     if(c.dupe.found&&purchaseIsOwned(c.dupe,owned))c.dupe={found:false,name:"",brand:"",concentration:"",fidelity_score:0,fidelity_level:"nao_confirmada",shared_notes:[],shared_pyramid:[],differences:[],why:"O possível dupe já pertence à sua coleção e foi excluído.",sources:[]};
     return true;
@@ -2005,11 +2006,16 @@ function sanitizePurchaseResults(r,owned){
     return sb-sa;
   });
   r.candidates=r.candidates.slice(0,3);
+  r.collection_reading=r.collection_reading||{};
+  const audit=[];
+  if(excludedOwned)audit.push(excludedOwned+" candidato(s) já estavam na sua coleção e foram excluídos");
+  if(excludedRedundant)audit.push(excludedRedundant+" candidato(s) tinham redundância alta e foram excluídos");
+  if(audit.length)r.collection_reading.method=audit.join(". ")+".";
   return r;
 }
 function renderCollectionSearch(r,owned){
   if(!r||!Array.isArray(r.candidates)||!r.candidates.length){
-    $("#qResult").innerHTML='<div class="id-note show">A IA não retornou candidatos suficientes.</div>';return;
+    $("#qResult").innerHTML='<div class="id-note show">Nenhum candidato passou pela análise da sua coleção. Perfumes já possuídos e opções com redundância alta são excluídos automaticamente.</div>';return;
   }
   const reading=r.collection_reading||{}, src=(r.sources||[]).filter(x=>x&&x.uri).slice(0,5);
   let html='';
