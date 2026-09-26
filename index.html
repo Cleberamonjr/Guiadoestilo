@@ -2235,8 +2235,6 @@ function renderCompare(){
 }
 $("#compareBtn").onclick=openCompare;
 initSuggest();
-initHomeStyleVision();
-initAppDrawer();
 renderAll();
 initCaps();
 </script>
@@ -2344,6 +2342,8 @@ function initAppDrawer(){
   $("#appDrawer")?.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.id!=="drawerClose")setTimeout(closeAppDrawer,90);});
   document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAppDrawer();});
 }
+initHomeStyleVision();
+initAppDrawer();
 
 function setProductNav(view){
   document.querySelectorAll(".product-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
