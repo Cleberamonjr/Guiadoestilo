@@ -530,32 +530,47 @@ header::after{
 .detail-actions{display:flex;gap:8px;flex-wrap:wrap}
 .detail-actions button{flex:1;min-width:130px}
 @media(max-width:560px){.detail-commercial-grid{grid-template-columns:1fr}.detail-actions{display:grid;grid-template-columns:1fr 1fr}.detail-actions .btn-primary{grid-column:1/-1}}
+</style><style id="pro-style-navigation-css">
+.menu-trigger{width:46px;height:46px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}.menu-trigger svg{width:21px;height:21px}
+.drawer-backdrop{position:fixed;inset:0;background:rgba(3,9,18,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);z-index:70;opacity:0;transition:opacity .22s ease}.drawer-backdrop.open{opacity:1}.drawer-backdrop[hidden]{display:none}
+.app-drawer{position:fixed;z-index:71;top:0;right:0;width:min(380px,92vw);height:100dvh;background:var(--surface);border-left:1px solid var(--line);box-shadow:-24px 0 70px rgba(0,0,0,.38);transform:translateX(102%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding:calc(22px + env(safe-area-inset-top)) 18px calc(22px + env(safe-area-inset-bottom));overflow:auto}.app-drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;justify-content:space-between;gap:16px;padding:4px 2px 18px;border-bottom:1px solid var(--line)}.drawer-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--gold);font-weight:800}.drawer-head h2{font-family:var(--serif);font-size:29px;line-height:1;margin:5px 0}.drawer-head p{margin:0;color:var(--muted);font-size:12px}.drawer-close{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink-soft);display:grid;place-items:center}.drawer-close svg{width:18px;height:18px}
+.drawer-section{padding:18px 0 4px}.drawer-label{font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);font-weight:800;margin:0 4px 8px}.drawer-item{width:100%;display:grid;grid-template-columns:42px 1fr;gap:11px;align-items:center;text-align:left;border:1px solid transparent;background:transparent;color:var(--ink);border-radius:14px;padding:11px 10px;margin-bottom:5px;transition:background .16s,border-color .16s,transform .16s}.drawer-item:hover,.drawer-item:focus-visible{background:var(--bg);border-color:var(--line);transform:translateX(-2px)}.drawer-icon{width:38px;height:38px;border-radius:11px;background:var(--surface-2);color:var(--gold-bright);display:grid;place-items:center;font-size:17px;font-weight:700}.drawer-item b{display:block;font-size:13px}.drawer-item small{display:block;color:var(--muted);font-size:10.5px;margin-top:2px;line-height:1.35}.drawer-footer{display:flex;gap:8px;align-items:flex-start;margin:18px 4px 4px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--muted);font-size:10.5px;line-height:1.45}.sync-dot{width:7px;height:7px;border-radius:50%;background:#4FB07E;flex:0 0 auto;margin-top:4px}
+@media(max-width:560px){.app-drawer{width:min(390px,94vw)}}
 </style></head>
 <body>
 <div class="wrap">
   <header>
     <div class="brand"><h1>Guia do <span class="g">Estilo</span></h1>
-      <div class="sub"><p>Perfumes &amp; relógios</p><span class="sync" id="sync"><span class="d"></span><span id="syncText">neste dispositivo</span></span></div></div>
-    <div class="top-actions">
-      <button class="icon-btn" id="installBtn" title="Instalar app" aria-label="Instalar app" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 6v7m0 0-2.4-2.4M12 13l2.4-2.4M9.5 18.5h5"/></svg></button>
-      <button class="icon-btn" id="suggestBtn" title="Sugestão pelo look" aria-label="Sugestão pelo look"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z"/><circle cx="18.5" cy="17.5" r="2.4"/></svg></button>
-      <button class="icon-btn" id="compareBtn" title="Comparar perfumes" aria-label="Comparar perfumes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="12" r="6.5"/><circle cx="15" cy="12" r="6.5"/></svg></button> 
-      <button class="icon-btn" id="collectionSearchBtn" title="Pesquisar perfume na coleção" aria-label="Pesquisar perfume na coleção"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.2 4.2"/><path d="M8.5 10.8h4.6M10.8 8.5v4.6"/></svg></button>
-      <button class="icon-btn" id="cfgBtn" title="IA / Configurações" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.2a1.6 1.6 0 0 0-2.6-1.1 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4.6 15H4.4a2 2 0 0 1 0-4h.2A1.6 1.6 0 0 0 6 8.4a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10.6A1.6 1.6 0 0 0 12 2.6V2.4a2 2 0 0 1 4 0v.2a1.6 1.6 0 0 0 2.6 1.1 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V8.4a1.6 1.6 0 0 0 1.4 1.4h.2a2 2 0 0 1 0 4H21a1.6 1.6 0 0 0-1.4 1.2z"/></svg></button>
-      <button class="icon-btn" id="themeBtn" title="Tema" aria-label="Alternar tema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
-      <button class="icon-btn" id="dlBtn" title="Backup" aria-label="Exportar backup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></button>
-    </div>
+      <div class="sub"><p>Perfumaria, imagem &amp; estilo</p><span class="sync" id="sync"><span class="d"></span><span id="syncText">neste dispositivo</span></span></div></div>
+    <div class="top-actions"><button class="icon-btn menu-trigger" id="menuBtn" title="Abrir menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="appDrawer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
   </header>
+<div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+<aside class="app-drawer" id="appDrawer" aria-hidden="true" aria-label="Menu do aplicativo">
+  <div class="drawer-head"><div><div class="drawer-eyebrow">Guia do Estilo</div><h2>Centro de controle</h2><p>Ações, inteligência e preferências</p></div><button class="drawer-close" id="drawerClose" type="button" aria-label="Fechar menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="drawer-section"><div class="drawer-label">IA &amp; consultoria</div>
+    <button class="drawer-item" id="suggestBtn" type="button"><span class="drawer-icon">✦</span><span><b>Analisar meu look</b><small>Foto, nota de estilo e fragrância ideal</small></span></button>
+    <button class="drawer-item" id="collectionSearchBtn" type="button"><span class="drawer-icon">⌕</span><span><b>Curadoria de compra</b><small>Descubra o que realmente falta</small></span></button>
+    <button class="drawer-item" id="compareBtn" type="button"><span class="drawer-icon">◉</span><span><b>Comparar fragrâncias</b><small>DNA, ocasião e compatibilidade</small></span></button>
+  </div>
+  <div class="drawer-section"><div class="drawer-label">Aplicativo</div>
+    <button class="drawer-item" id="cfgBtn" type="button"><span class="drawer-icon">⚙</span><span><b>IA &amp; configurações</b><small>Provedor, chave e radar</small></span></button>
+    <button class="drawer-item" id="themeBtn" type="button"><span class="drawer-icon">◐</span><span><b>Aparência</b><small>Alternar tema claro/escuro</small></span></button>
+    <button class="drawer-item" id="dlBtn" type="button"><span class="drawer-icon">↓</span><span><b>Exportar coleção</b><small>Backup dos seus dados</small></span></button>
+    <button class="drawer-item" id="installBtn" type="button" hidden><span class="drawer-icon">＋</span><span><b>Instalar aplicativo</b><small>Adicionar à tela inicial</small></span></button>
+  </div>
+  <div class="drawer-footer"><span class="sync-dot"></span><span>Seus dados continuam no dispositivo quando a nuvem estiver indisponível.</span></div>
+</aside>
   <nav class="product-nav" aria-label="Navegação principal">
     <button class="product-nav-item active" type="button" data-view="perfumes" onclick="switchProductView('colecao')"><span>◈</span><b>Coleção</b><small>Seu acervo</small></button>
     <button class="product-nav-item" type="button" data-view="consultor" onclick="focusProductSection('occasionAdvisor')"><span>✦</span><b>Consultor</b><small>Qual usar?</small></button>
     <button class="product-nav-item" type="button" data-view="impacto" onclick="focusProductSection('profileDashboard')"><span>◎</span><b>Impacto</b><small>Como comunica</small></button>
     <button class="product-nav-item" type="button" data-view="compra" onclick="openSheet('q')"><span>⌕</span><b>Compra</b><small>O que acrescentar?</small></button>
-    <button class="product-nav-item" type="button" data-view="watches" onclick="switchProductView('relogios')"><span>◷</span><b>Relógios</b><small>Seu acervo</small></button>
+    <button class="product-nav-item" type="button" data-view="watches" onclick="switchProductView('relogios')"><span>◷</span><b>Acessórios</b><small>Seu acervo</small></button>
   </nav>
   <div class="legacy-tabs" role="tablist" aria-hidden="true">
-    <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Perfumes</button>
-    <button role="tab" id="tabW" aria-selected="false" onclick="switchTab('watches')">Relógios</button>
+    <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Fragrâncias</button>
+    <button role="tab" id="tabW" aria-selected="false" onclick="switchTab('watches')">Acessórios</button>
   </div>
   <section id="viewPerfumes">
     <div class="summary" id="pSummary" hidden>
@@ -613,7 +628,7 @@ header::after{
       <div class="char-filter"><select id="pCharacteristic" aria-label="Filtrar por característica"><option value="">Qualquer característica</option><option value="dia">Dia</option><option value="noite">Noite</option><option value="romantico">Romântico</option><option value="doce">Doce</option><option value="maritimo">Aquático / marinho</option><option value="citrico">Cítrico</option><option value="projecao">Alta projeção</option><option value="longevidade">Alta longevidade</option><option value="versatilidade">Versátil</option><option value="frescor">Fresco</option><option value="amadeirado">Amadeirado</option><option value="elegancia">Elegante</option><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="festa">Festa</option><option value="esporte">Esporte</option><option value="verao">Verão</option><option value="primavera">Primavera</option><option value="outono">Outono</option><option value="inverno">Inverno</option></select></div>
       <div class="select"><select id="pStatus"><option value="">Todas</option><option value="tenho">Tenho</option><option value="desejo">Desejo</option><option value="acabou">Acabou</option></select></div>
       <div class="select"><select id="pSort"><option value="recent">Recentes</option><option value="rating">Rating</option><option value="dia">Dia</option><option value="noite">Noite</option><option value="romantico">Romântico</option><option value="doce">Doce</option><option value="name">Nome A–Z</option></select></div>
-      <button class="btn-add" onclick="openPerfume()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Perfume</button>
+      <button class="btn-add" onclick="openPerfume()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Fragrância</button>
     </div>
     <div class="grid" id="pGrid"></div>
     <div class="empty" id="pEmpty" hidden>
@@ -631,7 +646,7 @@ header::after{
       <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg><input id="wSearch" placeholder="Buscar por marca ou modelo…" autocomplete="off"></div>
       <div class="select"><select id="wStatus"><option value="">Todas</option><option value="tenho">Tenho</option><option value="desejo">Desejo</option><option value="vendido">Vendido</option></select></div>
       <div class="select"><select id="wSort"><option value="recent">Recentes</option><option value="brand">Marca A–Z</option><option value="rating">Avaliação</option></select></div>
-      <button class="btn-add" onclick="openWatch()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Relógio</button>
+      <button class="btn-add" onclick="openWatch()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Acessório</button>
     </div>
     <div class="grid" id="wGrid"></div>
     <div class="empty" id="wEmpty" hidden>
