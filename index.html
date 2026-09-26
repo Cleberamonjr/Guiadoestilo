@@ -1994,6 +1994,7 @@ function sanitizePurchaseResults(r,owned){
     if(seen.has(key)||purchaseIsOwned(c,owned))return false;
     seen.add(key);
     c.redundancy_score=purchaseRedundancyScore(c,owned);
+    if(c.redundancy_score>=65)return false;
     c.dupe=c.dupe||{};
     if(c.dupe.found&&purchaseIsOwned(c.dupe,owned))c.dupe={found:false,name:"",brand:"",concentration:"",fidelity_score:0,fidelity_level:"nao_confirmada",shared_notes:[],shared_pyramid:[],differences:[],why:"O possível dupe já pertence à sua coleção e foi excluído.",sources:[]};
     return true;
@@ -2058,7 +2059,8 @@ async function runCollectionSearch(){
   if(mode==="candidate"&&!name){toast("Digite o nome do perfume");return;}
   const owned=state.perfumes.filter(p=>p.status==="tenho");
   if(!owned.length){toast("Sua coleção está vazia");return;}
-  const btn=$("#qRun");btn.disabled=true;btn.textContent=mode==="candidate"?"Comparando com seu gosto…":"Encontrando lacunas…";$("#qResult").innerHTML="";
+  const btn=$("#qRun");btn.disabled=true;btn.textContent=mode==="candidate"?"1/2 Lendo sua coleção…":"1/2 Lendo seu DNA…";$("#qResult").innerHTML="";
+  setTimeout(()=>{if(btn.disabled)btn.textContent="2/2 Procurando fora da coleção…";},250);
   try{
     const out=await aiComplete(collectionSearchPrompt(name,brand,owned,mode));
     const clean=sanitizePurchaseResults(out.data||{},owned);
