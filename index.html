@@ -1961,6 +1961,51 @@ function collectionSearchPrompt(name,brand,owned,mode){
   'Perfil de gosto: '+JSON.stringify(profile.taste)+'. Lacunas: '+JSON.stringify(profile.gaps)+'. Favoritos por rating: '+JSON.stringify(profile.favorites)+
   '. Coleção real: '+JSON.stringify(compact)+'.';
 }
+function purchaseIdentityKey(name,brand){
+  return normalizeText((brand||"")+"|"+(name||"")).replace(/[^a-z0-9|]+/g,"-");
+}
+function purchaseIsOwned(candidate,owned){
+  if(!candidate||!candidate.name)return false;
+  const key=purchaseIdentityKey(candidate.name,candidate.brand);
+  return owned.some(p=>purchaseIdentityKey(p.name,p.brand)===key);
+}
+function purchaseText(candidate){
+  const pyr=candidate&&candidate.pyramid||{};
+  return [...(pyr.top||[]),...(pyr.heart||[]),...(pyr.base||[]),...(candidate.notes||[])].map(normalizeText).filter(Boolean);
+}
+function purchaseRedundancyScore(candidate,owned){
+  if(!candidate||!owned.length)return 0;
+  const ct=new Set(purchaseText(candidate));let max=0;
+  owned.forEach(p=>{
+    const pt=new Set(purchaseText({notes:p.notes||[],pyramid:p.pyramid_sources?.fragrantica||p.pyramid||{}}));
+    const inter=[...ct].filter(x=>pt.has(x)).length;
+    const uni=new Set([...ct,...pt]).size||1;
+    const sameFamily=normalizeText(candidate.family)===normalizeText(p.family)&&normalizeText(candidate.family)!=="";
+    max=Math.max(max,Math.min(1,inter/uni+(sameFamily?.18:0)));
+  });
+  return Math.round(max*100);
+}
+function sanitizePurchaseResults(r,owned){
+  if(!r||!Array.isArray(r.candidates))return r;
+  const seen=new Set();
+  r.candidates=r.candidates.filter(c=>{
+    if(!c||!c.name)return false;
+    const key=purchaseIdentityKey(c.name,c.brand);
+    if(seen.has(key)||purchaseIsOwned(c,owned))return false;
+    seen.add(key);
+    c.redundancy_score=purchaseRedundancyScore(c,owned);
+    c.dupe=c.dupe||{};
+    if(c.dupe.found&&purchaseIsOwned(c.dupe,owned))c.dupe={found:false,name:"",brand:"",concentration:"",fidelity_score:0,fidelity_level:"nao_confirmada",shared_notes:[],shared_pyramid:[],differences:[],why:"O possível dupe já pertence à sua coleção e foi excluído.",sources:[]};
+    return true;
+  });
+  r.candidates.sort((a,b)=>{
+    const sa=(Number(a.fit_score)||0)+(Number(a.gap_score)||0)-(Number(a.redundancy_score)||0);
+    const sb=(Number(b.fit_score)||0)+(Number(b.gap_score)||0)-(Number(b.redundancy_score)||0);
+    return sb-sa;
+  });
+  r.candidates=r.candidates.slice(0,3);
+  return r;
+}
 function renderCollectionSearch(r,owned){
   if(!r||!Array.isArray(r.candidates)||!r.candidates.length){
     $("#qResult").innerHTML='<div class="id-note show">A IA não retornou candidatos suficientes.</div>';return;
