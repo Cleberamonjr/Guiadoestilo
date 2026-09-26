@@ -1305,8 +1305,16 @@ function aiErr(e){
   if(c==="not_granted")return "Permita o uso da Claude para a IA.";
   return "IA indisponível: "+(e&&e.message?e.message:"erro desconhecido");
 }
-function perfumePrompt(brand,name){
-  return 'Você é especialista em perfumaria. Consulte fontes CONFIÁVEIS, priorizando o FRAGRANTICA (fragrantica.com.br / fragrantica.com), e também o site oficial da marca e o Parfumo, sobre o perfume "'+brand+' '+name+'". Corrija a marca/casa se estiver errada. Responda SOMENTE com JSON válido (sem markdown, sem texto extra): {"brand":"marca/casa correta segundo a fonte","concentration":"EDC|EDT|EDP|Parfum|Extrait ou vazio","family":"uma de: ambar, amadeirado, aromatico, citrico, aquatico, floral, gourmand, especiado, couro, chipre, outra","gender":"masculino|feminino|unissex ou vazio","perfumer":"","year":"","pyramid":{"top":["notas de saída"],"heart":["notas de corpo"],"base":["notas de fundo"]},"notes":["principais notas em português"],"seasons":["subconjunto de: Verão, Outono, Inverno, Primavera"],"best_occasion":"melhor ocasião em 1-2 palavras (ex.: Noite, Encontro, Trabalho, Festa, Dia a dia)","rating":8,"metrics":{"dia":0,"noite":0,"romantico":0,"doce":0,"maritimo":0,"citrico":0,"projecao":0,"longevidade":0,"performance":0,"versatilidade":0,"frescor":0,"amadeirado":0,"elegancia":0},"comment":"frase curta em português","sources":[{"title":"","uri":""}]}. Os campos brand, family, gender, perfumer, year, pyramid, notes e concentration DEVEM vir das fontes (de preferência Fragrantica) — não invente. Em metrics cada valor 0 a 10: doce=doçura, projecao=projeção, longevidade=fixação, performance=intensidade geral de desempenho, dia/noite=melhor período, romantico=apelo romântico, maritimo=aquático, citrico, versatilidade, frescor, amadeirado, elegancia. Em sources liste os LINKS reais consultados, incluindo o do Fragrantica.';
+function perfumeIdentityKey(brand,name,concentration){
+  const n=normalizeText(name),b=normalizeText(brand),co=normalizeText(concentration||"");
+  return [b,n,co].join("|").replace(/[^a-z0-9|]+/g,"-");
+}
+function perfumePrompt(brand,name,concentration){
+  return 'Você é um catalogador de perfumaria. IDENTIFIQUE PRIMEIRO A EDIÇÃO EXATA do perfume: marca "'+brand+'", nome "'+name+'", concentração "'+(concentration||"não informada")+'". NÃO misture flankers, versões, concentrações, anos ou reformulações. Consulte a página exata do FRAGRANTICA (fragrantica.com.br/fragrantica.com) e o SITE OFICIAL DA MARCA. Parfumo só pode ser usado como terceira fonte de conferência. '+
+  'REGRA CRÍTICA: não complete lacunas por conhecimento geral e não deduza uma nota pela família. Se uma fonte não informar uma nota, deixe-a ausente. NÃO transforme acordes, votos de usuários ou notas inferidas em notas oficiais. '+
+  'Retorne SOMENTE JSON válido. Preserve as notas como aparecem na fonte, apenas traduzindo o idioma quando necessário, sem criar sinônimos. Separe obrigatoriamente as duas fontes: "pyramid.fragrantica" = transcrição da pirâmide exibida na página exata do Fragrantica; "pyramid.brand" = transcrição da pirâmide/lista oficial da marca. "pyramid.canonical" DEVE ser uma cópia EXATA de pyramid.fragrantica quando houver Fragrantica. Se houver divergência, NÃO concilie: preserve ambas e liste a divergência em "source_comparison". '+
+  '{"brand":"","concentration":"","family":"uma de: ambar, amadeirado, aromatico, citrico, aquatico, floral, gourmand, especiado, couro, chipre, outra","gender":"masculino|feminino|unissex ou vazio","perfumer":"","year":"","pyramid":{"canonical":{"top":[],"heart":[],"base":[]},"fragrantica":{"top":[],"heart":[],"base":[]},"brand":{"top":[],"heart":[],"base":[]}},"notes":[],"seasons":[],"best_occasion":"","rating":0,"metrics":{"dia":0,"noite":0,"romantico":0,"doce":0,"maritimo":0,"citrico":0,"projecao":0,"longevidade":0,"performance":0,"versatilidade":0,"frescor":0,"amadeirado":0,"elegancia":0},"comment":"","source_comparison":"","sources":[{"title":"","uri":""}],"source_confidence":"alta|media|baixa"}. '+
+  'Campos factuais (brand, concentration, family, gender, perfumer, year, pyramid, notes e sources) só podem vir das fontes. Métricas são estimativas do app e NÃO podem alterar a pirâmide. Se não conseguir confirmar a página exata, use source_confidence="baixa" e não invente.';
 }
 function normSources(sources,r){let src=(sources&&sources.length)?sources:(Array.isArray(r&&r.sources)?r.sources:[]);return (src||[]).map(s=>({title:String((s&&(s.title||s.uri||s.link))||""),uri:String((s&&(s.uri||s.url||s.link))||"")})).filter(s=>s.uri).slice(0,6);}
 function aiErr(e){const c=(e&&e.code)||"";if(c==="no_provider")return "Escolha um provedor de IA na engrenagem (⚙).";if(c==="no_key")return "Cole a chave do provedor na engrenagem (⚙).";if(c==="http_401"||c==="http_403")return "Chave de IA inválida.";if(c==="rate_limited"||c==="http_429")return "Muitas chamadas — tente em instantes.";if(c==="not_granted")return "Permita o uso da Claude para a IA.";return "IA indisponível agora.";}
@@ -1327,34 +1335,69 @@ function applyAiResult(r,sources){
   if(r.comment&&!$("#f_comment").value.trim())$("#f_comment").value=String(r.comment);
   const src=normSources(sources,r);if(src.length)pDraft.sources=src;
 }
+function normalizePyramid(p){
+  p=p||{};
+  return {top:arrStr(p.top),heart:arrStr(p.heart),base:arrStr(p.base)};
+}
 function mergeAiInto(obj,r,sources){
   if(r.brand&&String(r.brand).trim())obj.brand=String(r.brand).trim();
-  if(r.concentration&&!obj.concentration)obj.concentration=r.concentration;
+  if(r.concentration) obj.concentration=String(r.concentration);
   if(r.family)obj.family=validFamily(r.family);
   if(r.gender)obj.gender=String(r.gender);
   if(r.perfumer)obj.perfumer=String(r.perfumer);
   if(r.year)obj.year=String(r.year);
-  if(r.pyramid&&typeof r.pyramid==="object")obj.pyramid={top:arrStr(r.pyramid.top),heart:arrStr(r.pyramid.heart),base:arrStr(r.pyramid.base)};
-  if(Array.isArray(r.notes)&&r.notes.length)obj.notes=r.notes.slice(0,12).map(String);
+  if(r.pyramid&&typeof r.pyramid==="object"){
+    const fr=normalizePyramid(r.pyramid.fragrantica||r.pyramid.canonical||r.pyramid);
+    const br=normalizePyramid(r.pyramid.brand);
+    obj.pyramid=fr;
+    obj.pyramid_sources={fragrantica:fr,brand:br};
+  }
+  if(Array.isArray(r.notes)&&r.notes.length)obj.notes=r.notes.slice(0,20).map(String);
   if(Array.isArray(r.seasons))obj.seasons=r.seasons.filter(s=>SEASONS.includes(s));
   if(r.best_occasion)obj.best_occasion=String(r.best_occasion);
   if(r.rating!=null&&!isNaN(Number(r.rating)))obj.rating=clamp(r.rating,0,10);
   const met=r.metrics||r.radar||{};obj.radar=Object.assign({},obj.radar);ALL_METRIC_KEYS.forEach(k=>{if(met[k]!=null&&!isNaN(Number(met[k])))obj.radar[k]=clamp(Math.round(met[k]),0,10);});
   if(r.comment)obj.comment=String(r.comment);
+  if(r.source_comparison)obj.source_comparison=String(r.source_comparison);
+  if(r.source_confidence)obj.source_confidence=String(r.source_confidence);
   const src=normSources(sources,r);if(src.length)obj.sources=src;
+  obj.authoritative_lookup_key=perfumeIdentityKey(obj.brand,obj.name,obj.concentration);
+  obj.authoritative_lookup_at=Date.now();
   return obj;
 }
+function getPerfumeAuthorityCache(){
+  try{return JSON.parse(localStorage.getItem("gde:perfume_authority_cache")||"{}")||{};}catch(e){return{};}
+}
+function getCachedPerfumeAuthority(brand,name,concentration){
+  const cache=getPerfumeAuthorityCache(),key=perfumeIdentityKey(brand,name,concentration);
+  return cache[key]||null;
+}
+function saveCachedPerfumeAuthority(brand,name,concentration,data){
+  try{
+    const cache=getPerfumeAuthorityCache(),key=perfumeIdentityKey(brand,name,concentration);
+    cache[key]={savedAt:Date.now(),data:JSON.parse(JSON.stringify(data))};
+    localStorage.setItem("gde:perfume_authority_cache",JSON.stringify(cache));
+  }catch(e){}
+}
+
 async function aiFillPerfume(){
-  const name=$("#f_name").value.trim(), brand=$("#f_brand").value.trim();
+  const name=$("#f_name").value.trim(), brand=$("#f_brand").value.trim(), conc=$("#f_conc").value;
   if(!name){$("#f_name").focus();toast("Digite ao menos o nome do perfume");return;}
   const btn=$("#aiFillBtn"),txt=$("#aiFillText"),note=$("#aiNote");
-  btn.classList.add("spin");btn.disabled=true;txt.textContent="Consultando IA…";note.classList.remove("show");
-  const prompt='Você é especialista em perfumaria. Para o perfume "'+brand+' '+name+'", responda SOMENTE com um objeto JSON (sem markdown, sem texto extra) com as chaves: {"concentration":"EDC|EDT|EDP|Parfum|Extrait ou vazio","family":"uma de: ambar, amadeirado, aromatico, citrico, aquatico, floral, gourmand, especiado, couro, chipre, outra","notes":["4 a 6 notas principais em português"],"seasons":["subconjunto de: Verão, Outono, Inverno, Primavera"],"rating":numero de 0 a 10,"radar":{"dia":0,"noite":0,"romantico":0,"doce":0,"maritimo":0,"citrico":0},"comment":"uma frase curta em português"}. No radar cada valor vai de 0 a 10, onde dia=uso diurno, noite=noturno, romantico=apelo romântico, doce=doçura, maritimo=frescor aquático/marinho, citrico=cítrico. Faça a melhor estimativa pelas notas típicas do perfume; não diga que não existe.';
+  btn.classList.add("spin");btn.disabled=true;txt.textContent="Verificando ficha canônica…";note.classList.remove("show");
   try{
-    const out=await aiComplete(perfumePrompt(brand,name));
-    applyAiResult(out.data,out.sources);
+    let outData=null,fromCache=false;
+    const cached=getCachedPerfumeAuthority(brand,name,conc);
+    if(cached&&cached.data){outData=cached.data;fromCache=true;}
+    else{
+      const out=await aiComplete(perfumePrompt(brand,name,conc));
+      outData=out.data;
+      saveCachedPerfumeAuthority(brand,name,conc,outData);
+    }
+    applyAiResult(outData,[]);
     const ns=(pDraft.sources||[]).length;
-    note.innerHTML="<b>Preenchido pela IA</b>"+(ns?(" · "+ns+" fonte(s) anexada(s)"):" · sem fontes retornadas")+". Revise antes de salvar.";note.classList.add("show");toast("Preenchido pela IA");
+    note.innerHTML="<b>"+(fromCache?"Ficha canônica reutilizada":"Ficha canônica consultada")+"</b>"+(ns?(" · "+ns+" fonte(s)"):" · confirme as fontes antes de salvar")+". Fragrantica e fabricante ficam separados quando divergem.";note.classList.add("show");
+    toast(fromCache?"Mesma ficha canônica":"Dados conferidos");
   }catch(e){const msg=aiErr(e);note.innerHTML="Não consegui preencher: "+msg;note.classList.add("show");toast(msg);}
   finally{btn.classList.remove("spin");txt.textContent="Preencher com IA (marca + nome)";btn.disabled=false;}
 }
@@ -1472,10 +1515,10 @@ $("#bulkBtn").onclick=async()=>{
   const btn=$("#bulkBtn");btn.disabled=true;let done=0,fail=0;
   for(let k=0;k<list.length;k++){
     btn.textContent="Buscando "+(k+1)+"/"+list.length+"…";
-    try{const out=await aiComplete(perfumePrompt(list[k].brand,list[k].name));const upd=mergeAiInto(JSON.parse(JSON.stringify(list[k])),out.data,out.sources);await dataUpdate("perfumes",list[k].id,upd);done++;}catch(e){fail++;}
+    try{const cached=getCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"");const outData=cached&&cached.data?cached.data:(await aiComplete(perfumePrompt(list[k].brand,list[k].name,list[k].concentration||""))).data;if(!cached)saveCachedPerfumeAuthority(list[k].brand,list[k].name,list[k].concentration||"",outData);const upd=mergeAiInto(JSON.parse(JSON.stringify(list[k])),outData,[]);await dataUpdate("perfumes",list[k].id,upd);done++;}catch(e){fail++;}
     await new Promise(r=>setTimeout(r,350));
   }
-  btn.disabled=false;btn.textContent="Buscar no Fragrantica p/ toda a coleção (IA)";
+  btn.disabled=false;btn.textContent="Conferir ficha canônica p/ toda a coleção";
   toast("Concluído: "+done+" atualizados"+(fail?(", "+fail+" falharam"):""));
 };
 const RGROUPS=[
@@ -1555,7 +1598,10 @@ function openDetail(id){
   const doce=(i.radar&&i.radar.doce)||0, perf=performanceOf(i);
   const bar=(lbl,v,col)=>`<div class="bar"><div class="bl"><span>${lbl}</span><b>${v}/10</b></div><div class="bt"><div class="bf" style="width:${v*10}%;background:${col}"></div></div></div>`;
   const meta=[i.perfumer?("Perfumista: "+esc(i.perfumer)):"",i.year?("Ano: "+esc(i.year)):"",i.gender?esc(i.gender):""].filter(Boolean).join(" · ");
-  const hasPyr=i.pyramid&&((i.pyramid.top&&i.pyramid.top.length)||(i.pyramid.heart&&i.pyramid.heart.length)||(i.pyramid.base&&i.pyramid.base.length));
+  const pyrF=(i.pyramid_sources&&i.pyramid_sources.fragrantica)||i.pyramid||{};
+  const pyrB=(i.pyramid_sources&&i.pyramid_sources.brand)||{};
+  const hasPyr=(p)=>p&&((p.top&&p.top.length)||(p.heart&&p.heart.length)||(p.base&&p.base.length));
+  const pyrHtml=(label,p)=>hasPyr(p)?`<div class="pyr-source"><div class="pyr-source-title">${label}</div>${prow("Topo",p.top)}${prow("Coração",p.heart)}${prow("Fundo",p.base)}</div>`:"";
   const prow=(k,arr)=>{arr=Array.isArray(arr)?arr:[];return arr.length?`<div class="prow"><div class="pk">${k}</div><div class="pv">${arr.map(n=>`<span class="chip">${esc(n)}</span>`).join("")}</div></div>`:"";};
   const badge=i.status==="desejo"?' <span class="badge desejo">Desejo</span>':i.status==="acabou"?' <span class="badge acabou">Acabou</span>':"";
   const notes=(i.notes||[]).length?i.notes.map(n=>`<span class="chip">${esc(n)}</span>`).join(""):'<span class="muted">—</span>';
@@ -1582,7 +1628,7 @@ function openDetail(id){
      <div class="dblock detail-impact"><div class="dlabel">Impacto social</div><p>${esc(impactText)}</p><small>Leitura baseada no perfil olfativo do perfume, não em traços de personalidade.</small></div>
      <div class="dblock detail-role"><div class="dlabel">Papel na sua coleção</div><p>${esc(collectionRole)}</p><small>${familyCount} perfume(s) da mesma família no seu acervo.</small></div>
    </div>
-   ${hasPyr?`<div class="dblock"><div class="dlabel">Pirâmide olfativa</div><div class="pyr">${prow("Topo",i.pyramid.top)}${prow("Coração",i.pyramid.heart)}${prow("Fundo",i.pyramid.base)}</div></div>`:`<div class="dblock"><div class="dlabel">Notas</div><div class="notes">${notes}</div></div>`}
+   ${hasPyr(pyrF)||hasPyr(pyrB)?`<div class="dblock"><div class="dlabel">Pirâmide olfativa — fonte por fonte</div>${pyrHtml("Fragrantica · ficha canônica",pyrF)}${pyrHtml("Site oficial da marca",pyrB)}${i.source_comparison?`<div class="id-note show" style="margin-top:10px"><b>Diferença entre fontes:</b> ${esc(i.source_comparison)}</div>`:""}<div class="hint" style="margin-top:8px">A ficha não mistura as fontes. A pirâmide canônica do app é a do Fragrantica quando confirmada.</div></div>`:`<div class="dblock"><div class="dlabel">Notas</div><div class="notes">${notes}</div></div>`}
    <div class="dblock"><div class="dlabel">Estações</div><div>${esc(seasons)}</div></div>
    ${i.comment?`<div class="dblock"><div class="dlabel">Observações</div><div>${esc(i.comment)}</div></div>`:""}${layer}${sources}
    <div class="sheet-foot detail-actions"><button class="btn-ghost" id="dAiBtn">Atualizar dados com IA</button><button class="btn-ghost" id="dBuyBtn">Ver papel na coleção</button><button class="btn-primary" id="dEditBtn">Editar</button></div>`;
@@ -1595,13 +1641,21 @@ function openDetail(id){
 }
 async function aiUpdateExisting(id){
   const i=state.perfumes.find(x=>x.id===id);if(!i)return;
-  const btn=$("#dAiBtn");if(btn){btn.disabled=true;btn.textContent="Consultando…";}
+  const btn=$("#dAiBtn");if(btn){btn.disabled=true;btn.textContent="Conferindo ficha…";}
   try{
-    const out=await aiComplete(perfumePrompt(i.brand,i.name));
-    const upd=mergeAiInto(JSON.parse(JSON.stringify(i)),out.data,out.sources);
+    const conc=i.concentration||"";
+    const cached=getCachedPerfumeAuthority(i.brand,i.name,conc);
+    let data= cached&&cached.data ? cached.data : null;
+    if(!data){
+      const out=await aiComplete(perfumePrompt(i.brand,i.name,conc));
+      data=out.data;
+      saveCachedPerfumeAuthority(i.brand,i.name,conc,data);
+    }
+    const upd=mergeAiInto(JSON.parse(JSON.stringify(i)),data,[]);
     await dataUpdate("perfumes",id,upd);Object.assign(i,upd);
-    toast("Atualizado pela IA");openDetail(id);
-  }catch(e){toast(aiErr(e));if(btn){btn.disabled=false;btn.textContent="Buscar no Fragrantica (IA)";}}
+    toast(cached?"Ficha canônica reutilizada":"Ficha canônica atualizada");openDetail(id);
+  }catch(e){toast(aiErr(e));}
+  finally{if(btn){btn.disabled=false;btn.textContent="Atualizar ficha canônica";}}
 }
 async function blobToB64(blob){const d=await blobToDataURL(blob);return d.split(",")[1];}
 async function geminiVision(prompt,blob,cfg){
