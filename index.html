@@ -1937,20 +1937,27 @@ function collectionSearchPrompt(name,brand,owned,mode){
   const profile=purchaseProfilePayload(owned);
   const compact=owned.slice(0,100).map(p=>({
     id:p.id,nome:p.name,marca:p.brand,familia:p.family,concentracao:p.concentration,
-    notas:(p.notes||[]).slice(0,12),pyramid:p.pyramid_sources?.fragrantica||p.pyramid||{},
+    notas:(p.notes||[]).slice(0,15),pyramid:p.pyramid_sources?.fragrantica||p.pyramid||{},
     estacoes:p.seasons||[],ocasiao:p.best_occasion||"",rating:p.rating||0
   }));
   const identity=mode==="candidate"
     ? 'Analise o candidato específico "'+name+'" da marca "'+(brand||"não informada")+'".'
-    : 'Não existe candidato específico. Sugira até 3 perfumes reais que possam ser pesquisados/comprados e que preencham lacunas da coleção sem abandonar o gosto demonstrado.';
+    : 'Sugira até 3 perfumes reais que preencham lacunas da coleção sem abandonar o gosto demonstrado.';
   return 'Você é um consultor de curadoria de perfumaria. '+identity+
-  ' Use o PERFIL DE GOSTO calculado localmente como sinal principal, mas trate-o como preferência inferida, não como fato químico. '+
-  'A pirâmide/notas factual de cada perfume deve permanecer separada das estimativas de radar. Priorize Fragrantica e site oficial da marca; Parfumo é terceira fonte. Não invente notas, concentração, ano ou família. '+
-  'Para cada candidato, compare: (1) compatibilidade com o gosto, especialmente os territórios com maior força/avaliação; (2) lacuna que ele preenche; (3) redundância com a coleção; (4) ponte com o DNA já apreciado. '+
-  'Importante: preencher uma lacuna NÃO significa escolher algo totalmente distante do gosto. Procure uma ponte: novidade suficiente + elementos que o usuário já demonstra gostar. '+
-  'Não transforme a análise em nota de qualidade. Retorne SOMENTE JSON válido: '+
-  '{"candidates":[{"name":"","brand":"","concentration":"","family":"","notes":[],"pyramid":{"top":[],"heart":[],"base":[]},"fit_score":0,"gap_score":0,"redundancy_score":0,"bridge":"","gap":"","summary":"","sources":[{"title":"","uri":""}]}],"collection_reading":{"taste":[],"gaps":[],"method":""},"sources":[{"title":"","uri":""}]}. '+
-  'fit_score, gap_score e redundancy_score são estimativas de compatibilidade/diversidade, não qualidade. '+
+  ' O resultado OBRIGATORIAMENTE deve trazer, para cada candidato, UM DUPE específico com a maior fidelidade encontrada. '+
+  'Dupe significa uma fragrância alternativa que procura reproduzir o cheiro/estrutura do candidato, não apenas outra fragrância da mesma família. '+
+  'NÃO chame de dupe uma fragrância apenas semelhante, inspirada na mesma categoria ou que compartilhe algumas notas. '+
+  'Para chamar de dupe, confirme em fontes de perfumaria que a alternativa é apresentada como clone/inspired-by/dupe do candidato e compare a pirâmide quando disponível. '+
+  'Priorize fidelidade de DNA, sequência de notas/pirâmide, acordes, concentração e relatos consistentes de similaridade. '+
+  'Se não houver dupe suficientemente confirmado, retorne dupe_found=false e não invente um. '+
+  'A fidelidade do dupe deve ser explicada em termos factuais: elementos compartilhados, diferenças conhecidas e fontes. '+
+  'Use Fragrantica e site oficial da marca para o candidato; para dupe, consulte Fragrantica, site do fabricante do dupe e fontes de perfumaria confiáveis. Parfumo pode ser terceira fonte. '+
+  'Não invente notas, concentração, ano, família ou relação de clone. A pirâmide factual permanece separada das estimativas de radar. '+
+  'Para o candidato compare: (1) compatibilidade com o gosto; (2) lacuna que preenche; (3) redundância; (4) ponte com o DNA já apreciado. '+
+  'Para o dupe compare: (1) fidelidade ao candidato; (2) correspondência de notas/pirâmide; (3) diferenças; (4) disponibilidade/preço apenas se a fonte informar. '+
+  'Retorne SOMENTE JSON válido: '+
+  '{"candidates":[{"name":"","brand":"","concentration":"","family":"","notes":[],"pyramid":{"top":[],"heart":[],"base":[]},"fit_score":0,"gap_score":0,"redundancy_score":0,"bridge":"","gap":"","summary":"","sources":[{"title":"","uri":""}],"dupe":{"found":false,"name":"","brand":"","concentration":"","fidelity_score":0,"fidelity_level":"alta|media|baixa|nao_confirmada","shared_notes":[],"shared_pyramid":[],"differences":[],"why":"","sources":[{"title":"","uri":""}]}}],"collection_reading":{"taste":[],"gaps":[],"method":""},"sources":[{"title":"","uri":""}]}. '+
+  'fidelity_score mede somente semelhança/fidelidade do dupe ao candidato, NÃO qualidade. Só use alta quando houver forte evidência de clone/dupe e correspondência estrutural; use media quando houver evidência consistente mas diferenças relevantes; baixa quando a relação for apenas parcial; nao_confirmada quando não houver confirmação. '+
   'Perfil de gosto: '+JSON.stringify(profile.taste)+'. Lacunas: '+JSON.stringify(profile.gaps)+'. Favoritos por rating: '+JSON.stringify(profile.favorites)+
   '. Coleção real: '+JSON.stringify(compact)+'.';
 }
@@ -1964,6 +1971,7 @@ function renderCollectionSearch(r,owned){
   if(Array.isArray(reading.gaps)&&reading.gaps.length) html+='<div class="ai-search-box"><div class="dlabel">Lacunas priorizadas</div><p>'+reading.gaps.slice(0,5).map(esc).join(" · ")+'</p></div>';
   html+='<div class="ai-search-grid">';
   r.candidates.slice(0,3).forEach((c,idx)=>{
+    const d=c.dupe||{};
     html+='<div class="ai-search-box"><div class="dlabel">Candidato '+(idx+1)+'</div>';
     html+='<h3 style="margin:2px 0 4px;font-family:var(--serif);font-size:23px">'+esc(c.name||"")+'</h3>';
     html+='<p class="ai-search-sub">'+esc(c.brand||"")+(c.concentration?" · "+esc(c.concentration):"")+(c.family?" · "+esc(c.family):"")+'</p>';
@@ -1972,11 +1980,24 @@ function renderCollectionSearch(r,owned){
     html+='<p><b>Ponte com seu gosto:</b> '+esc(c.bridge||"Não informada.")+'</p>';
     html+='<p><b>Espaço acrescentado:</b> '+esc(c.gap||"Não identificado.")+'</p>';
     if(Array.isArray(c.notes)&&c.notes.length)html+='<div class="notes">'+c.notes.slice(0,8).map(n=>'<span class="chip">'+esc(n)+'</span>').join("")+'</div>';
-    html+='</div>';
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">';
+    html+='<div class="dlabel">Dupe mais fiel encontrado</div>';
+    if(d.found&&d.name){
+      html+='<h4 style="margin:4px 0;font-size:18px">'+esc(d.name)+'</h4>';
+      html+='<p class="ai-search-sub">'+esc(d.brand||"")+(d.concentration?" · "+esc(d.concentration):"")+'</p>';
+      html+='<p><b>Fidelidade:</b> '+esc(String(d.fidelity_level||"não confirmada"))+(d.fidelity_score!=null?" · "+clamp(d.fidelity_score||0,0,100)+"%":"")+'</p>';
+      if(Array.isArray(d.shared_pyramid)&&d.shared_pyramid.length)html+='<p><b>Estrutura em comum:</b> '+d.shared_pyramid.slice(0,6).map(esc).join(" · ")+'</p>';
+      if(Array.isArray(d.shared_notes)&&d.shared_notes.length)html+='<p><b>Notas em comum:</b> '+d.shared_notes.slice(0,8).map(esc).join(" · ")+'</p>';
+      if(Array.isArray(d.differences)&&d.differences.length)html+='<p><b>Diferenças:</b> '+d.differences.slice(0,5).map(esc).join(" · ")+'</p>';
+      html+='<p>'+esc(d.why||"")+'</p>';
+    }else{
+      html+='<p class="ai-search-sub">Nenhum dupe suficientemente confirmado. O app não vai inventar um “clone”.</p>';
+    }
+    html+='</div></div>';
   });
   html+='</div>';
   if(reading.method)html+='<div class="ai-search-foot">'+esc(reading.method)+'</div>';
-  const allSources=[...src,...r.candidates.flatMap(c=>Array.isArray(c.sources)?c.sources:[])].filter((x,i,a)=>x&&x.uri&&a.findIndex(y=>y.uri===x.uri)===i).slice(0,8);
+  const allSources=[...src,...r.candidates.flatMap(c=>[...(Array.isArray(c.sources)?c.sources:[]),...((c.dupe&&Array.isArray(c.dupe.sources))?c.dupe.sources:[])])].filter((x,i,a)=>x&&x.uri&&a.findIndex(y=>y.uri===x.uri)===i).slice(0,10);
   html+='<div class="ai-search-foot">Fontes consultadas: '+(allSources.length?allSources.map(x=>'<a href="'+esc(x.uri)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||x.uri)+'</a>').join(" · "):"o provedor não retornou URLs de fonte")+'</div>';
   $("#qResult").innerHTML=html;
 }
