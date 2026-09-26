@@ -1943,8 +1943,8 @@ function collectionSearchPrompt(name,brand,owned,mode){
   const identity=mode==="candidate"
     ? 'Analise o candidato específico "'+name+'" da marca "'+(brand||"não informada")+'".'
     : 'Sugira até 3 perfumes reais que preencham lacunas da coleção sem abandonar o gosto demonstrado.';
-  return 'Você é um consultor de curadoria de perfumaria. '+identity+
-  ' O resultado OBRIGATORIAMENTE deve trazer, para cada candidato, UM DUPE específico com a maior fidelidade encontrada. '+
+  return 'Você é um consultor de curadoria de perfumaria. PRIMEIRO LEIA A COLEÇÃO REAL. Ela é uma LISTA DE EXCLUSÃO OBRIGATÓRIA: nenhum perfume já presente pode ser recomendado como candidato. Analise o gosto, as lacunas e a saturação do acervo antes de buscar opções externas. '+identity+
+  ' O resultado final deve conter somente perfumes que NÃO estão na coleção. Para sugestões, pesquise internamente pelo menos 6 opções e devolva até 3 após excluir o acervo e reduzir redundância. Cada candidato final deve trazer UM DUPE específico com a maior fidelidade encontrada, e o dupe também deve estar fora da coleção. '+
   'Dupe significa uma fragrância alternativa que procura reproduzir o cheiro/estrutura do candidato, não apenas outra fragrância da mesma família. '+
   'NÃO chame de dupe uma fragrância apenas semelhante, inspirada na mesma categoria ou que compartilhe algumas notas. '+
   'Para chamar de dupe, confirme em fontes de perfumaria que a alternativa é apresentada como clone/inspired-by/dupe do candidato e compare a pirâmide quando disponível. '+
@@ -1953,13 +1953,13 @@ function collectionSearchPrompt(name,brand,owned,mode){
   'A fidelidade do dupe deve ser explicada em termos factuais: elementos compartilhados, diferenças conhecidas e fontes. '+
   'Use Fragrantica e site oficial da marca para o candidato; para dupe, consulte Fragrantica, site do fabricante do dupe e fontes de perfumaria confiáveis. Parfumo pode ser terceira fonte. '+
   'Não invente notas, concentração, ano, família ou relação de clone. A pirâmide factual permanece separada das estimativas de radar. '+
-  'Para o candidato compare: (1) compatibilidade com o gosto; (2) lacuna que preenche; (3) redundância; (4) ponte com o DNA já apreciado. '+
+  'Para o candidato compare: (1) compatibilidade com o gosto; (2) lacuna real; (3) redundância com a coleção; (4) ponte com o DNA já apreciado. Não use apenas a família olfativa para dizer que algo é novo: verifique notas, pirâmide, acordes e território de uso. '+
   'Para o dupe compare: (1) fidelidade ao candidato; (2) correspondência de notas/pirâmide; (3) diferenças; (4) disponibilidade/preço apenas se a fonte informar. '+
   'Retorne SOMENTE JSON válido: '+
   '{"candidates":[{"name":"","brand":"","concentration":"","family":"","notes":[],"pyramid":{"top":[],"heart":[],"base":[]},"fit_score":0,"gap_score":0,"redundancy_score":0,"bridge":"","gap":"","summary":"","sources":[{"title":"","uri":""}],"dupe":{"found":false,"name":"","brand":"","concentration":"","fidelity_score":0,"fidelity_level":"alta|media|baixa|nao_confirmada","shared_notes":[],"shared_pyramid":[],"differences":[],"why":"","sources":[{"title":"","uri":""}]}}],"collection_reading":{"taste":[],"gaps":[],"method":""},"sources":[{"title":"","uri":""}]}. '+
   'fidelity_score mede somente semelhança/fidelidade do dupe ao candidato, NÃO qualidade. Só use alta quando houver forte evidência de clone/dupe e correspondência estrutural; use media quando houver evidência consistente mas diferenças relevantes; baixa quando a relação for apenas parcial; nao_confirmada quando não houver confirmação. '+
   'Perfil de gosto: '+JSON.stringify(profile.taste)+'. Lacunas: '+JSON.stringify(profile.gaps)+'. Favoritos por rating: '+JSON.stringify(profile.favorites)+
-  '. Coleção real: '+JSON.stringify(compact)+'.';
+  '. Coleção real que DEVE SER EXCLUÍDA: '+JSON.stringify(compact)+'.';
 }
 function purchaseIdentityKey(name,brand){
   return normalizeText((brand||"")+"|"+(name||"")).replace(/[^a-z0-9|]+/g,"-");
