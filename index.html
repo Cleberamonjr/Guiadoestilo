@@ -631,7 +631,7 @@ header::after{
         <article class="profile-card">
           <h3>Perfil olfativo</h3>
           <p id="profileOlfactory">—</p>
-          <div class="profile-radar" id="profileBars" aria-label="Radar do perfil olfativo da coleção"></div>
+          <div class="profile-radar" id="profileBars" aria-label="Radar do perfil olfativo da coleção"><div id="profileRadarTabs" class="rtabs"></div><div id="profileRadarCanvas"></div></div>
         </article>
         <article class="profile-card">
           <h3>Impacto social</h3>
@@ -786,12 +786,12 @@ header::after{
   <h2>IA &amp; Configurações</h2>
   <div class="id-note show" id="aiSrcNote" style="margin-top:0"></div>
   <div class="field"><label>Provedor de IA</label><select id="c_provider"><option value="">Selecione um provedor</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI / compatível</option></select></div>
-  <div class="field"><label>Chave da API</label><input type="text" id="c_key" placeholder="cole sua chave aqui" autocomplete="off"></div>
+  <div class="field"><label>Chave da API</label><input type="password" id="c_key" placeholder="cole sua chave aqui" autocomplete="off"></div>
   <div class="row2">
     <div class="field"><label>Base URL (GLM/OpenAI)</label><input type="text" id="c_base" placeholder="opcional" autocomplete="off"></div>
     <div class="field"><label>Modelo</label><input type="text" id="c_model" placeholder="gemini-2.0-flash" autocomplete="off"></div>
   </div>
-  <div class="hint">Chave salva só neste navegador. <b>Gemini</b> usa Google Search e <b>GLM</b> usa web_search — os campos factuais e as fontes vêm dessas buscas reais.</div>
+  <div class="hint">Chave salva só neste navegador. A rota usa até <b>3 provedores</b> em sequência: se o primeiro falhar por quota, rede, autenticação ou indisponibilidade, o próximo é tentado automaticamente.</div><div class="field"><label>Backup 1</label><div class="row2"><select id="c_provider2"><option value="">Desativado</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI / compatível</option></select><input type="password" id="c_key2" placeholder="chave do backup 1" autocomplete="off"></div><div class="row2" style="margin-top:8px"><input type="text" id="c_base2" placeholder="Base URL opcional"><input type="text" id="c_model2" placeholder="Modelo opcional"></div></div><div class="field"><label>Backup 2</label><div class="row2"><select id="c_provider3"><option value="">Desativado</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI / compatível</option></select><input type="password" id="c_key3" placeholder="chave do backup 2" autocomplete="off"></div><div class="row2" style="margin-top:8px"><input type="text" id="c_base3" placeholder="Base URL opcional"><input type="text" id="c_model3" placeholder="Modelo opcional"></div></div>
   <div class="field" style="margin-top:8px"><label>Variáveis do radar (escolha 3 ou mais)</label><div class="chips" id="axisChecks"></div></div>
   <div class="field"><label>Coleção</label><button class="btn-ghost" id="bulkBtn" style="width:100%;margin-bottom:8px">Buscar no Fragrantica p/ toda a coleção (IA)</button>
     <button class="btn-ghost" id="recoverBtn" style="width:100%;margin-bottom:8px;border-color:var(--gold);color:var(--gold)">🔐 Diagnosticar e recuperar coleção</button>
@@ -1306,8 +1306,8 @@ async function readApiError(res){
   try{const j=JSON.parse(body);msg=(j.error&&((j.error.message)||j.error.code))||j.message||j.detail||"";}catch(e){}
   const e=new Error(msg||("HTTP "+res.status));e.code="http_"+res.status;e.apiMessage=msg||body.slice(0,300);throw e;
 }
-async function openaiJSON(prompt){
-  const cfg=normalizeAiCfg(getAiCfg());
+async function openaiJSON(prompt,cfgOverride){
+  const cfg=normalizeAiCfg(cfgOverride||getAiCfg());
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
   const base=(cfg.baseUrl||"https://api.openai.com/v1").replace(/\/$/,"");
   let res;
@@ -1348,13 +1348,28 @@ async function glmJSON(prompt,cfg){
   let data;try{data=JSON.parse(txt);}catch(e){e.code="bad_json";throw e;}
   return {data,sources:[]};
 }
+function getAiConfigs(){
+  const c=getAiCfg();
+  const list=[
+    {provider:c.provider,key:c.key,baseUrl:c.baseUrl,model:c.model},
+    {provider:c.provider2,key:c.key2,baseUrl:c.baseUrl2,model:c.model2},
+    {provider:c.provider3,key:c.key3,baseUrl:c.baseUrl3,model:c.model3}
+  ].map(normalizeAiCfg).filter(x=>x.provider&&x.key);
+  const seen=new Set();
+  return list.filter(x=>{const k=[x.provider,x.key,x.baseUrl||"",x.model||""].join("|");if(seen.has(k))return false;seen.add(k);return true;});
+}
 async function aiComplete(prompt){
-  const cfg=normalizeAiCfg(getAiCfg());const prov=cfg.provider||"";
-  if(prov==="gemini")return geminiJSON(prompt,cfg);
-  if(prov==="glm")return glmJSON(prompt,cfg);
-  if(prov==="openai")return {data:await openaiJSON(prompt),sources:[]};
-  if(sampleNS)return {data:await sampleNS.json(prompt,{modelTier:"default"}),sources:[]};
-  const e=new Error("no_provider");e.code="no_provider";throw e;
+  const configs=getAiConfigs();
+  if(!configs.length){if(sampleNS)return {data:await sampleNS.json(prompt,{modelTier:"default"}),sources:[]};const e=new Error("no_provider");e.code="no_provider";throw e;}
+  const errors=[];
+  for(const cfg of configs){
+    try{
+      if(cfg.provider==="gemini")return await geminiJSON(prompt,cfg);
+      if(cfg.provider==="glm")return await glmJSON(prompt,cfg);
+      if(cfg.provider==="openai")return {data:await openaiJSON(prompt,cfg),sources:[]};
+    }catch(e){errors.push({provider:cfg.provider,code:e.code||"",message:e.message||""});}
+  }
+  const e=new Error("all_providers_failed");e.code="all_providers_failed";e.providerErrors=errors;throw e;
 }
 function aiErr(e){
   const c=(e&&e.code)||"";
@@ -1368,6 +1383,7 @@ function aiErr(e){
   if(c==="http_429")return "Limite de requisições/quota atingido. Aguarde ou verifique o plano.";
   if(c==="http_500"||c==="http_502"||c==="http_503")return "O provedor está indisponível temporariamente.";
   if(c==="not_granted")return "Permita o uso da Claude para a IA.";
+  if(c==="all_providers_failed"){const es=Array.isArray(e.providerErrors)?e.providerErrors.map(x=>(x.provider||"IA")+": "+(x.code||"erro")).join(" · "):"";return "Os provedores configurados falharam. "+es;}
   return "IA indisponível: "+(e&&e.message?e.message:"erro desconhecido");
 }
 function perfumeIdentityKey(brand,name,concentration){
@@ -1477,12 +1493,12 @@ async function aiFillPerfume(){
 $("#aiFillBtn").onclick=aiFillPerfume;
 $("#cfgBtn").onclick=()=>{
   const c=getAiCfg();
-  $("#c_provider").value=c.provider||"";$("#c_key").value=c.key||"";$("#c_base").value=c.baseUrl||"";$("#c_model").value=c.model||"";
+  $("#c_provider").value=c.provider||"";$("#c_key").value=c.key||"";$("#c_base").value=c.baseUrl||"";$("#c_model").value=c.model||"";$("#c_provider2").value=c.provider2||"";$("#c_key2").value=c.key2||"";$("#c_base2").value=c.baseUrl2||"";$("#c_model2").value=c.model2||"";$("#c_provider3").value=c.provider3||"";$("#c_key3").value=c.key3||"";$("#c_base3").value=c.baseUrl3||"";$("#c_model3").value=c.model3||"";
   $("#aiSrcNote").innerHTML=sampleNS?"Dentro do app da Claude a IA nativa funciona sem chave (sem busca web). Para <b>fontes reais</b>, escolha Gemini ou GLM e use no site publicado.":"Escolha um provedor e cole a chave. <b>Gemini</b> e <b>GLM</b> trazem fontes reais da web.";
   buildAxisChecks();openSheet("c");
 };
 $("#cSave").onclick=()=>{
-  saveAiCfg(normalizeAiCfg({provider:$("#c_provider").value,key:$("#c_key").value.trim(),baseUrl:$("#c_base").value.trim(),model:$("#c_model").value.trim()}));
+  const primary=normalizeAiCfg({provider:$("#c_provider").value,key:$("#c_key").value.trim(),baseUrl:$("#c_base").value.trim(),model:$("#c_model").value.trim()}); const b1=normalizeAiCfg({provider:$("#c_provider2").value,key:$("#c_key2").value.trim(),baseUrl:$("#c_base2").value.trim(),model:$("#c_model2").value.trim()}); const b2=normalizeAiCfg({provider:$("#c_provider3").value,key:$("#c_key3").value.trim(),baseUrl:$("#c_base3").value.trim(),model:$("#c_model3").value.trim()}); saveAiCfg({...primary,provider2:b1.provider,key2:b1.key,baseUrl2:b1.baseUrl,model2:b1.model,provider3:b2.provider,key3:b2.key,baseUrl3:b2.baseUrl,model3:b2.model});
   const checked=[...document.querySelectorAll('#axisChecks button[aria-pressed="true"]')].map(x=>x.dataset.k);
   if(checked.length>=3)saveAxes(checked); else if(checked.length){toast("Escolha ao menos 3 variáveis");return;}
   closeSheet("c");renderAll();if(detailId&&$("#dSheet").classList.contains("open"))openDetail(detailId);toast("Configurações salvas");
@@ -1741,15 +1757,16 @@ async function aiUpdateExisting(id){
   try{
     const conc=i.concentration||"";
     const cached=getCachedPerfumeAuthority(i.brand,i.name,conc);
-    let data= cached&&cached.data ? cached.data : null;
-    if(!data){
+    let data=null;
+    {
       const out=await aiComplete(perfumePrompt(i.brand,i.name,conc));
       data={...out.data,sources:[...(Array.isArray(out.data&&out.data.sources)?out.data.sources:[]),...(Array.isArray(out.sources)?out.sources:[])]};
       saveCachedPerfumeAuthority(i.brand,i.name,conc,data);
     }
     const upd=mergeAiInto(JSON.parse(JSON.stringify(i)),data,[]);
     await dataUpdate("perfumes",id,upd);Object.assign(i,upd);
-    toast(cached?"Ficha canônica reutilizada":"Ficha canônica atualizada");openDetail(id);
+    saveCachedPerfumeAuthority(i.brand,i.name,conc,data);
+    toast("Ficha canônica atualizada pela rota de IA");openDetail(id);
   }catch(e){toast(aiErr(e));}
   finally{if(btn){btn.disabled=false;btn.textContent="Atualizar ficha canônica";}}
 }
@@ -1907,6 +1924,22 @@ function purchaseProfilePayload(owned){
     favorites:owned.slice().sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)).slice(0,8).map(p=>({name:p.name,brand:p.brand,rating:p.rating,dna:perfumeDNAVector(p).filter(x=>x.score>=5).map(x=>x.label)}))
   };
 }
+let profileRadarGroup="tipo";
+function renderProfileRadar(owned){
+  const tabs=$("#profileRadarTabs"),canvas=$("#profileRadarCanvas");
+  if(!tabs||!canvas)return;
+  const groups=typeof RGROUPS!=="undefined"?RGROUPS:[];
+  tabs.innerHTML=groups.map(g=>`<button type="button" class="rtab${g.id===profileRadarGroup?" on":""}" data-g="${g.id}">${g.name}</button>`).join("");
+  const render=()=>{
+    const grp=groups.find(g=>g.id===profileRadarGroup)||groups[0];
+    if(!grp){canvas.innerHTML="";return;}
+    const axes=grp.axes.map(([k,label])=>[label,Math.round(owned.reduce((sum,p)=>sum+(groupValues(p,grp.id)[k]||0),0)/owned.length*10)]);
+    canvas.innerHTML=collectionProfileRadarSvg(axes,300);
+    tabs.querySelectorAll(".rtab").forEach(b=>b.classList.toggle("on",b.dataset.g===profileRadarGroup));
+  };
+  tabs.querySelectorAll(".rtab").forEach(b=>b.onclick=()=>{profileRadarGroup=b.dataset.g;render();});
+  render();
+}
 function renderCollectionProfile(){
   const owned=state.perfumes.filter(p=>p.status==="tenho");
   const countEl=$("#profileCount"), head=$("#profileHeadline"), olf=$("#profileOlfactory"), psych=$("#profilePsych");
@@ -1940,8 +1973,7 @@ function renderCollectionProfile(){
   const dominant=fams[0]?.[0]||"perfil diversificado";
   head.textContent='Predomínio de '+dominant.toLowerCase()+', com maior afinidade por '+(topOcc?.[0]||"uso versátil").toLowerCase()+'.';
   olf.textContent='Sua coleção combina '+(topType?.[0]||"vários estilos").toLowerCase()+' com '+(topOcc?.[0]||"versatilidade").toLowerCase()+', indicando um guarda-roupa olfativo construído para presença e contexto.';
-  const radarAxes=["Elegância","Versatilidade","Presença","Sensualidade","Frescor","Doçura"].map(label=>[label,metrics.find(x=>x[0]===label)?.[1]||0]);
-  $("#profileBars").innerHTML=collectionProfileRadarSvg(radarAxes,330);
+  renderProfileRadar(owned);
   $("#profileFamilies").innerHTML=fams.slice(0,6).map(([k,v])=>'<span>'+esc(k)+' · '+v+'</span>').join("");
   const ranked=[...metrics].sort((a,b)=>b[1]-a[1]);
   const e=metrics.find(x=>x[0]==="Elegância")?.[1]||0, pr=metrics.find(x=>x[0]==="Presença")?.[1]||0, fr=metrics.find(x=>x[0]==="Frescor")?.[1]||0, se=metrics.find(x=>x[0]==="Sensualidade")?.[1]||0;
