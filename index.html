@@ -1584,26 +1584,38 @@ $("#bulkBtn").onclick=async()=>{
   if(!(getAiCfg().provider)&&!sampleNS){toast("Escolha um provedor de IA primeiro");return;}
   const list=state.perfumes.slice();
   if(!list.length){toast("Coleção vazia");return;}
-  if(!confirm("Buscar dados no Fragrantica para os "+list.length+" perfumes? Pode levar alguns minutos e consome sua cota de IA."))return;
-  const btn=$("#bulkBtn");btn.disabled=true;let done=0,fail=0;
+  if(!confirm("Atualizar "+list.length+" perfumes pela web com IA? Isso força uma nova consulta e pode consumir sua cota."))return;
+  const btn=$("#bulkBtn");btn.disabled=true;let done=0,fail=0,errors=[];
   for(let k=0;k<list.length;k++){
-    btn.textContent="Buscando "+(k+1)+"/"+list.length+"…";
+    const p=list[k]; btn.textContent="Atualizando "+(k+1)+"/"+list.length+"…";
     try{
-      const conc=list[k].concentration||"";
-      const cached=getCachedPerfumeAuthority(list[k].brand,list[k].name,conc);
-      let outData=cached&&cached.data?cached.data:null;
-      if(!outData){
-        const fresh=await aiComplete(perfumePrompt(list[k].brand,list[k].name,conc));
-        outData={...fresh.data,sources:[...(Array.isArray(fresh.data&&fresh.data.sources)?fresh.data.sources:[]),...(Array.isArray(fresh.sources)?fresh.sources:[])]};
-        saveCachedPerfumeAuthority(list[k].brand,list[k].name,conc,outData);
-      }
-      const upd=mergeAiInto(JSON.parse(JSON.stringify(list[k])),outData,[]);
-      await dataUpdate("perfumes",list[k].id,upd);done++;
-    }catch(e){fail++;}
-    await new Promise(r=>setTimeout(r,350));
+      const conc=p.concentration||"";
+      // Bulk update intentionally bypasses the local authority cache so the user can
+      // request a genuinely fresh web verification at any time.
+      const fresh=await aiComplete(perfumePrompt(p.brand,p.name,conc));
+      const outData={...fresh.data,sources:[...(Array.isArray(fresh.data&&fresh.data.sources)?fresh.data.sources:[]),...(Array.isArray(fresh.sources)?fresh.sources:[])]};
+      const upd=mergeAiInto(JSON.parse(JSON.stringify(p)),outData,[]);
+      await dataUpdate("perfumes",p.id,upd);
+      // Replace the cache with the newest verified result for future single-item lookups.
+      saveCachedPerfumeAuthority(p.brand,p.name,conc,outData);
+      done++;
+    }catch(e){
+      fail++;
+      const msg=aiErr(e);
+      errors.push(p.name+": "+msg);
+    }
+    await new Promise(r=>setTimeout(r,700));
   }
-  btn.disabled=false;btn.textContent="Conferir ficha canônica p/ toda a coleção";
-  toast("Concluído: "+done+" atualizados"+(fail?(", "+fail+" falharam"):""));
+  btn.disabled=false;btn.textContent="Atualizar toda a coleção pela IA";
+  if(fail){
+    const detail=errors.slice(0,4).join("\n");
+    toast("Atualizados: "+done+" • Falharam: "+fail+"\n"+detail);
+  }else{
+    toast("✅ Coleção atualizada: "+done+" perfumes");
+  }
+  if(fail){
+    const out=$("#recoverStatus"); if(out) out.textContent="Última atualização: "+done+" concluídos • "+fail+" falharam.\n"+errors.slice(0,6).join("\n");
+  }
 };
 const RGROUPS=[
   {id:"tipo",name:"Tipo",axes:[["citrico","Cítrico"],["aquatico","Aquático"],["floral","Floral"],["frutado","Frutado"],["doce","Doce"],["especiado","Especiado"],["amadeirado","Amadeirado"],["ambarado","Ambarado"]]},
