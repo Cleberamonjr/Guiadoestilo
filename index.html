@@ -786,13 +786,13 @@ header::after{
 <div class="sheet" id="cSheet" role="dialog" aria-modal="true">
   <h2>IA &amp; Configurações</h2>
   <div class="id-note show" id="aiSrcNote" style="margin-top:0"></div>
-  <div class="field"><label>Provedor de IA</label><select id="c_provider"><option value="">Selecione um provedor</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI / compatível</option></select></div>
+  <div class="field"><label>Provedor de IA</label><select id="c_provider"><option value="">Selecione um provedor</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI (GPT)</option><option value="deepseek">DeepSeek</option></select></div>
   <div class="field"><label>Chave da API</label><input type="password" id="c_key" placeholder="cole sua chave aqui" autocomplete="off"></div>
   <div class="row2">
-    <div class="field"><label>Base URL (GLM/OpenAI)</label><input type="text" id="c_base" placeholder="opcional" autocomplete="off"></div>
-    <div class="field"><label>Modelo</label><input type="text" id="c_model" placeholder="gemini-2.0-flash" autocomplete="off"></div>
+    <div class="field"><label>Base URL (automática por provedor)</label><input type="text" id="c_base" placeholder="opcional" autocomplete="off"></div>
+    <div class="field"><label>Modelo</label><input type="text" id="c_model" placeholder="Modelo padrão do provedor" autocomplete="off"></div>
   </div>
-  <div class="hint">Chave salva só neste navegador. A rota usa até <b>3 provedores</b> em sequência: se o primeiro falhar por quota, rede, autenticação ou indisponibilidade, o próximo é tentado automaticamente.</div><div class="field"><label>Backup 1</label><div class="row2"><select id="c_provider2"><option value="">Desativado</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI / compatível</option></select><input type="password" id="c_key2" placeholder="chave do backup 1" autocomplete="off"></div><div class="row2" style="margin-top:8px"><input type="text" id="c_base2" placeholder="Base URL opcional"><input type="text" id="c_model2" placeholder="Modelo opcional"></div></div><div class="field"><label>Backup 2</label><div class="row2"><select id="c_provider3"><option value="">Desativado</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI / compatível</option></select><input type="password" id="c_key3" placeholder="chave do backup 2" autocomplete="off"></div><div class="row2" style="margin-top:8px"><input type="text" id="c_base3" placeholder="Base URL opcional"><input type="text" id="c_model3" placeholder="Modelo opcional"></div></div>
+  <div class="hint">Chave salva só neste navegador. A rota usa até <b>3 provedores</b> em sequência: se o primeiro falhar por quota, rede, autenticação ou indisponibilidade, o próximo é tentado automaticamente.</div><div class="field"><label>Backup 1</label><div class="row2"><select id="c_provider2"><option value="">Desativado</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI (GPT)</option><option value="deepseek">DeepSeek</option></select><input type="password" id="c_key2" placeholder="chave do backup 1" autocomplete="off"></div><div class="row2" style="margin-top:8px"><input type="text" id="c_base2" placeholder="Base URL opcional"><input type="text" id="c_model2" placeholder="Modelo opcional"></div></div><div class="field"><label>Backup 2</label><div class="row2"><select id="c_provider3"><option value="">Desativado</option><option value="gemini">Gemini — Google Search</option><option value="glm">GLM (Z.AI)</option><option value="openai">OpenAI (GPT)</option><option value="deepseek">DeepSeek</option></select><input type="password" id="c_key3" placeholder="chave do backup 2" autocomplete="off"></div><div class="row2" style="margin-top:8px"><input type="text" id="c_base3" placeholder="Base URL opcional"><input type="text" id="c_model3" placeholder="Modelo opcional"></div></div>
   <div class="field" style="margin-top:8px"><label>Variáveis do radar (escolha 3 ou mais)</label><div class="chips" id="axisChecks"></div></div>
   <div class="field"><label>Coleção</label><button class="btn-ghost" id="bulkBtn" style="width:100%;margin-bottom:8px">Buscar no Fragrantica p/ toda a coleção (IA)</button>
     <button class="btn-ghost" id="recoverBtn" style="width:100%;margin-bottom:8px;border-color:var(--gold);color:var(--gold)">🔐 Diagnosticar e recuperar coleção</button>
@@ -1295,6 +1295,9 @@ function normalizeAiCfg(c){
   }else if(c.provider==="glm"){
     c.baseUrl=(c.baseUrl||"https://api.z.ai/api/paas/v4").replace(/\/$/,"");
     if(!c.model||/^glm-4-(flash|v)/i.test(c.model))c.model="glm-4.6";
+  }else if(c.provider==="deepseek"){
+    c.baseUrl="https://api.deepseek.com";
+    if(!c.model)c.model="deepseek-chat";
   }else if(c.provider==="openai"){
     c.baseUrl=(c.baseUrl||"https://api.openai.com/v1").replace(/\/$/,"");
     if(!c.model)c.model="gpt-4o-mini";
@@ -1311,10 +1314,10 @@ async function readApiError(res){
 async function openaiJSON(prompt,cfgOverride){
   const cfg=normalizeAiCfg(cfgOverride||getAiCfg());
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
-  const base=(cfg.baseUrl||"https://api.openai.com/v1").replace(/\/$/,"");
+  const base=(cfg.baseUrl||(cfg.provider==="deepseek"?"https://api.deepseek.com":"https://api.openai.com/v1")).replace(/\/$/,"");
   let res;
   try{
-    res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"gpt-4o-mini",temperature:0,messages:[{role:"user",content:prompt}]})});
+    res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||(cfg.provider==="deepseek"?"deepseek-chat":"gpt-4o-mini"),temperature:0,messages:[{role:"user",content:prompt}]})});
   }catch(e){e.code="network";throw e;}
   if(!res.ok)await readApiError(res);
   const j=await res.json();let txt=(j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||"";
@@ -1368,7 +1371,7 @@ async function aiComplete(prompt){
     try{
       if(cfg.provider==="gemini")return await geminiJSON(prompt,cfg);
       if(cfg.provider==="glm")return await glmJSON(prompt,cfg);
-      if(cfg.provider==="openai")return {data:await openaiJSON(prompt,cfg),sources:[]};
+      if(cfg.provider==="openai"||cfg.provider==="deepseek")return {data:await openaiJSON(prompt,cfg),sources:[]};
     }catch(e){errors.push({provider:cfg.provider,code:e.code||"",message:e.message||""});}
   }
   const e=new Error("all_providers_failed");e.code="all_providers_failed";e.providerErrors=errors;throw e;
@@ -1482,8 +1485,16 @@ async function aiFillPerfume(){
     if(cached&&cached.data){outData=cached.data;fromCache=true;}
     else{
       const out=await aiComplete(perfumePrompt(brand,name,conc));
-      outData={...out.data,sources:[...(Array.isArray(out.data&&out.data.sources)?out.data.sources:[]),...(Array.isArray(out.sources)?out.sources:[])]};
-      saveCachedPerfumeAuthority(brand,name,conc,outData);
+      const grounded=Array.isArray(out.sources)?out.sources.filter(x=>x&&String(x.uri||"").startsWith("https://")):[];
+      if(!grounded.length){
+        note.textContent="Nenhuma fonte externa confirmada. Para evitar dados inventados, o app não alterou sua ficha. OpenAI e DeepSeek nesta configuração não consultam o Fragrantica diretamente.";
+        note.classList.add("show");return;
+      }
+      outData={...out.data,sources:grounded,source_confidence:"revisao_pendente"};
+    }
+    if(!fromCache || !outData.reviewed_by_user){
+      note.textContent="Ficha gerada por IA ainda não conferida. Não apliquei notas, pirâmide ou avaliações automaticamente. A correspondência exata precisa ser validada na fonte.";
+      note.classList.add("show");return;
     }
     applyAiResult(outData,[]);
     const ns=(pDraft.sources||[]).length;
@@ -1496,7 +1507,7 @@ $("#aiFillBtn").onclick=aiFillPerfume;
 $("#cfgBtn").onclick=()=>{
   const c=getAiCfg();
   $("#c_provider").value=c.provider||"";$("#c_key").value=c.key||"";$("#c_base").value=c.baseUrl||"";$("#c_model").value=c.model||"";$("#c_provider2").value=c.provider2||"";$("#c_key2").value=c.key2||"";$("#c_base2").value=c.baseUrl2||"";$("#c_model2").value=c.model2||"";$("#c_provider3").value=c.provider3||"";$("#c_key3").value=c.key3||"";$("#c_base3").value=c.baseUrl3||"";$("#c_model3").value=c.model3||"";
-  $("#aiSrcNote").innerHTML=sampleNS?"Dentro do app da Claude a IA nativa funciona sem chave (sem busca web). Para <b>fontes reais</b>, escolha Gemini ou GLM e use no site publicado.":"Escolha um provedor e cole a chave. <b>Gemini</b> e <b>GLM</b> trazem fontes reais da web.";
+  $("#aiSrcNote").innerHTML=sampleNS?"Dentro do app da Claude a IA nativa funciona sem chave (sem busca web). Para <b>fontes reais</b>, escolha Gemini ou GLM e use no site publicado.":"OpenAI e DeepSeek não confirmam consulta ao Fragrantica nesta integração. Não use dados sem fontes conferidas. As chaves ficam no navegador: use apenas em dispositivo pessoal.";
   buildAxisChecks();openSheet("c");
 };
 $("#cSave").onclick=()=>{
@@ -1793,7 +1804,7 @@ async function glmVision(prompt,blob,cfg){
 }
 async function openaiVision(prompt,blob,cfg){
   if(!cfg.key){const e=new Error("no_key");e.code="no_key";throw e;}
-  const base=(cfg.baseUrl||"https://api.openai.com/v1").replace(/\/$/,"");const durl=await blobToDataURL(blob);
+  const base=(cfg.baseUrl||(cfg.provider==="deepseek"?"https://api.deepseek.com":"https://api.openai.com/v1")).replace(/\/$/,"");const durl=await blobToDataURL(blob);
   const body={model:cfg.model||"gpt-4o",temperature:0.3,messages:[{role:"user",content:[{type:"text",text:prompt},{type:"image_url",image_url:{url:durl}}]}]};
   const res=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify(body)});
   if(!res.ok){const e=new Error("http");e.code="http_"+res.status;throw e;}
