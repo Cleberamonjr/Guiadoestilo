@@ -573,7 +573,7 @@ header::after{
     <button class="drawer-item" id="dlBtn" type="button"><span class="drawer-icon">↓</span><span><b>Exportar coleção</b><small>Backup dos seus dados</small></span></button>
     <button class="drawer-item" id="installBtn" type="button" hidden><span class="drawer-icon">＋</span><span><b>Instalar aplicativo</b><small>Adicionar à tela inicial</small></span></button>
   </div>
-  <div class="drawer-footer"><span class="sync-dot"></span><span>Seus dados continuam no dispositivo quando a nuvem estiver indisponível.</span></div>
+  <div class="drawer-footer"><span class="sync-dot"></span><span>Exporte sua coleção regularmente. O salvamento local depende deste navegador e pode ser apagado. Chaves de IA salvas no navegador não são adequadas a dispositivos compartilhados.</span></div>
 </aside>
   <nav class="product-nav" aria-label="Navegação principal">
     <button class="product-nav-item active" type="button" data-view="perfumes" onclick="switchProductView('colecao')"><span>◈</span><b>Coleção</b><small>Seu acervo</small></button>
@@ -1274,7 +1274,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("#pSheet").cla
 (function(){try{const t=localStorage.getItem("gde:theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
 $("#themeBtn").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")||"dark";const next=cur==="light"?"dark":"light";if(next==="dark")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme","light");try{localStorage.setItem("gde:theme",next);}catch(e){}};
 $("#dlBtn").onclick=async()=>{
-  const payload=JSON.stringify({exportedAt:new Date().toISOString(),perfumes:state.perfumes,watches:state.watches},null,2);
+  const payload=JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),perfumes:state.perfumes,watches:state.watches},null,2);
   const filename="guia-do-estilo-"+new Date().toISOString().slice(0,10)+".json";
   if(downloadsNS){try{await downloadsNS.save({filename,data:payload});toast("Backup gerado");return;}catch(e){}}
   try{const blob=new Blob([payload],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);toast("Backup baixado");}catch(e){toast("Não foi possível exportar");}
@@ -1375,13 +1375,13 @@ async function aiComplete(prompt){
 function aiErr(e){
   const c=(e&&e.code)||"";
   if(c==="no_provider")return "Selecione um provedor de IA e salve as configurações.";
-  if(c==="no_key")return "A chave da API está vazia.";
+  if(c==="no_key")return "Chave de IA não configurada. Abra Menu → IA & configurações. Não compartilhe a chave em capturas de tela.";
   if(c==="network")return "Falha de rede/CORS: o navegador não conseguiu acessar o endpoint da IA.";
   if(c==="bad_json")return "A IA respondeu em formato inválido. Tente novamente.";
   if(c==="http_400")return "Requisição rejeitada: "+(e.apiMessage||"verifique modelo, endpoint e parâmetros.");
   if(c==="http_401"||c==="http_403")return "Autenticação recusada: confira a chave e as permissões do projeto.";
   if(c==="http_404")return "Modelo ou endpoint não encontrado: confira o modelo configurado.";
-  if(c==="http_429")return "Limite de requisições/quota atingido. Aguarde ou verifique o plano.";
+  if(c==="http_429")return "Limite de requisições ou créditos atingido no provedor. Verifique consumo e plano, sem repetir automaticamente a chamada.";
   if(c==="http_500"||c==="http_502"||c==="http_503")return "O provedor está indisponível temporariamente.";
   if(c==="not_granted")return "Permita o uso da Claude para a IA.";
   if(c==="all_providers_failed"){const es=Array.isArray(e.providerErrors)?e.providerErrors.map(x=>(x.provider||"IA")+": "+(x.code||"erro")).join(" · "):"";return "Os provedores configurados falharam. "+es;}
@@ -1972,7 +1972,7 @@ function renderCollectionProfile(){
   const fam={};owned.forEach(p=>{const f=famById(p.family);fam[f.name]=(fam[f.name]||0)+1;});
   const fams=Object.entries(fam).sort((a,b)=>b[1]-a[1]);
   const dominant=fams[0]?.[0]||"perfil diversificado";
-  head.textContent='Predomínio de '+dominant.toLowerCase()+', com maior afinidade por '+(topOcc?.[0]||"uso versátil").toLowerCase()+'.';
+  head.textContent='Na sua coleção, predomina '+dominant.toLowerCase()+', com maior representação de '+(topOcc?.[0]||"uso versátil").toLowerCase()+'. Posse não significa preferência.';
   olf.textContent='Sua coleção combina '+(topType?.[0]||"vários estilos").toLowerCase()+' com '+(topOcc?.[0]||"versatilidade").toLowerCase()+', indicando um guarda-roupa olfativo construído para presença e contexto.';
   renderProfileRadar(owned);
   $("#profileFamilies").innerHTML=fams.slice(0,6).map(([k,v])=>'<span>'+esc(k)+' · '+v+'</span>').join("");
@@ -1989,8 +1989,9 @@ function renderCollectionProfile(){
   if(!socialMap.length)socialMap.push("equilíbrio e adaptação ao contexto");
   psych.textContent='Sua coleção apresenta maior potencial de comunicação de '+socialMap.slice(0,3).join(", ")+'. Em termos de percepção, esse conjunto tende a construir uma imagem '+(ranked[0]?.[0]||"equilibrada").toLowerCase()+' e orientada ao contexto.';
   const taste=collectionTasteProfile(owned), gaps=collectionGapProfile(owned,taste);
+  if(taste.ratedCount<3){document.getElementById("profileTaste").textContent="Avalie pelo menos três perfumes para melhorar a interpretação do seu gosto. Por enquanto este painel reflete sobretudo o acervo.";}
   const tasteTop=taste.top.filter(x=>x.score>=1.5).slice(0,4);
-  $("#profileTaste").textContent=tasteTop.length
+  $("#profileTaste").textContent=taste.ratedCount<3 ? "Seu gosto ainda não está suficientemente avaliado. A leitura abaixo é exploratória." : tasteTop.length
     ? "Maior afinidade factual com "+tasteTop.map(x=>x.label.toLowerCase()).join(", ")+". O peso aumenta quando esses territórios aparecem em perfumes melhor avaliados."
     : "Ainda faltam notas/pirâmides suficientes para inferir seu gosto.";
   $("#profileTasteTags").innerHTML=tasteTop.map(x=>'<span>'+esc(x.label)+' · '+Math.round(x.score*10)+'%</span>').join("");
@@ -2126,7 +2127,7 @@ function renderCollectionSearch(r,owned){
   const reading=r.collection_reading||{}, src=(r.sources||[]).filter(x=>x&&x.uri).slice(0,5);
   let html='';
   if(Array.isArray(reading.taste)&&reading.taste.length) html+='<div class="ai-search-box"><div class="dlabel">Seu gosto detectado</div><p>'+reading.taste.slice(0,5).map(esc).join(" · ")+'</p></div>';
-  if(Array.isArray(reading.gaps)&&reading.gaps.length) html+='<div class="ai-search-box"><div class="dlabel">Lacunas priorizadas</div><p>'+reading.gaps.slice(0,5).map(esc).join(" · ")+'</p></div>';
+  if(Array.isArray(reading.gaps)&&reading.gaps.length) html+='<div class="ai-search-box"><div class="dlabel">Características pouco representadas (não implicam necessidade de compra)</div><p>'+reading.gaps.slice(0,5).map(esc).join(" · ")+'</p></div>';
   html+='<div class="ai-search-grid">';
   r.candidates.slice(0,3).forEach((c,idx)=>{
     const d=c.dupe||{};
@@ -2134,7 +2135,7 @@ function renderCollectionSearch(r,owned){
     html+='<h3 style="margin:2px 0 4px;font-family:var(--serif);font-size:23px">'+esc(c.name||"")+'</h3>';
     html+='<p class="ai-search-sub">'+esc(c.brand||"")+(c.concentration?" · "+esc(c.concentration):"")+(c.family?" · "+esc(c.family):"")+'</p>';
     html+='<p>'+esc(c.summary||"")+'</p>';
-    html+='<div class="ai-search-sub"><b>Compatibilidade com seu gosto:</b> '+clamp(c.fit_score||0,0,100)+'% · <b>Lacuna:</b> '+clamp(c.gap_score||0,0,100)+'% · <b>Redundância:</b> '+clamp(c.redundancy_score||0,0,100)+'%</div>';
+    html+='<div class="ai-search-sub"><b>Afinidade estimada pelo modelo:</b> '+clamp(c.fit_score||0,0,100)+'% · <b>Lacuna:</b> '+clamp(c.gap_score||0,0,100)+'% · <b>Redundância:</b> '+clamp(c.redundancy_score||0,0,100)+'%</div>';
     html+='<p><b>Ponte com seu gosto:</b> '+esc(c.bridge||"Não informada.")+'</p>';
     html+='<p><b>Espaço acrescentado:</b> '+esc(c.gap||"Não identificado.")+'</p>';
     if(Array.isArray(c.notes)&&c.notes.length)html+='<div class="notes">'+c.notes.slice(0,8).map(n=>'<span class="chip">'+esc(n)+'</span>').join("")+'</div>';
@@ -2255,7 +2256,7 @@ function renderCompare(){
   if(a.id===b.id){box.innerHTML='<div class="id-note show">Escolha dois perfumes diferentes.</div>';return;}
   const r=compatScore(a,b), pct=r.pct;
   const col=pct>=70?"#4FB07E":pct>=55?"var(--gold-bright)":pct>=40?"#E0A24E":"#D08A8A";
-  const verdict=pct>=85?"Excelente combinação para layering":pct>=70?"Combinam muito bem":pct>=55?"Combinam bem":pct>=40?"Combinação neutra — camadas leves":"Contrastam — melhor separados";
+  const verdict=pct>=85?"Alta compatibilidade estimada para layering":pct>=70?"Boa compatibilidade estimada":pct>=55?"Compatibilidade moderada":pct>=40?"Compatibilidade incerta":"Baixa compatibilidade estimada";
   const fa=famById(a.family),fb=famById(b.family);
   const reason=(r.curated?"✦ Curadoria indica combinar. ":"")+"Famílias "+fa.name+" + "+fb.name+" · "+(r.shared.length?r.shared.length+" nota(s) em comum":"sem notas em comum");
   const op=perfumerOpinion(a,b,r);
@@ -2265,7 +2266,7 @@ function renderCompare(){
   box.innerHTML=`
     <div class="cmp-score"><div class="cmp-pct" style="color:${col}">${pct}%</div><div class="cmp-verdict">${verdict}</div></div>
     <div class="cmp-bar"><div style="width:${pct}%;background:${col}"></div></div>
-    <div class="cmp-reason">${esc(reason)}</div>
+    <div class="cmp-reason">${esc(reason)} · Índice heurístico baseado nos dados cadastrados; não é teste olfativo nem previsão de como a mistura ficará na pele.</div>
     <div class="cmp-opinion"><div class="cnl">Parecer — perfumista &amp; personal stylist</div><p class="cvd">${esc(op.verdict)}</p><p>${op.perf}</p><p>${op.sty}</p></div>
     <div class="rtabs cmp-tabs">${RGROUPS.map(gp=>`<button type="button" class="rtab${gp.id===cmpGroup?" on":""}" data-g="${gp.id}">${gp.name}</button>`).join("")}</div>
     <div id="cmpCanvas"></div>
