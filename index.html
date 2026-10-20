@@ -505,7 +505,7 @@ header::after{
 .profile-radar{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:310px;padding:6px 4px 0}.profile-radar #profileRadarTabs{width:100%;margin-bottom:8px}.profile-radar #profileRadarCanvas{width:100%;display:flex;justify-content:center}
 .collection-radar-svg{display:block;width:min(100%,330px);height:auto;overflow:visible;filter:drop-shadow(0 10px 18px rgba(0,0,0,.2))}
 @media(max-width:560px){.profile-radar{min-height:285px;padding-inline:0}.collection-radar-svg{width:min(100%,310px)}}
-</style><style id="olfactory-qa-css">.oa-shortcuts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.oa-shortcuts button{padding:7px 11px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-soft);font-size:12px}.oa-shortcuts button:hover{border-color:var(--accent)}.onboarding-note{border:1px solid var(--gold-line);padding:14px 16px;border-radius:13px;margin:12px 0;background:var(--surface);color:var(--ink-soft);font-size:13px}.onboarding-note button{display:inline-block;margin-top:8px;border:1px solid var(--accent);border-radius:9px;padding:8px 12px;background:transparent;color:var(--gold-bright);font-weight:700}@media(max-width:560px){.product-nav{grid-template-columns:repeat(4,minmax(0,1fr))}.product-nav-item[data-view="watches"]{display:block;grid-column:span 4}}</style><style id="commercial-ux-css">
+</style><style id="olfactory-qa-css">.oa-shortcuts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.oa-shortcuts button{padding:7px 11px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-soft);font-size:12px}.oa-shortcuts button:hover{border-color:var(--accent)}.onboarding-note{border:1px solid var(--gold-line);padding:14px 16px;border-radius:13px;margin:12px 0;background:var(--surface);color:var(--ink-soft);font-size:13px}.onboarding-note button{display:inline-block;margin-top:8px;border:1px solid var(--accent);border-radius:9px;padding:8px 12px;background:transparent;color:var(--gold-bright);font-weight:700}@media(max-width:560px){.product-nav{grid-template-columns:repeat(4,minmax(0,1fr))}.product-nav-item[data-view="watches"]{display:block;grid-column:span 4}}</style><style id="advisor-v2-css">.advisor-context{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}.advisor-context label{display:flex;flex-direction:column;gap:5px;color:var(--ink-soft);font-size:12px;font-weight:650}.advisor-context select{width:100%;min-width:0;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px}.profile-insight{padding:12px;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px;font-size:12px;color:var(--ink-soft)}@media(min-width:700px){.advisor-context{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:380px){.advisor-context{grid-template-columns:1fr 1fr}}</style><style id="commercial-ux-css">
 .profile-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .profile-action{appearance:none;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:12px 13px;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
 .profile-action:hover{transform:translateY(-2px);border-color:var(--gold-bright);box-shadow:var(--shadow)}
@@ -643,7 +643,7 @@ header::after{
         <article class="profile-card">
           <h3>Seu gosto real</h3>
           <p id="profileTaste">—</p>
-          <div class="profile-families" id="profileTasteTags"></div>
+          <div class="profile-families" id="profileTasteTags"></div><div class="profile-insight" id="profileConfidence"></div>
         </article>
         <article class="profile-card">
           <h3>Lacunas da coleção</h3>
@@ -656,7 +656,7 @@ header::after{
       <div class="oa-kicker">Consultor da sua coleção</div>
       <h2>Para qual ocasião você vai usar?</h2>
       <p class="oa-sub">Informe ocasião, horário, clima e intensidade desejada. O consultor considera somente perfumes que você possui e explica os critérios da escolha. A compatibilidade é uma estimativa, não uma medição científica.</p><div class="oa-shortcuts" aria-label="Exemplos de ocasiões"><button type="button" data-occasion="reunião de trabalho em ambiente fechado, calor, projeção discreta">Trabalho no calor</button><button type="button" data-occasion="encontro romântico à noite, clima ameno">Encontro à noite</button><button type="button" data-occasion="passeio ao ar livre durante o dia, calor intenso">Dia quente</button></div>
-      <div class="oa-row"><input id="oaOccasion" type="text" placeholder="Ex.: reunião de negócios pela manhã" autocomplete="off"><button id="oaRun" type="button">Consultar</button></div>
+      <div class="advisor-context"><label>Temperatura <select id="oaTemp"><option value="auto">Não informada</option><option value="hot">Calor</option><option value="mild">Ameno</option><option value="cold">Frio</option></select></label><label>Ambiente <select id="oaSpace"><option value="auto">Não informado</option><option value="indoor">Fechado</option><option value="outdoor">Aberto</option></select></label><label>Intensidade <select id="oaIntensity"><option value="balanced">Equilibrada</option><option value="soft">Discreta</option><option value="strong">Marcante</option></select></label><label>Período <select id="oaPeriod"><option value="auto">Não informado</option><option value="day">Dia</option><option value="night">Noite</option></select></label></div><div class="oa-row"><input id="oaOccasion" type="text" placeholder="Ex.: reunião de negócios pela manhã" autocomplete="off"><button id="oaRun" type="button">Consultar</button></div>
       <div class="oa-result" id="oaResult" aria-live="polite"></div>
     </section>
     <div class="bar-row" id="pControls" hidden>
@@ -1954,7 +1954,7 @@ function renderCollectionProfile(){
     $("#profileRadarTabs").innerHTML=""; $("#profileRadarCanvas").innerHTML="";
     $("#profileFamilies").innerHTML="";
     $("#profileTaste").textContent="Ainda não há dados suficientes.";
-    $("#profileTasteTags").innerHTML="";
+    $("#profileTasteTags").innerHTML="";$("#profileConfidence").textContent="Avalie seus perfumes para começar a leitura de preferências.";
     $("#profileGaps").textContent="Ainda não há dados suficientes.";
     $("#profileGapTags").innerHTML="";
     return;
@@ -1992,40 +1992,63 @@ function renderCollectionProfile(){
   const taste=collectionTasteProfile(owned), gaps=collectionGapProfile(owned,taste);
   if(taste.ratedCount<3){document.getElementById("profileTaste").textContent="Avalie pelo menos três perfumes para melhorar a interpretação do seu gosto. Por enquanto este painel reflete sobretudo o acervo.";}
   const tasteTop=taste.top.filter(x=>x.score>=1.5).slice(0,4);
+  $("#profileConfidence").textContent=taste.ratedCount+" de "+owned.length+" perfumes avaliados · "+(taste.ratedCount>=5?"perfil pessoal com mais evidências":taste.ratedCount>=3?"perfil preliminar":"preferências ainda não confirmadas")+". O radar acima descreve o acervo, não a sua personalidade.";
   $("#profileTaste").textContent=taste.ratedCount<3 ? "Seu gosto ainda não está suficientemente avaliado. A leitura abaixo é exploratória." : tasteTop.length
     ? "Maior afinidade factual com "+tasteTop.map(x=>x.label.toLowerCase()).join(", ")+". O peso aumenta quando esses territórios aparecem em perfumes melhor avaliados."
     : "Ainda faltam notas/pirâmides suficientes para inferir seu gosto.";
   $("#profileTasteTags").innerHTML=tasteTop.map(x=>'<span>'+esc(x.label)+' · '+Math.round(x.score*10)+'%</span>').join("");
   const gapTop=gaps.filter(x=>x.coverage<2.5).slice(0,4);
   $("#profileGaps").textContent=gapTop.length
-    ? "Territórios pouco representados: "+gapTop.map(x=>x.label.toLowerCase()).join(", ")+". Eles entram como candidatos a preencher lacunas, sem ignorar seu gosto."
+    ? "Territórios pouco representados: "+gapTop.map(x=>x.label.toLowerCase()).join(", ")+". Ausência não indica necessidade de compra; experimente amostras antes de adquirir."
     : "A coleção cobre bem os principais territórios identificados.";
   $("#profileGapTags").innerHTML=gapTop.map(x=>'<span>'+esc(x.label)+' · '+Math.round(x.coverage*10)+'%</span>').join("");
 }
-function renderOccasionAdvisor(r,owned){
-  const byId={};owned.forEach(p=>byId[p.id]=p);
-  const p=byId[r.id]||owned.find(x=>x.name===r.name);
-  if(!p){$("#oaResult").innerHTML='<div class="id-note show">O consultor não encontrou um perfume válido dentro da sua coleção.</div>';return;}
-  const pct=clamp(r.match_percent!=null?r.match_percent:localOccasionScore(p,$("#oaOccasion").value),0,100);
-  $("#oaResult").innerHTML='<div class="oa-result-card"><div class="oa-result-top"><div><div class="oa-result-brand">'+esc(p.brand||"")+'</div><div class="oa-result-name">'+esc(p.name)+'</div></div><div class="oa-score">'+pct+'%</div></div><div class="oa-why">'+esc(r.why||"Melhor correspondência encontrada para a ocasião informada.")+'</div><div class="oa-meta">Estimativa de adequação · não é probabilidade estatística nem garantia de desempenho.</div></div>';
+function adviserContext(){
+ const val=id=>document.getElementById(id)?.value||"auto";
+ return {temp:val("oaTemp"),space:val("oaSpace"),intensity:val("oaIntensity"),period:val("oaPeriod")};
+}
+function adviserScore(p,occasion,c){
+ const r=p.radar||{}, base=localOccasionScore(p,occasion);
+ const n=x=>Number(r[x]||0);
+ let adjustment=0, reasons=[],known=0;
+ if(c.temp==="hot"){adjustment+=(n("frescor")-n("doce"))*1.5;reasons.push("calor: preferência por frescor e menor doçura");known++;}
+ if(c.temp==="cold"){adjustment+=(n("doce")-5)*.8;reasons.push("frio: estrutura mais encorpada pode funcionar");known++;}
+ if(c.space==="indoor"){adjustment-=(n("projecao")-5)*1.3;reasons.push("ambiente fechado: projeção moderada");known++;}
+ if(c.intensity==="soft"){adjustment-=(n("projecao")-3)*1.8;reasons.push("intensidade discreta");known++;}
+ if(c.intensity==="strong"){adjustment+=(n("projecao")-5)*1.4;reasons.push("intensidade marcante");known++;}
+ if(c.period==="day"){adjustment+=(n("dia")-5)*1.1;known++;reasons.push("uso diurno");}
+ if(c.period==="night"){adjustment+=(n("noite")-5)*1.1;known++;reasons.push("uso noturno");}
+ const present=Object.keys(r).filter(k=>Number(r[k])>0).length;
+ return {p,score:clamp(Math.round(base+adjustment),0,100),reasons,known:present,contextCount:known};
+}
+function renderOccasionAdvisor(r,owned,ranked){
+ const p=owned.find(x=>x.id===r.id);
+ if(!p){$("#oaResult").textContent="Não encontrei um perfume válido no acervo.";return;}
+ const top=ranked.find(x=>x.p.id===p.id)||ranked[0], alternative=ranked.find(x=>x.p.id!==p.id);
+ const reason=top.reasons.length?top.reasons.join(" · "):"adequação estimada a partir da ocasião informada";
+ const isSparse=top.known<3;
+ $("#oaResult").innerHTML='<div class="oa-result-card"><div class="oa-result-top"><div><div class="oa-result-brand">'+esc(p.brand||"")+'</div><div class="oa-result-name">'+esc(p.name)+'</div></div><div class="oa-score">'+top.score+'%</div></div><div class="oa-why">'+esc(r.why||"Maior correspondência local entre os perfumes disponíveis.")+'</div><div class="oa-meta"><b>Critérios:</b> '+esc(reason)+'. '+(isSparse?"Poucos atributos cadastrados: confiança reduzida. ":"")+'Pontuação heurística, não probabilidade ou garantia de desempenho.</div>'+(alternative?'<div class="profile-insight"><b>Alternativa:</b> '+esc(alternative.p.name)+' · '+alternative.score+'% estimados</div>':"")+'</div>';
 }
 async function runOccasionAdvisor(){
-  const occasion=$("#oaOccasion").value.trim();
-  if(!occasion){$("#oaOccasion").focus();toast("Digite a ocasião");return;}
-  const owned=state.perfumes.filter(p=>p.status==="tenho");
-  if(!owned.length){toast("Sua coleção está vazia");return;}
-  const btn=$("#oaRun");btn.disabled=true;btn.textContent="Consultando…";$("#oaResult").innerHTML="";
-  const ranked=owned.map(p=>({p,score:localOccasionScore(p,occasion)})).sort((a,b)=>b.score-a.score);
-  const list=owned.map(p=>({id:p.id,nome:p.name,marca:p.brand,familia:p.family,notas:(p.notes||[]).slice(0,8),radar:p.radar||{},estacoes:p.seasons||[],ocasiao:p.best_occasion||"",observacoes:p.comment||""}));
-  const prompt='Você é meu consultor pessoal de fragrâncias. Ocasião informada: '+JSON.stringify(occasion)+'. Escolha EXATAMENTE 1 perfume entre os ids da coleção abaixo. Avalie adequação ao contexto informado usando perfil olfativo, horário, estação, projeção, longevidade, elegância, versatilidade e notas. Não invente perfumes fora da lista. Retorne SOMENTE JSON válido: {"id":"id_da_colecao","match_percent":0,"why":"explicação objetiva em 1-2 frases"}. match_percent é uma estimativa subjetiva de adequação entre 0 e 100, NÃO é medição científica, nota de qualidade ou garantia de reação social. Explique incertezas quando notas ou desempenho estiverem ausentes. Coleção: '+JSON.stringify(list);
-  try{
-    const out=await aiComplete(prompt);let r=out.data||{};
-    if(!r.id||!owned.some(p=>p.id===r.id)){r={id:ranked[0].p.id,match_percent:ranked[0].score,why:"É a maior correspondência calculada localmente para as características da ocasião."};}
-    renderOccasionAdvisor(r,owned);
-  }catch(e){
-    const top=ranked[0];renderOccasionAdvisor({id:top.p.id,match_percent:top.score,why:"Análise local sem IA: correspondência aproximada baseada nos critérios cadastrados. Confira a intensidade e teste na pele."},owned);
-    toast("IA indisponível; usei a análise local da coleção.");
-  }finally{btn.disabled=false;btn.textContent="Consultar";}
+ const occasion=$("#oaOccasion").value.trim();
+ if(!occasion){$("#oaOccasion").focus();toast("Digite a ocasião");return;}
+ const owned=state.perfumes.filter(p=>p.status==="tenho");
+ if(!owned.length){toast("Cadastre ao menos um perfume para consultar.");return;}
+ const btn=$("#oaRun");btn.disabled=true;btn.textContent="Consultando…";$("#oaResult").innerHTML="";
+ const ctx=adviserContext();
+ const ranked=owned.map(p=>adviserScore(p,occasion,ctx)).sort((a,b)=>b.score-a.score);
+ const top=ranked[0];
+ const list=ranked.slice(0,25).map(x=>({id:x.p.id,nome:x.p.name,marca:x.p.brand,familia:x.p.family,notas:(x.p.notes||[]).slice(0,8),radar:x.p.radar||{},score_local:x.score}));
+ try{
+   const cfg=getAiConfigs();
+   if(!cfg.length)throw new Error("no_provider");
+   const prompt="Consultor de perfumaria. Escolha somente um id do acervo informado. Contexto: "+JSON.stringify({occasion,ctx})+". Ranking local: "+JSON.stringify(list)+". Considere projeção, local fechado, temperatura, período e intensidade. Retorne JSON {\"id\":\"\",\"why\":\"\"}. Não invente desempenho, clima real, notas ou perfumes. Explique incertezas.";
+   const out=await aiComplete(prompt);const candidate=out.data||{};
+   const chosen=owned.some(p=>p.id===candidate.id)?candidate.id:top.p.id;
+   renderOccasionAdvisor({id:chosen,why:candidate.why||"Recomendação conforme os critérios cadastrados."},owned,ranked);
+ }catch(e){
+   renderOccasionAdvisor({id:top.p.id,why:"Seleção local baseada nos atributos registrados; IA não utilizada nesta consulta."},owned,ranked);
+ }finally{btn.disabled=false;btn.textContent="Consultar";}
 }
 $("#oaRun").onclick=runOccasionAdvisor;
 $("#oaOccasion").addEventListener("keydown",e=>{if(e.key==="Enter")runOccasionAdvisor();});
