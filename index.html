@@ -520,8 +520,8 @@ header::after{
 .product-nav-item b{display:block;font-size:11.5px;color:var(--ink)}
 .product-nav-item small{display:block;font-size:9.5px;margin-top:2px}
 .product-nav-item:hover,.product-nav-item.active{background:var(--bg);border-color:var(--line);transform:translateY(-1px)}
-.legacy-tabs{display:none!important}
-@media(max-width:620px){.product-nav{grid-template-columns:repeat(4,1fr);gap:4px;padding:5px;top:4px}.product-nav-item{padding:8px 3px}.product-nav-item span{font-size:16px}.product-nav-item b{font-size:10.5px}.product-nav-item small{font-size:8.5px}.product-nav-item[data-view="watches"]{grid-column:span 4}.product-nav-item[data-view="watches"]{display:block;grid-column:span 4;background:var(--bg);border-color:var(--line)}}
+.legacy-tabs{display:none!important}#occasionAdvisor,#profileDashboard,#pControls,#viewWatches{scroll-margin-top:100px}
+@media(max-width:620px){.product-nav{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:4px;top:calc(env(safe-area-inset-top) + 4px);border-radius:14px}.product-nav-item{min-width:0;padding:9px 2px 8px;border-radius:10px}.product-nav-item span{font-size:17px;margin-bottom:3px}.product-nav-item b{font-size:11px}.product-nav-item small{display:none}.product-nav-item:hover{transform:none}}
 </style><style id="detail-commercial-css">
 .detail-commercial-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .detail-impact,.detail-role{margin:0}
@@ -567,6 +567,7 @@ header::after{
     <button class="drawer-item" id="collectionSearchBtn" type="button"><span class="drawer-icon">⌕</span><span><b>Curadoria de compra</b><small>Descubra o que realmente falta</small></span></button>
     <button class="drawer-item" id="compareBtn" type="button"><span class="drawer-icon">◉</span><span><b>Comparar fragrâncias</b><small>DNA, ocasião e compatibilidade</small></span></button>
   </div>
+  <div class="drawer-section"><div class="drawer-label">Meu acervo</div><button class="drawer-item" id="watchesNavBtn" type="button" onclick="switchProductView('relogios')"><span class="drawer-icon">◷</span><span><b>Acessórios e relógios</b><small>Acessar coleção secundária</small></span></button></div>
   <div class="drawer-section"><div class="drawer-label">Aplicativo</div>
     <button class="drawer-item" id="cfgBtn" type="button"><span class="drawer-icon">⚙</span><span><b>IA &amp; configurações</b><small>Provedor, chave e radar</small></span></button>
     <button class="drawer-item" id="themeBtn" type="button"><span class="drawer-icon">◐</span><span><b>Aparência</b><small>Alternar tema claro/escuro</small></span></button>
@@ -579,9 +580,8 @@ header::after{
   <nav class="product-nav" aria-label="Navegação principal">
     <button class="product-nav-item active" type="button" data-view="perfumes" onclick="switchProductView('colecao')"><span>◈</span><b>Coleção</b><small>Seu acervo</small></button>
     <button class="product-nav-item" type="button" data-view="consultor" onclick="focusProductSection('occasionAdvisor')"><span>✦</span><b>Consultor</b><small>Qual usar?</small></button>
-    <button class="product-nav-item" type="button" data-view="impacto" onclick="focusProductSection('profileDashboard')"><span>◎</span><b>Impacto</b><small>Como comunica</small></button>
-    <button class="product-nav-item" type="button" data-view="compra" onclick="openSheet('q')"><span>⌕</span><b>Compra</b><small>O que acrescentar?</small></button>
-    <button class="product-nav-item" type="button" data-view="watches" onclick="switchProductView('relogios')"><span>◷</span><b>Acessórios</b><small>Seu acervo</small></button>
+    <button class="product-nav-item" type="button" data-view="impacto" onclick="focusProductSection('profileDashboard')"><span>◎</span><b>Perfil</b><small>DNA olfativo</small></button>
+    <button class="product-nav-item" type="button" data-view="compra" onclick="openSheet('q')"><span>⌕</span><b>Descobrir</b><small>Compras conscientes</small></button>
   </nav>
   <div class="legacy-tabs" role="tablist" aria-hidden="true">
     <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Fragrâncias</button>
@@ -2400,11 +2400,12 @@ function setProductNav(view){
 function focusProductSection(id){
   const el=document.getElementById(id);
   if(!el)return;
+  switchTab("perfumes");
   setProductNav(id==="profileDashboard"?"impacto":"consultor");
   el.scrollIntoView({behavior:"smooth",block:"start"});
 }
 function switchProductView(view){
-  if(view==="relogios"){switchTab("watches");setProductNav("watches");return;}
+  if(view==="relogios"){switchTab("watches");setProductNav("");document.getElementById("viewWatches")?.scrollIntoView({behavior:"smooth",block:"start"});return;}
   switchTab("perfumes");setProductNav("perfumes");
   window.scrollTo({top:0,behavior:"smooth"});
 }
