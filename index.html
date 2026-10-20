@@ -572,6 +572,7 @@ header::after{
     <button class="drawer-item" id="cfgBtn" type="button"><span class="drawer-icon">⚙</span><span><b>IA &amp; configurações</b><small>Provedor, chave e radar</small></span></button>
     <button class="drawer-item" id="themeBtn" type="button"><span class="drawer-icon">◐</span><span><b>Aparência</b><small>Alternar tema claro/escuro</small></span></button>
     <button class="drawer-item" id="dlBtn" type="button"><span class="drawer-icon">↓</span><span><b>Exportar coleção</b><small>Backup dos seus dados</small></span></button>
+    <button class="drawer-item" id="catalogAuditBtn" type="button"><span class="drawer-icon">◉</span><span><b>Verificar catálogo (sem IA)</b><small>Auditar cobertura da coleção</small></span></button>
     <button class="drawer-item" id="updateAppBtn" type="button"><span class="drawer-icon">↻</span><span><b>Atualizar aplicativo</b><small id="updateAppStatus">Verificar versão publicada</small></span></button>
     <button class="drawer-item" id="installBtn" type="button" hidden><span class="drawer-icon">＋</span><span><b>Instalar aplicativo</b><small>Adicionar à tela inicial</small></span></button>
   </div>
@@ -2476,5 +2477,65 @@ function switchProductView(view){
   });
 })();
 </script>
-</body>
+<div class="overlay" id="catalogAuditOverlay" hidden></div><div class="sheet" id="catalogAuditSheet" role="dialog" aria-modal="true" aria-label="Auditoria de catálogo" style="overflow-y:auto;max-height:90dvh">
+<h2>Catálogo · verificação em lote</h2>
+<p class="hint">Consulta pública ao Open Beauty Facts. Não altera seus perfumes. Correspondências são apenas candidatas, sem pirâmide olfativa validada. Fonte: Open Beauty Facts (ODbL).</p>
+<div id="catalogAuditSummary" class="id-note show">Abra sua coleção e execute a verificação para obter um relatório real.</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><button class="btn-primary" id="catalogAuditRun" type="button">Verificar minha coleção</button><button class="btn-ghost" id="catalogAuditExport" type="button" disabled>Exportar relatório CSV</button><button class="btn-ghost" id="catalogAuditClose" type="button">Fechar</button></div>
+<div id="catalogAuditRows" style="display:grid;gap:8px"></div>
+</div>
+<script id="catalog-audit-feature">
+(function(){
+ const $id=id=>document.getElementById(id);
+ const escText=x=>String(x==null?"":x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const norm=x=>String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+ let results=[],running=false;
+ function show(open){$id("catalogAuditOverlay").hidden=!open;$id("catalogAuditSheet").classList.toggle("open",open);$id("catalogAuditSheet").style.display=open?"block":"none";$id("catalogAuditOverlay").style.display=open?"block":"none";}
+ const pane=$id("catalogAuditSheet");pane.style.display="none";
+ $id("catalogAuditBtn").addEventListener("click",()=>{show(true);$id("catalogAuditSummary").textContent="Coleção: "+((typeof state!=="undefined"&&state.perfumes)||[]).length+" registros. A verificação não edita nenhum registro.";});
+ $id("catalogAuditClose").onclick=()=>show(false);$id("catalogAuditOverlay").onclick=()=>show(false);
+ function identify(p,items){
+  const name=norm(p.name),brand=norm(p.brand),conc=norm(p.concentration);
+  return items.map(x=>{
+   const pn=norm(x.product_name||x.product_name_en),br=norm(x.brands);
+   const exactName=!!name&&(pn===name||pn===norm([p.brand,p.name].filter(Boolean).join(" ")));
+   const brandMatch=!!brand&&(br.split(",").some(v=>v.trim()===brand)||pn.includes(brand));
+   const versionKnown=!conc||pn.split(" ").includes(conc)||pn.includes(conc);
+   return {x,exactName,brandMatch,versionKnown,score:(exactName?5:pn.includes(name)&&name?2:0)+(brandMatch?3:0)+(versionKnown?1:0)};
+  }).filter(x=>x.score>=4).sort((a,b)=>b.score-a.score)[0];
+ }
+ async function lookup(p){
+  const q=[p.brand,p.name,p.concentration].filter(Boolean).join(" ").trim();
+  const u="https://world.openbeautyfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(q)+"&search_simple=1&action=process&json=1&page_size=15&fields="+encodeURIComponent("code,product_name,product_name_en,brands,url,categories");
+  const response=await fetch(u,{headers:{Accept:"application/json"}});
+  if(!response.ok)throw Error("HTTP "+response.status);
+  const data=await response.json(),hit=identify(p,Array.isArray(data.products)?data.products:[]);
+  if(!hit)return {name:p.name,brand:p.brand,concentration:p.concentration||"",status:"Não encontrado",candidate:"",source:"",code:""};
+  const exact=hit.exactName&&hit.brandMatch&&hit.versionKnown;
+  return {name:p.name,brand:p.brand,concentration:p.concentration||"",status:exact?"Candidato forte — revisar":"Candidato ambíguo",candidate:hit.x.product_name||"",source:hit.x.url||("https://world.openbeautyfacts.org/product/"+encodeURIComponent(hit.x.code||"")),code:hit.x.code||""};
+ }
+ function render(){
+  const found=results.filter(x=>x.status==="Candidato forte — revisar").length,amb=results.filter(x=>x.status==="Candidato ambíguo").length,missing=results.filter(x=>x.status==="Não encontrado").length,errors=results.filter(x=>x.status.startsWith("Erro")).length;
+  $id("catalogAuditSummary").textContent=results.length+" examinados · "+found+" candidatos fortes · "+amb+" ambíguos · "+missing+" não encontrados · "+errors+" erros. Zero pirâmides importadas automaticamente.";
+  $id("catalogAuditRows").innerHTML=results.map(r=>'<div style="padding:10px;border:1px solid var(--line);border-radius:10px"><strong>'+escText([r.brand,r.name,r.concentration].filter(Boolean).join(" · "))+'</strong><div style="font-size:12px;margin-top:5px">'+escText(r.status)+(r.candidate?" — "+escText(r.candidate):"")+'</div>'+(r.source?'<a href="'+escText(r.source)+'" target="_blank" rel="noopener noreferrer" style="font-size:12px">Ver registro de origem ↗</a>':"")+'</div>').join("");
+ }
+ $id("catalogAuditRun").onclick=async()=>{
+  if(running)return;
+  const items=(typeof state!=="undefined"&&state.perfumes)||[];
+  if(!items.length){$id("catalogAuditSummary").textContent="Coleção ainda não carregada. Aguarde a sincronização e tente novamente.";return;}
+  running=true;results=[];$id("catalogAuditRun").disabled=true;$id("catalogAuditExport").disabled=true;
+  for(const p of items){
+   $id("catalogAuditSummary").textContent="Pesquisando "+(results.length+1)+" de "+items.length+"…";
+   try{results.push(await lookup(p));}catch(e){results.push({name:p.name,brand:p.brand,concentration:p.concentration||"",status:"Erro na consulta",candidate:"",source:"",code:""});}
+   render();
+  }
+  running=false;$id("catalogAuditRun").disabled=false;$id("catalogAuditExport").disabled=false;
+ };
+ $id("catalogAuditExport").onclick=()=>{
+  const columns=["name","brand","concentration","status","candidate","source","code"];
+  const csv=[columns.join(";"),...results.map(r=>columns.map(k=>'"'+String(r[k]||"").replace(/"/g,'""')+'"').join(";"))].join("\r\n");
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="guia-estilo-cobertura-catalogo.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ };
+})();
+</script></body>
 </html>
