@@ -571,6 +571,7 @@ header::after{
     <button class="drawer-item" id="cfgBtn" type="button"><span class="drawer-icon">⚙</span><span><b>IA &amp; configurações</b><small>Provedor, chave e radar</small></span></button>
     <button class="drawer-item" id="themeBtn" type="button"><span class="drawer-icon">◐</span><span><b>Aparência</b><small>Alternar tema claro/escuro</small></span></button>
     <button class="drawer-item" id="dlBtn" type="button"><span class="drawer-icon">↓</span><span><b>Exportar coleção</b><small>Backup dos seus dados</small></span></button>
+    <button class="drawer-item" id="updateAppBtn" type="button"><span class="drawer-icon">↻</span><span><b>Atualizar aplicativo</b><small id="updateAppStatus">Verificar versão publicada</small></span></button>
     <button class="drawer-item" id="installBtn" type="button" hidden><span class="drawer-icon">＋</span><span><b>Instalar aplicativo</b><small>Adicionar à tela inicial</small></span></button>
   </div>
   <div class="drawer-footer"><span class="sync-dot"></span><span>Exporte sua coleção regularmente. O salvamento local depende deste navegador e pode ser apagado. Chaves de IA salvas no navegador não são adequadas a dispositivos compartilhados.</span></div>
@@ -2407,5 +2408,38 @@ function switchProductView(view){
   switchTab("perfumes");setProductNav("perfumes");
   window.scrollTo({top:0,behavior:"smooth"});
 }
-</script></body>
+</script><script id="app-update-feature">
+(function(){
+  const btn=document.getElementById('updateAppBtn');
+  const status=document.getElementById('updateAppStatus');
+  if(!btn||!status)return;
+  btn.addEventListener('click',async function(){
+    if(btn.disabled)return;
+    btn.disabled=true;
+    status.textContent='Verificando atualizações…';
+    try{
+      if(!navigator.onLine)throw new Error('offline');
+      if('serviceWorker' in navigator){
+        const reg=await navigator.serviceWorker.getRegistration('./');
+        if(reg){
+          await reg.update();
+          if(reg.waiting){reg.waiting.postMessage({type:'SKIP_WAITING'});}
+        }
+      }
+      const probe=new URL('./index.html',location.href);
+      probe.searchParams.set('_update_check',String(Date.now()));
+      const response=await fetch(probe.href,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+      if(!response.ok)throw new Error('http_'+response.status);
+      // Cache-busting forces navigation to revalidate the app shell.
+      // User data remains in local storage / existing database; do not clear either.
+      status.textContent='Abrindo a versão publicada…';
+      location.assign(probe.href);
+    }catch(error){
+      status.textContent=error.message==='offline'?'Sem internet. Tente novamente.':'Não foi possível verificar. Tente novamente.';
+      btn.disabled=false;
+    }
+  });
+})();
+</script>
+</body>
 </html>
