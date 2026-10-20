@@ -505,7 +505,7 @@ header::after{
 .profile-radar{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:310px;padding:6px 4px 0}.profile-radar #profileRadarTabs{width:100%;margin-bottom:8px}.profile-radar #profileRadarCanvas{width:100%;display:flex;justify-content:center}
 .collection-radar-svg{display:block;width:min(100%,330px);height:auto;overflow:visible;filter:drop-shadow(0 10px 18px rgba(0,0,0,.2))}
 @media(max-width:560px){.profile-radar{min-height:285px;padding-inline:0}.collection-radar-svg{width:min(100%,310px)}}
-</style><style id="commercial-ux-css">
+</style><style id="olfactory-qa-css">.oa-shortcuts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.oa-shortcuts button{padding:7px 11px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-soft);font-size:12px}.oa-shortcuts button:hover{border-color:var(--accent)}.onboarding-note{border:1px solid var(--gold-line);padding:14px 16px;border-radius:13px;margin:12px 0;background:var(--surface);color:var(--ink-soft);font-size:13px}.onboarding-note button{display:inline-block;margin-top:8px;border:1px solid var(--accent);border-radius:9px;padding:8px 12px;background:transparent;color:var(--gold-bright);font-weight:700}@media(max-width:560px){.product-nav{grid-template-columns:repeat(4,minmax(0,1fr))}.product-nav-item[data-view="watches"]{display:block;grid-column:span 4}}</style><style id="commercial-ux-css">
 .profile-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .profile-action{appearance:none;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:12px 13px;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
 .profile-action:hover{transform:translateY(-2px);border-color:var(--gold-bright);box-shadow:var(--shadow)}
@@ -521,7 +521,7 @@ header::after{
 .product-nav-item small{display:block;font-size:9.5px;margin-top:2px}
 .product-nav-item:hover,.product-nav-item.active{background:var(--bg);border-color:var(--line);transform:translateY(-1px)}
 .legacy-tabs{display:none!important}
-@media(max-width:620px){.product-nav{grid-template-columns:repeat(4,1fr);gap:4px;padding:5px;top:4px}.product-nav-item{padding:8px 3px}.product-nav-item span{font-size:16px}.product-nav-item b{font-size:10.5px}.product-nav-item small{font-size:8.5px}.product-nav-item[data-view="watches"]{grid-column:span 4}.product-nav-item[data-view="watches"]{display:none}}
+@media(max-width:620px){.product-nav{grid-template-columns:repeat(4,1fr);gap:4px;padding:5px;top:4px}.product-nav-item{padding:8px 3px}.product-nav-item span{font-size:16px}.product-nav-item b{font-size:10.5px}.product-nav-item small{font-size:8.5px}.product-nav-item[data-view="watches"]{grid-column:span 4}.product-nav-item[data-view="watches"]{display:block;grid-column:span 4;background:var(--bg);border-color:var(--line)}}
 </style><style id="detail-commercial-css">
 .detail-commercial-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .detail-impact,.detail-role{margin:0}
@@ -591,7 +591,7 @@ header::after{
       <div class="count"><div class="num" id="pCount">0</div><div class="lbl"><b id="pWord">frascos</b><span class="w">na coleção</span><div id="pWish"></div></div></div>
 
     </div>
-    <section class="style-vision" id="styleVision" aria-label="Análise de estilo por foto">
+    <div class="onboarding-note" id="onboardingNote" hidden><strong>Comece pelo seu acervo.</strong> Cadastre alguns perfumes e dê suas avaliações pessoais. Assim, o guia poderá diferenciar o que você tem do que realmente prefere.<div><button type="button" id="onboardingAdd">Adicionar primeiro perfume</button></div></div><section class="style-vision" id="styleVision" aria-label="Análise de estilo por foto">
       <div class="style-vision-grid">
         <div class="style-vision-copy">
           <div class="style-vision-kicker">Style Vision · IA</div>
@@ -654,7 +654,7 @@ header::after{
     <section class="occasion-advisor" id="occasionAdvisor" aria-label="Consultor de ocasião">
       <div class="oa-kicker">Consultor da sua coleção</div>
       <h2>Para qual ocasião você vai usar?</h2>
-      <p class="oa-sub">Digite a ocasião — por exemplo: “entrevista de trabalho às 10h30, clima quente”. O consultor escolhe apenas entre os perfumes que você possui.</p>
+      <p class="oa-sub">Informe ocasião, horário, clima e intensidade desejada. O consultor considera somente perfumes que você possui e explica os critérios da escolha. A compatibilidade é uma estimativa, não uma medição científica.</p><div class="oa-shortcuts" aria-label="Exemplos de ocasiões"><button type="button" data-occasion="reunião de trabalho em ambiente fechado, calor, projeção discreta">Trabalho no calor</button><button type="button" data-occasion="encontro romântico à noite, clima ameno">Encontro à noite</button><button type="button" data-occasion="passeio ao ar livre durante o dia, calor intenso">Dia quente</button></div>
       <div class="oa-row"><input id="oaOccasion" type="text" placeholder="Ex.: reunião de negócios pela manhã" autocomplete="off"><button id="oaRun" type="button">Consultar</button></div>
       <div class="oa-result" id="oaResult" aria-live="polite"></div>
     </section>
@@ -1071,6 +1071,7 @@ function localOccasionScore(p,occasion){
   return clamp(Math.round(base*10),0,100);
 }
 function renderPerfumes(){
+  const start=document.getElementById("onboardingNote");if(start)start.hidden=state.perfumes.length>0;
   const loading=(mode!=="local"&&!pLoaded);
   if(loading){$("#pGrid").innerHTML="";$("#pEmpty").hidden=true;$("#pSummary").hidden=true;$("#pControls").hidden=true;return;}
   const has=state.perfumes.length>0;
@@ -1897,20 +1898,20 @@ function perfumeDNAVector(p){
 function collectionTasteProfile(owned){
   const axes=DNA_AXES.map(([id,label])=>({id,label,score:0,count:0,weighted:0}));
   owned.forEach(p=>{
-    const rating=Number(p.rating)||0, weight=rating>=8?1.15:rating>=7?1:0.8;
+    const rating=Number(p.rating)||0, weight=rating>=8?1.3:rating>=7?1.1:rating>0&&rating<=5?0.35:0.65;
     perfumeDNAVector(p).forEach((x,i)=>{if(x.score>0){axes[i].count++;axes[i].weighted+=x.score*weight;}});
   });
   axes.forEach(a=>{a.score=a.weighted/(owned.length||1);});
   const liked=axes.slice().sort((a,b)=>b.score-a.score);
   const hated=axes.slice().sort((a,b)=>a.score-b.score);
   const top=liked.filter(x=>x.score>=2).slice(0,5);
-  return {axes,top,low:hated.slice(0,4)};
+  return {axes,top,low:hated.slice(0,4),ratedCount:owned.filter(p=>Number(p.rating)>0).length};
 }
 function collectionGapProfile(owned,taste){
   const familyCounts={};
   owned.forEach(p=>{const f=normalizeText(p.family);if(f)familyCounts[f]=(familyCounts[f]||0)+1;});
   const dna=taste.axes.map(x=>({id:x.id,label:x.label,coverage:x.score}));
-  return dna.slice().sort((a,b)=>a.coverage-b.coverage).slice(0,5).map(x=>({...x,count:DNA_AXES.find(a=>a[0]===x.id)?owned.filter(p=>perfumeDNAVector(p).find(v=>v.id===x.id)?.score>=5).length:0}));
+  return dna.slice().sort((a,b)=>a.coverage-b.coverage).slice(0,5).map(x=>({...x,count:owned.filter(p=>perfumeDNAVector(p).find(v=>v.id===x.id)?.score>=5).length,unexplored:true}));
 }
 function tasteSummary(owned){
   const t=collectionTasteProfile(owned);
@@ -2004,7 +2005,7 @@ function renderOccasionAdvisor(r,owned){
   const p=byId[r.id]||owned.find(x=>x.name===r.name);
   if(!p){$("#oaResult").innerHTML='<div class="id-note show">O consultor não encontrou um perfume válido dentro da sua coleção.</div>';return;}
   const pct=clamp(r.match_percent!=null?r.match_percent:localOccasionScore(p,$("#oaOccasion").value),0,100);
-  $("#oaResult").innerHTML='<div class="oa-result-card"><div class="oa-result-top"><div><div class="oa-result-brand">'+esc(p.brand||"")+'</div><div class="oa-result-name">'+esc(p.name)+'</div></div><div class="oa-score">'+pct+'%</div></div><div class="oa-why">'+esc(r.why||"Melhor correspondência encontrada para a ocasião informada.")+'</div><div class="oa-meta">Compatibilidade estimada com a ocasião · baseada somente na sua coleção.</div></div>';
+  $("#oaResult").innerHTML='<div class="oa-result-card"><div class="oa-result-top"><div><div class="oa-result-brand">'+esc(p.brand||"")+'</div><div class="oa-result-name">'+esc(p.name)+'</div></div><div class="oa-score">'+pct+'%</div></div><div class="oa-why">'+esc(r.why||"Melhor correspondência encontrada para a ocasião informada.")+'</div><div class="oa-meta">Estimativa de adequação · não é probabilidade estatística nem garantia de desempenho.</div></div>';
 }
 async function runOccasionAdvisor(){
   const occasion=$("#oaOccasion").value.trim();
@@ -2014,13 +2015,13 @@ async function runOccasionAdvisor(){
   const btn=$("#oaRun");btn.disabled=true;btn.textContent="Consultando…";$("#oaResult").innerHTML="";
   const ranked=owned.map(p=>({p,score:localOccasionScore(p,occasion)})).sort((a,b)=>b.score-a.score);
   const list=owned.map(p=>({id:p.id,nome:p.name,marca:p.brand,familia:p.family,notas:(p.notes||[]).slice(0,8),radar:p.radar||{},estacoes:p.seasons||[],ocasiao:p.best_occasion||"",observacoes:p.comment||""}));
-  const prompt='Você é meu consultor pessoal de fragrâncias. Ocasião informada: '+JSON.stringify(occasion)+'. Escolha EXATAMENTE 1 perfume entre os ids da coleção abaixo. Avalie adequação ao contexto informado usando perfil olfativo, horário, estação, projeção, longevidade, elegância, versatilidade e notas. Não invente perfumes fora da lista. Retorne SOMENTE JSON válido: {"id":"id_da_colecao","match_percent":0,"why":"explicação objetiva em 1-2 frases"}. match_percent é compatibilidade estimada de 0 a 100, NÃO é nota de qualidade. Coleção: '+JSON.stringify(list);
+  const prompt='Você é meu consultor pessoal de fragrâncias. Ocasião informada: '+JSON.stringify(occasion)+'. Escolha EXATAMENTE 1 perfume entre os ids da coleção abaixo. Avalie adequação ao contexto informado usando perfil olfativo, horário, estação, projeção, longevidade, elegância, versatilidade e notas. Não invente perfumes fora da lista. Retorne SOMENTE JSON válido: {"id":"id_da_colecao","match_percent":0,"why":"explicação objetiva em 1-2 frases"}. match_percent é uma estimativa subjetiva de adequação entre 0 e 100, NÃO é medição científica, nota de qualidade ou garantia de reação social. Explique incertezas quando notas ou desempenho estiverem ausentes. Coleção: '+JSON.stringify(list);
   try{
     const out=await aiComplete(prompt);let r=out.data||{};
     if(!r.id||!owned.some(p=>p.id===r.id)){r={id:ranked[0].p.id,match_percent:ranked[0].score,why:"É a maior correspondência calculada localmente para as características da ocasião."};}
     renderOccasionAdvisor(r,owned);
   }catch(e){
-    const top=ranked[0];renderOccasionAdvisor({id:top.p.id,match_percent:top.score,why:"O consultor usou o perfil da sua coleção para encontrar a maior compatibilidade disponível."},owned);
+    const top=ranked[0];renderOccasionAdvisor({id:top.p.id,match_percent:top.score,why:"Análise local sem IA: correspondência aproximada baseada nos critérios cadastrados. Confira a intensidade e teste na pele."},owned);
     toast("IA indisponível; usei a análise local da coleção.");
   }finally{btn.disabled=false;btn.textContent="Consultar";}
 }
@@ -2039,7 +2040,7 @@ function collectionSearchPrompt(name,brand,owned,mode){
     ? 'Analise o candidato específico "'+name+'" da marca "'+(brand||"não informada")+'".'
     : 'Sugira até 3 perfumes reais que preencham lacunas da coleção sem abandonar o gosto demonstrado.';
   return 'Você é um consultor de curadoria de perfumaria. PRIMEIRO LEIA A COLEÇÃO REAL. Ela é uma LISTA DE EXCLUSÃO OBRIGATÓRIA: nenhum perfume já presente pode ser recomendado como candidato. Analise o gosto, as lacunas e a saturação do acervo antes de buscar opções externas. '+identity+
-  ' O resultado final deve conter somente perfumes que NÃO estão na coleção. Para sugestões, pesquise internamente pelo menos 6 opções e devolva até 3 após excluir o acervo e reduzir redundância. Cada candidato final deve trazer UM DUPE específico com a maior fidelidade encontrada, e o dupe também deve estar fora da coleção. '+
+  ' O resultado final deve conter somente perfumes que NÃO estão na coleção. Caso não haja fontes verificáveis ou suficiente confiança, marque como não confirmado, não invente evidências, pirâmides olfativas nem percentuais de semelhança. Para sugestões, pesquise internamente pelo menos 6 opções e devolva até 3 após excluir o acervo e reduzir redundância. Cada candidato final deve trazer UM DUPE específico com a maior fidelidade encontrada, e o dupe também deve estar fora da coleção. '+
   'Dupe significa uma fragrância alternativa que procura reproduzir o cheiro/estrutura do candidato, não apenas outra fragrância da mesma família. '+
   'NÃO chame de dupe uma fragrância apenas semelhante, inspirada na mesma categoria ou que compartilhe algumas notas. '+
   'Para chamar de dupe, confirme em fontes de perfumaria que a alternativa é apresentada como clone/inspired-by/dupe do candidato e compare a pirâmide quando disponível. '+
@@ -2339,7 +2340,7 @@ function renderHomeStyleResult(r,owned){
   const improvements=Array.isArray(r&&r.improvements)?r.improvements.slice(0,4):[];
   const occasions=(r&&r.occasions&&typeof r.occasions==="object")?r.occasions:{};
   const p=owned.find(x=>x.id===r?.perfume_id)||owned.find(x=>normalizeText(x.name)===normalizeText(r?.perfume_name||""));
-  let html='<div class="style-result-card"><div class="style-result-top"><div><div class="style-result-title">'+esc(title)+'</div><div class="style-result-sub">Leitura visual · não é avaliação da pessoa</div></div><div class="style-score-wrap"><span class="style-score">'+score.toFixed(1)+'</span><small>/10</small></div></div>';
+  let html='<div class="style-result-card"><div class="style-result-top"><div><div class="style-result-title">'+esc(title)+'</div><div class="style-result-sub">Leitura subjetiva do look · não avalia a pessoa</div></div><div class="style-score-wrap"><span class="style-score">'+score.toFixed(1)+'</span><small>/10</small></div></div>';
   html+='<div class="style-columns"><div class="style-mini"><b>Pontos fortes</b><p>'+esc(strengths.join(" · ")||"Boa base visual identificada.")+'</p></div><div class="style-mini"><b>Ajustes de maior impacto</b><p>'+esc(improvements.join(" · ")||"Nenhum ajuste prioritário identificado.")+'</p></div></div>';
   [["trabalho","Trabalho"],["encontro","Encontro"],["dia","Dia a dia"],["noite","Noite / evento"]].forEach(([k,l])=>{const o=occasions[k];if(o)html+='<div class="style-tip"><b>'+l+' · '+clamp(Number(o.score)||0,0,10).toFixed(1)+'/10:</b> '+esc(o.tip||"")+'</div>';});
   if(p)html+='<div class="style-tip"><b>Fragrância sugerida do seu acervo:</b> '+esc(p.name)+(p.brand?" · "+esc(p.brand):"")+(r.perfume_reason?" — "+esc(r.perfume_reason):"")+'</div>';
@@ -2353,7 +2354,7 @@ async function runHomeStyleVision(){
   btn.disabled=true;btn.textContent="Analisando look…";result.innerHTML='<div class="id-note show">A IA está lendo proporção visual, cores, coordenação, contexto e ocasião.</div>';
   const now=new Date(),h=now.getHours(),periodo=h<12?"manhã":h<18?"tarde":"noite";
   const list=owned.slice(0,60).map(p=>({id:p.id,nome:p.name,marca:p.brand,familia:p.family,notas:(p.notes||[]).slice(0,8),radar:p.radar||{},estacoes:p.seasons||[],ocasiao:p.best_occasion||""}));
-  const prompt='Você é um personal stylist e consultor de imagem. Analise SOMENTE o look/roupa visível na FOTO; não avalie beleza, corpo, idade, raça, gênero, identidade ou valor da pessoa. Horário local: '+h+'h ('+periodo+'). Dê uma nota de estilo de 0 a 10 baseada exclusivamente em coerência visual do look: caimento/proporção aparente da roupa, coordenação de cores, combinação de peças, adequação ao contexto inferível e acabamento visual. A nota NÃO é uma nota da pessoa. Retorne SOMENTE JSON válido: {"style_score":0,"title":"","strengths":[],"improvements":[],"occasions":{"trabalho":{"score":0,"tip":""},"encontro":{"score":0,"tip":""},"dia":{"score":0,"tip":""},"noite":{"score":0,"tip":""}},"perfume_id":"","perfume_name":"","perfume_reason":""}. Escolha perfume_id apenas entre os IDs da coleção abaixo; se a coleção estiver vazia, deixe vazio. Não invente perfume. Seja específico e acionável, sem comentários sobre atributos pessoais. Coleção: '+JSON.stringify(list);
+  const prompt='Você é um personal stylist e consultor de imagem. Analise SOMENTE o look/roupa visível na FOTO; não avalie beleza, corpo, idade, raça, gênero, identidade ou valor da pessoa. Horário local: '+h+'h ('+periodo+'). Dê uma nota de estilo de 0 a 10 baseada exclusivamente em coerência visual do look: caimento/proporção aparente da roupa, coordenação de cores, combinação de peças, adequação ao contexto inferível e acabamento visual. A nota NÃO é uma nota da pessoa, é subjetiva, e a adequação à ocasião deve indicar incerteza quando não houver contexto suficiente. Retorne SOMENTE JSON válido: {"style_score":0,"title":"","strengths":[],"improvements":[],"occasions":{"trabalho":{"score":0,"tip":""},"encontro":{"score":0,"tip":""},"dia":{"score":0,"tip":""},"noite":{"score":0,"tip":""}},"perfume_id":"","perfume_name":"","perfume_reason":""}. Escolha perfume_id apenas entre os IDs da coleção abaixo; se a coleção estiver vazia, deixe vazio. Não invente perfume. Seja específico e acionável, sem comentários sobre atributos pessoais. Coleção: '+JSON.stringify(list);
   try{const out=await aiVision(prompt,homeStyleBlob);renderHomeStyleResult(out.data||{},owned);}
   catch(e){result.innerHTML='<div class="id-note show">'+esc(aiErr(e))+'</div>';toast(aiErr(e));}
   finally{btn.disabled=false;btn.textContent="Analisar meu estilo";}
@@ -2388,6 +2389,8 @@ function initAppDrawer(){
 }
 initHomeStyleVision();
 initAppDrawer();
+document.getElementById("onboardingAdd")?.addEventListener("click",()=>openPerfume());
+document.querySelectorAll("[data-occasion]").forEach(b=>b.addEventListener("click",()=>{const i=document.getElementById("oaOccasion");i.value=b.dataset.occasion;i.focus();}));
 
 function setProductNav(view){
   document.querySelectorAll(".product-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
