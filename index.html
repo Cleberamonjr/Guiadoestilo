@@ -572,6 +572,7 @@ header::after{
     <button class="drawer-item" id="cfgBtn" type="button"><span class="drawer-icon">⚙</span><span><b>IA &amp; configurações</b><small>Provedor, chave e radar</small></span></button>
     <button class="drawer-item" id="themeBtn" type="button"><span class="drawer-icon">◐</span><span><b>Aparência</b><small>Alternar tema claro/escuro</small></span></button>
     <button class="drawer-item" id="dlBtn" type="button"><span class="drawer-icon">↓</span><span><b>Exportar coleção</b><small>Backup dos seus dados</small></span></button>
+    <button class="drawer-item" id="bodyFitBtn" type="button"><span class="drawer-icon">♙</span><span><b>Meu corpo &amp; caimento</b><small>Perfil editável de roupas</small></span></button>
     <button class="drawer-item" id="catalogAuditBtn" type="button"><span class="drawer-icon">◉</span><span><b>Verificar catálogo (sem IA)</b><small>Auditar cobertura da coleção</small></span></button>
     <button class="drawer-item" id="updateAppBtn" type="button"><span class="drawer-icon">↻</span><span><b>Atualizar aplicativo</b><small id="updateAppStatus">Verificar versão publicada</small></span></button>
     <button class="drawer-item" id="installBtn" type="button" hidden><span class="drawer-icon">＋</span><span><b>Instalar aplicativo</b><small>Adicionar à tela inicial</small></span></button>
@@ -2054,7 +2055,8 @@ async function runOccasionAdvisor(){
  try{
    const cfg=getAiConfigs();
    if(!cfg.length)throw new Error("no_provider");
-   const prompt="Consultor de perfumaria. Escolha somente um id do acervo informado. Contexto: "+JSON.stringify({occasion,ctx})+". Ranking local: "+JSON.stringify(list)+". Considere projeção, local fechado, temperatura, período e intensidade. Retorne JSON {\"id\":\"\",\"why\":\"\"}. Não invente desempenho, clima real, notas ou perfumes. Explique incertezas.";
+   const bodyFit=window.getBodyFitProfile?window.getBodyFitProfile():null;
+   const prompt="Consultor de perfumaria. Escolha somente um id do acervo informado. Contexto: "+JSON.stringify({occasion,ctx,bodyFit})+". O perfil corporal é opcional e NÃO permite inferir caimento de roupa a partir de notas de perfume. Ranking local: "+JSON.stringify(list)+". Considere projeção, local fechado, temperatura, período e intensidade. Retorne JSON {\"id\":\"\",\"why\":\"\"}. Não invente desempenho, clima real, notas ou perfumes. Explique incertezas.";
    const out=await aiComplete(prompt);const candidate=out.data||{};
    const chosen=owned.some(p=>p.id===candidate.id)?candidate.id:top.p.id;
    renderOccasionAdvisor({id:chosen,why:candidate.why||"Recomendação conforme os critérios cadastrados."},owned,ranked);
@@ -2536,6 +2538,17 @@ function switchProductView(view){
   const csv=[columns.join(";"),...results.map(r=>columns.map(k=>'"'+String(r[k]||"").replace(/"/g,'""')+'"').join(";"))].join("\r\n");
   const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="guia-estilo-cobertura-catalogo.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
  };
+})();
+</script><div id="bodyFitModal" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);overflow:auto;padding:24px 12px"><div style="max-width:480px;margin:5vh auto;background:var(--card,#14202e);color:var(--text,#fff);padding:22px;border-radius:18px;border:1px solid var(--line,#444)"><h2>Meu corpo &amp; caimento</h2><p style="font-size:13px">Informações opcionais e editáveis. O consultor respeita suas preferências sem regras rígidas.</p><label for="bfShape">Silhueta</label><select id="bfShape"><option value="nao-sei">Não sei</option><option value="retangular">Retangular</option><option value="triangular">Triangular</option><option value="invertido">Triângulo invertido</option><option value="oval">Oval</option><option value="ampulheta">Ampulheta</option></select><label for="bfFit">Caimento preferido</label><select id="bfFit"><option value="regular">Regular</option><option value="slim">Ajustado</option><option value="relaxed">Solto</option><option value="oversized">Amplo</option></select><label for="bfProp">Proporção corporal</label><select id="bfProp"><option value="nao-sei">Não sei</option><option value="equilibrado">Equilibrada</option><option value="tronco">Tronco mais longo</option><option value="pernas">Pernas mais longas</option></select><label for="bfHeight">Altura em cm (opcional)</label><input id="bfHeight" type="number" min="80" max="250" placeholder="Não informada"/><div style="display:flex;gap:10px;margin-top:18px"><button type="button" id="bfSave" class="btn-primary">Salvar perfil</button><button type="button" id="bfClose" class="btn-ghost">Fechar</button></div><p id="bfStatus" style="font-size:12px"></p></div></div><script id="body-fit-profile">
+(function(){
+ const el=id=>document.getElementById(id),key="gde:body-fit:v1";
+ const defaults={shape:"nao-sei",fit:"regular",proportion:"nao-sei",height:null};
+ window.getBodyFitProfile=function(){try{return Object.assign({},defaults,JSON.parse(localStorage.getItem(key)||"{}"))}catch(e){return {...defaults}}};
+ const modal=el("bodyFitModal");
+ function close(){modal.hidden=true}
+ el("bodyFitBtn").onclick=()=>{const p=window.getBodyFitProfile();el("bfShape").value=p.shape;el("bfFit").value=p.fit;el("bfProp").value=p.proportion;el("bfHeight").value=p.height||"";el("bfStatus").textContent="";modal.hidden=false};
+ el("bfClose").onclick=close;
+ el("bfSave").onclick=()=>{const raw=el("bfHeight").value.trim(),h=raw?Number(raw):null;if(h!==null&&(!Number.isFinite(h)||h<80||h>250)){el("bfStatus").textContent="Informe uma altura entre 80 e 250 cm ou deixe vazio.";return;}const p={shape:el("bfShape").value,fit:el("bfFit").value,proportion:el("bfProp").value,height:h};try{localStorage.setItem(key,JSON.stringify(p));el("bfStatus").textContent="Perfil salvo neste dispositivo.";setTimeout(close,450)}catch(e){el("bfStatus").textContent="Não foi possível salvar neste navegador."}};
 })();
 </script></body>
 </html>
