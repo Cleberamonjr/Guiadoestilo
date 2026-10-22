@@ -2589,7 +2589,7 @@ function switchProductView(view){
 </script><div id="stylistModal" hidden style="position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.83);overflow:auto;padding:16px 10px"><section style="max-width:650px;margin:12px auto;background:var(--card,#172333);color:var(--text,#fff);border:1px solid var(--line,#555);border-radius:18px;padding:20px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Seu Personal Stylist</h2><button class="btn-ghost" id="stylistClose" type="button">Fechar</button></div><p style="font-size:13px">Construa seu perfil, cadastre peças e receba combinações. Tudo pode ser editado; nenhuma característica corporal define o que você pode vestir.</p>
 <h3>1 · Sua identidade</h3><label>Estilo que você gosta<select id="stStyle"><option value="classico">Clássico</option><option value="casual">Casual refinado</option><option value="minimalista">Minimalista</option><option value="criativo">Criativo</option><option value="esportivo">Esportivo</option><option value="explorar">Quero descobrir</option></select></label><label>Imagem que deseja transmitir<select id="stImage"><option value="elegante">Elegância</option><option value="confiavel">Confiança</option><option value="criativo">Criatividade</option><option value="discreto">Discrição</option><option value="marcante">Presença marcante</option></select></label><label>Cores que prefere<select id="stColors"><option value="neutras">Neutras</option><option value="frias">Frias</option><option value="quentes">Quentes</option><option value="vivas">Vibrantes</option><option value="mistas">Variadas</option></select></label><label>Orçamento para novas peças<select id="stBudget"><option value="acervo">Usar o que já tenho</option><option value="economico">Econômico</option><option value="moderado">Moderado</option><option value="livre">Flexível</option></select></label><label>Rotina<select id="stRoutine"><option value="variada">Variada</option><option value="trabalho">Trabalho</option><option value="casual">Casual</option><option value="eventos">Eventos sociais</option></select></label><button class="btn-primary" type="button" id="stSave">Salvar meu perfil</button><p id="stSaveMsg" role="status" style="font-size:12px"></p>
 <hr style="margin:20px 0;opacity:.2"><h3>2 · Meu guarda-roupa</h3><p style="font-size:12px">Cadastre peças para recomendações com o que você já possui. Para analisar fotos, use também o recurso de foto do aplicativo.</p><label>Peça<input id="stItem" placeholder="Ex.: camisa de linho"></label><label>Categoria<select id="stCategory"><option value="superior">Parte superior</option><option value="inferior">Parte inferior</option><option value="calcado">Calçado</option><option value="relogio">Relógio</option><option value="oculos">Óculos</option><option value="acessorio">Outro acessório</option></select></label><label>Cor<input id="stItemColor" placeholder="Ex.: azul-marinho"></label><div class="stylist-extension"><label for="stItemPhoto">Foto da peça (opcional, armazenada neste dispositivo)<input id="stItemPhoto" type="file" accept="image/*"></label><p id="stPhotoStatus" role="status" style="font-size:12px"></p></div><button class="btn-ghost" type="button" id="stAdd">Adicionar peça</button><div id="stWardrobe" style="display:grid;gap:7px;margin-top:12px"></div>
-<hr style="margin:20px 0;opacity:.2"><h3>3 · Monte um look</h3><label>Ocasião<select id="stOccasion"><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="jantar">Jantar</option><option value="casual">Passeio casual</option><option value="evento">Evento formal</option></select></label><label>Clima<select id="stWeather"><option value="ameno">Ameno</option><option value="quente">Quente</option><option value="frio">Frio</option></select></label><label><input id="stWatch" type="checkbox" checked> Quero usar relógio</label><label><input id="stGlasses" type="checkbox"> Quero usar óculos</label><label for="stFormality">Formalidade<select id="stFormality"><option value="auto">Adequada à ocasião</option><option value="casual">Mais casual</option><option value="formal">Mais formal</option></select></label><button class="btn-primary" type="button" id="stGenerate">Sugerir look</button><div id="stResult" aria-live="polite" style="margin-top:14px;line-height:1.6"></div></section></div><script id="personal-stylist-v1">
+<hr style="margin:20px 0;opacity:.2"><h3>3 · Monte um look</h3><label>Ocasião<select id="stOccasion"><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="jantar">Jantar</option><option value="casual">Passeio casual</option><option value="evento">Evento formal</option></select></label><label>Clima<select id="stWeather"><option value="ameno">Ameno</option><option value="quente">Quente</option><option value="frio">Frio</option></select></label><label><input id="stWatch" type="checkbox" checked> Quero usar relógio</label><label><input id="stGlasses" type="checkbox"> Quero usar óculos</label><label for="stFormality">Formalidade<select id="stFormality"><option value="auto">Adequada à ocasião</option><option value="casual">Mais casual</option><option value="formal">Mais formal</option></select></label><div id="stLookControls" style="margin:12px 0;display:grid;gap:12px"><label>Prioridade da combinação<select id="stLookPriority"><option value="acervo">Usar meu guarda-roupa</option><option value="coerencia">Harmonia de cores</option><option value="conforto">Conforto e praticidade</option></select></label><label><input id="stAccessoryExtra" type="checkbox"> Considerar outros acessórios cadastrados</label><button id="stAlternative" class="btn-ghost" type="button" style="display:none">Outra combinação</button></div><button class="btn-primary" type="button" id="stGenerate">Sugerir look</button><div id="stResult" aria-live="polite" style="margin-top:14px;line-height:1.6"></div></section></div><script id="personal-stylist-v1">
 (function(){
  const e=id=>document.getElementById(id),pk="gde:stylist-profile:v1",wk="gde:stylist-wardrobe:v1";
  const safe=x=>String(x||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -2663,6 +2663,81 @@ const extras=[];for(const [id,cat,name] of [["stWatch","relogio","Relógio"],["s
 const photos=read(photoKey,{});const visuals=chosen.map((x,i)=>{if(!x)return "";const index=w.indexOf(x),k=[x.name,x.color,x.category,index].join("|"),src=photos[k];return src&&/^data:image\/jpeg;base64,/.test(src)?'<img alt="'+safe(x.name)+'" src="'+src+'" style="width:85px;height:85px;object-fit:cover;border-radius:10px">':""}).join("");
 result.innerHTML='<h4>Combinação do seu guarda-roupa</h4>'+(rows?'<ol>'+rows+'</ol>':'<p>Cadastre roupas e calçados para montar combinações com peças reais.</p>')+(visuals?'<div style="display:flex;gap:8px;flex-wrap:wrap">'+visuals+'</div>':'')+'<p><b>Acessórios:</b> '+safe(extras.join("; ")||"Nenhum solicitado")+'</p>'+(missing.length?'<p><b>Faltam no acervo:</b> '+safe(missing.join(", "))+'. As sugestões abaixo são alternativas, não peças suas.</p>':'')+'<details><summary>Ver sugestões gerais e orientação olfativa</summary>'+result.innerHTML+'</details><small>Combinação heurística por categorias e cores declaradas, não análise de imagem nem garantia de caimento. O nível de formalidade ajusta a preferência entre peças cadastradas.</small>';
 };
+})();
+</script><script id="stylist-outfit-engine-v2">
+(function(){
+const $=id=>document.getElementById(id);
+if(!$("stGenerate")||!$("stResult"))return;
+const read=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(_){return d}};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fold=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const families={
+neutral:["preto","branco","cinza","grafite","bege","areia","off white","marinho","navy","creme","taupe"],
+cool:["azul","marinho","navy","verde","roxo","lilas","violeta","cinza","prata"],
+warm:["marrom","bege","areia","caramelo","terracota","laranja","amarelo","mostarda","dourado"],
+bright:["vermelho","bordo","vinho","rosa","pink","fucsia","verde","azul","amarelo","laranja"]
+};
+const canonical=s=>{const f=fold(s);return Object.fromEntries(Object.entries(families).map(([k,a])=>[k,a.some(v=>f.includes(v))]))};
+const climate={quente:/linho|algodao|viscose|seda|leve|fresco|respiravel|sandalia|rasteira|papete|tenis/,frio:/la|tricot|malha|casaco|jaqueta|bota|couro|moletom|cachecol|sobretudo/,ameno:/camisa|calca|jaqueta|tenis|sapato|blazer|vestido/};
+const occasion={trabalho:/camisa|polo|alfaiataria|chino|blazer|social|mocassim|loafer|sapatilha|vestido|saia/,encontro:/camisa|blusa|vestido|saia|calca|bota|mocassim|sapatilha|tenis/,jantar:/camisa|vestido|blazer|calca|saia|mocassim|bota|salto|sapato/,casual:/camiseta|jeans|tenis|short|bermuda|saia|vestido|sandalia|rasteira/,evento:/alfaiataria|social|blazer|vestido|saia|camisa|salto|sapato|mocassim/};
+const formal=/alfaiataria|social|blazer|loafer|mocassim|sapato|salto|vestido|camisa|sapatilha/;
+const casual=/tenis|camiseta|jeans|moletom|bermuda|short|rasteira|papete/;
+const defaults={
+trabalho:["camisa, blusa estruturada ou polo","calça reta, saia ou peça de alfaiataria","mocassim, sapatilha ou tênis discreto"],
+encontro:["camisa, blusa ou vestido adequado ao encontro","calça, saia ou peça inferior coordenada","bota, tênis limpo ou sapato confortável"],
+jantar:["camisa, blusa ou vestido de bom caimento","calça ou saia coerente com o ambiente","sapato, bota ou sandália adequada"],
+casual:["camiseta, camisa casual ou vestido leve","calça, bermuda ou saia confortável","tênis ou calçado confortável"],
+evento:["peça superior ou vestido apropriado ao dress code","peça inferior coordenada, quando necessária","calçado compatível com o evento"]
+};
+const priorityMatch=(c,p)=>p==="frias"?c.cool:p==="quentes"?c.warm:p==="vivas"?c.bright:p==="neutras"?c.neutral:true;
+function score(item,opts,usedColors){
+ const name=fold(item.name),color=canonical(item.color),text=name+" "+fold(item.color);
+ let n=10;
+ if(occasion[opts.occasion]?.test(name))n+=opts.priority==="conforto"?10:20;
+ if(climate[opts.weather]?.test(name))n+=opts.priority==="conforto"?24:12;
+ if(opts.formality==="formal"&&formal.test(name))n+=24;
+ if(opts.formality==="casual"&&casual.test(name))n+=18;
+ if(priorityMatch(color,opts.colors))n+=opts.priority==="coerencia"?28:14;
+ if(usedColors.length){const existing=usedColors.map(canonical);if(color.neutral||existing.some(c=>c.neutral))n+=18;else if(existing.some(c=>(c.cool&&color.cool)||(c.warm&&color.warm)))n+=12}
+ if(opts.image==="discreto"&&color.neutral)n+=7;
+ if(opts.image==="marcante"&&color.bright)n+=7;
+ if(opts.style==="esportivo"&&casual.test(text))n+=8;
+ if(opts.style==="classico"&&formal.test(text))n+=8;
+ return n;
+}
+function select(items,category,opts,used,shift){
+ const candidates=items.filter(x=>x&&x.category===category&&x.name);
+ if(!candidates.length)return null;
+ const sorted=candidates.map((x,i)=>({x,i,value:score(x,opts,used)})).sort((a,b)=>b.value-a.value||a.i-b.i);
+ return sorted[shift%sorted.length].x;
+}
+let alternative=0;
+function generate(){
+ const p=Object.fromEntries(Object.entries({style:"stStyle",image:"stImage",colors:"stColors",budget:"stBudget"}).map(([k,id])=>[k,$(id)?.value||""]));
+ const opts={...p,occasion:$("stOccasion").value,weather:$("stWeather").value,formality:$("stFormality").value,priority:$("stLookPriority").value};
+ const items=read("gde:stylist-wardrobe:v1",[]);
+ if(!Array.isArray(items)){$("stResult").textContent="Não foi possível carregar seu guarda-roupa.";return}
+ const chosen=[],used=[],kinds=["superior","inferior","calcado"];
+ kinds.forEach((cat,i)=>{const item=select(items,cat,opts,used,alternative);if(item){chosen.push({category:cat,item});if(item.color)used.push(item.color)}else chosen.push({category:cat,suggestion:defaults[opts.occasion][i]})});
+ const name=x=>x.item?x.item.name+(x.item.color?" · "+x.item.color:""):x.suggestion;
+ const accessory=[];
+ for(const [id,cat,label] of [["stWatch","relogio","Relógio"],["stGlasses","oculos","Óculos"],["stAccessoryExtra","acessorio","Acessório"]])if($(id)?.checked){const item=select(items,cat,opts,used,alternative);accessory.push({label,item})}
+ const colors=used.length?used.join(" + "):"As cores dependem das peças que você escolher";
+ const body=window.getBodyFitProfile?.()||{fit:"regular",shape:"nao-sei",proportion:"nao-sei"};
+ const fit={regular:"Priorize um caimento regular e mobilidade confortável.",slim:"Considere peças ajustadas, sem limitar o movimento.",relaxed:"Prefira folga confortável nas modelagens.",oversized:"Modelagens amplas podem compor sua preferência."}[body.fit]||"Respeite seu caimento preferido.";
+ const wtip={quente:"Considere leveza, ventilação e proteção solar.",frio:"Adapte com camadas e proteção térmica.",ameno:"Use camadas removíveis conforme a temperatura real."}[opts.weather];
+ const missing=chosen.filter(x=>!x.item);
+ const owned=(typeof state!=="undefined"&&Array.isArray(state.perfumes)?state.perfumes:[]).filter(x=>x.status==="tenho");
+ const perfume=owned.length?"Você tem "+owned.length+" fragrância(s) cadastrada(s). Para escolher uma com segurança, informe também o ambiente e a intensidade no consultor olfativo.":"Inclua seus perfumes na coleção para completar a combinação.";
+ const rows=chosen.map((x,i)=>'<li style="margin:10px 0"><b>'+esc(["Parte superior","Parte inferior","Calçado"][i])+':</b> '+esc(name(x))+(x.item?'<small style="display:block;color:var(--ink-soft)">Do seu guarda-roupa</small>':'<small style="display:block;color:var(--ink-soft)">Ideia de peça; não cadastrada</small>')+(x.item?.photo?'<img src="'+esc(x.item.photo)+'" alt="Peça selecionada" style="display:block;width:84px;height:84px;object-fit:cover;border-radius:10px;margin-top:7px">':"")+'</li>').join("");
+ const acc=accessory.map(a=>'<li>'+esc(a.label)+': '+esc(a.item?a.item.name:"não cadastrado; opcional")+'</li>').join("");
+ const occasionText=$("stOccasion").selectedOptions[0].text;
+ $("stResult").innerHTML='<h4>Look para '+esc(occasionText)+'</h4><ol>'+rows+'</ol>'+(acc?'<h4>Acessórios opcionais</h4><ul>'+acc+'</ul>':'')+'<p><b>Harmonia sugerida:</b> '+esc(colors)+'. A combinação é orientativa; tonalidades exatas não são verificadas por foto.</p><p><b>Conforto:</b> '+esc(fit+' '+wtip)+'</p>'+(missing.length?'<p><b>Itens que faltam:</b> '+missing.length+'. '+(p.budget==="acervo"?"Você pode substituir por peças semelhantes que já possui.":"Considere apenas se realmente precisar comprar.")+'</p>':'<p>Conjunto principal montado com peças cadastradas.</p>')+'<p><b>Perfume:</b> '+esc(perfume)+'</p><small>Motor local por critérios de texto informado: não infere silhueta, cor real, gênero ou qualidade pela fotografia. Confirme o dress code específico da ocasião.</small>';
+ $("stAlternative").style.display=items.length>1?"block":"none";
+}
+$("stGenerate").onclick=()=>{alternative=0;generate()};
+$("stAlternative").onclick=()=>{alternative++;generate()};
+window.__stylistOutfitQA={canonical,score,select,generate};
 })();
 </script></body>
 </html>
