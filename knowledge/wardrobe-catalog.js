@@ -3,7 +3,7 @@
 const el=id=>document.getElementById(id);let taxonomy=null;
 const target={calca:"inferior","parte-superior":"superior",vestido:"superior",saia:"inferior",calcado:"calcado","terceira-peca":"superior",acessorio:"acessorio"};
 const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-async function load(){if(taxonomy)return taxonomy;const res=await fetch(new URL("garment-taxonomy.v1.json",document.currentScript?.src||document.baseURI));if(!res.ok)throw Error("Glossário indisponível");const d=await res.json();if(!Array.isArray(d.items))throw Error("Glossário inválido");taxonomy=d;return d}
+async function load(){if(taxonomy)return taxonomy;const res=await fetch(new URL("garment-taxonomy.v1.json",document.querySelector('script[src*="wardrobe-catalog.js"]')?.src||new URL("knowledge/wardrobe-catalog.js",document.baseURI).href));if(!res.ok)throw Error("Glossário indisponível");const d=await res.json();if(!Array.isArray(d.items))throw Error("Glossário inválido");taxonomy=d;return d}
 function options(query){
  const group=el("gdeGarmentGroup").value,audience=el("gdeGarmentAudience").value,kind=el("stCategory").value;
  const list=(taxonomy?.items||[]).filter(x=>(!group||x.category===group)&&(!kind||target[x.category]===kind)&&(audience==="all"||x.audience===audience||x.audience==="unissex"));
