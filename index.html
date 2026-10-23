@@ -339,6 +339,21 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .app-drawer .drawer-item{min-height:54px!important;align-items:center!important;gap:12px!important}
 .app-drawer .drawer-icon{width:40px!important;height:40px!important;flex:0 0 40px!important;border-radius:12px!important;background:var(--surface-2)!important;color:var(--accent)!important}
 .app-drawer .drawer-item:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.gde-look-studio,.gde-saved-looks{margin-top:20px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink)}
+.gde-look-studio[hidden]{display:none!important}.gde-look-studio h3,.gde-saved-looks h3{font-size:22px;line-height:1.2;margin:7px 0 6px;color:var(--ink)}.gde-look-studio p{font-size:12px;line-height:1.5;color:var(--ink-soft)}
+.gde-look-pieces{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:16px 0}
+.gde-look-piece{min-width:0;background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:9px;display:flex;flex-direction:column;gap:8px}
+.gde-look-thumb{aspect-ratio:1;background:var(--bg);border-radius:9px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.gde-look-thumb img{width:100%;height:100%;object-fit:cover}.gde-look-thumb svg{width:35px;height:35px;stroke:var(--muted)}
+.gde-look-piece b{font-size:12px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}.gde-look-piece small{font-size:11px;color:var(--ink-soft);overflow-wrap:anywhere;line-height:1.4}
+.gde-look-piece label{display:flex!important;flex-direction:column!important;gap:5px!important;margin:0!important;font-size:11px!important}
+.gde-look-piece select{width:100%!important;min-width:0!important;box-sizing:border-box;font:500 16px var(--sans)!important;min-height:44px!important;border:1px solid var(--line)!important;border-radius:9px!important;padding:7px!important;background:var(--surface)!important;color:var(--ink)!important}
+.gde-look-actions{display:flex;gap:10px;align-items:flex-end}.gde-look-actions label{display:flex!important;flex:1;min-width:0;flex-direction:column!important;gap:6px!important;margin:0!important;font-size:12px!important}.gde-look-actions input{min-width:0;width:100%;min-height:44px;font-size:16px}.gde-look-actions button{min-height:44px}
+.gde-saved-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.gde-saved-heading span{font-size:11px;color:var(--muted)}
+.gde-saved-grid{display:grid;gap:10px}.gde-saved-card{background:var(--surface-2);padding:12px;border:1px solid var(--line);border-radius:12px}.gde-saved-card strong{display:block;font-size:14px}.gde-saved-card small{display:block;font-size:11px;color:var(--ink-soft);margin-top:3px}.gde-saved-preview{display:flex;gap:7px;margin:10px 0;flex-wrap:wrap}.gde-saved-preview img,.gde-saved-preview span{width:58px;height:58px;object-fit:cover;border-radius:8px;background:var(--bg)}.gde-saved-preview span{display:grid;place-items:center;font-size:10px;color:var(--muted);text-align:center;padding:4px}.gde-saved-controls{display:flex;gap:8px}.gde-saved-controls button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 12px}
+.gde-look-piece select:focus-visible,.gde-look-actions button:focus-visible,.gde-saved-controls button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(max-width:440px){.gde-look-pieces{grid-template-columns:1fr 1fr}.gde-look-actions{flex-direction:column;align-items:stretch}.gde-look-actions label{width:100%}.gde-look-pieces .gde-look-piece:last-child:nth-child(odd){grid-column:span 2}}
 </style>
 <style id="collection-ai-search-css">
 .ai-search-result{margin-top:16px}
@@ -666,8 +681,8 @@ header::after{
     <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Fragrâncias</button>
     <button role="tab" id="tabW" aria-selected="false" onclick="switchTab('watches')">Acessórios</button>
   </div>
-  <section id="viewPerfumes"><section class="style-home" id="styleHome"><span class="style-kicker">IMAGEM · ESTILO · CONFIANÇA</span><h2>Seu estilo começa em você.</h2><p>Combine o que você veste com quem deseja ser. Seus perfumes são parte da experiência — não o ponto de partida.</p><div class="style-quick">
-<button id="homeOpenStylist" type="button" class="gde-primary-quick"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><path d="m9 4 3 3 3-3 6 4-3 5-2-1v9H8v-9l-2 1-3-5z"/></svg><span><b>Montar um look</b><small>Comece pela ocasião</small></span><span class="gde-quick-chevron" aria-hidden="true">›</span></button>
+  <section id="viewPerfumes"><section class="style-home" id="styleHome"><span class="style-kicker">IMAGEM · ESTILO · CONFIANÇA</span><h2>Qual look vai fazer você arrasar hoje?</h2><p>Combine o que você veste com quem deseja ser. Seus perfumes são parte da experiência — não o ponto de partida.</p><div class="style-quick">
+<button id="homeOpenStylist" type="button" class="gde-primary-quick"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><path d="m9 4 3 3 3-3 6 4-3 5-2-1v9H8v-9l-2 1-3-5z"/></svg><span><b>Montar meu look</b><small>Escolha a ocasião e combine suas peças</small></span><span class="gde-quick-chevron" aria-hidden="true">›</span></button>
 <button id="homeOpenWardrobe" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M12 4v17M7 8h2M15 8h2"/></svg><span><b>Meu guarda-roupa</b><small>Peças, fotos e acessórios</small></span><span class="gde-quick-chevron" aria-hidden="true">›</span></button>
 <button id="homeOpenProfile" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><circle cx="12" cy="8" r="3.3"/><path d="M4.6 20a7.4 7.4 0 0 1 14.8 0"/><circle cx="12" cy="12" r="10"/></svg><span><b>Meu perfil</b><small>Estilo e preferências</small></span><span class="gde-quick-chevron" aria-hidden="true">›</span></button></div></section>
 <section id="scentQuizSection" class="scent-quiz"><div class="scent-intro"><div><span class="style-kicker">PREFERÊNCIAS REAIS</span><h2>Sua assinatura olfativa</h2><p>Escolha o que realmente gosta. Suas respostas podem ser alteradas a qualquer momento.</p></div><span id="scentQuizState">Não preenchido</span></div><form id="scentQuizForm"><div class="scent-fields">
@@ -2647,7 +2662,13 @@ function switchProductView(view){
 </script><div id="stylistModal" hidden style="position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.83);overflow:auto;padding:16px 10px"><section style="max-width:650px;margin:12px auto;background:var(--card,#172333);color:var(--text,#fff);border:1px solid var(--line,#555);border-radius:18px;padding:20px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Seu Personal Stylist</h2><button class="btn-ghost" id="stylistClose" type="button">Fechar</button></div><p style="font-size:13px">Construa seu perfil, cadastre peças e receba combinações. Tudo pode ser editado; nenhuma característica corporal define o que você pode vestir.</p>
 <h3>1 · Sua identidade</h3><label>Estilo que você gosta<select id="stStyle"><option value="classico">Clássico</option><option value="casual">Casual refinado</option><option value="minimalista">Minimalista</option><option value="criativo">Criativo</option><option value="esportivo">Esportivo</option><option value="explorar">Quero descobrir</option></select></label><label>Imagem que deseja transmitir<select id="stImage"><option value="elegante">Elegância</option><option value="confiavel">Confiança</option><option value="criativo">Criatividade</option><option value="discreto">Discrição</option><option value="marcante">Presença marcante</option></select></label><label>Cores que prefere<select id="stColors"><option value="neutras">Neutras</option><option value="frias">Frias</option><option value="quentes">Quentes</option><option value="vivas">Vibrantes</option><option value="mistas">Variadas</option></select></label><label>Orçamento para novas peças<select id="stBudget"><option value="acervo">Usar o que já tenho</option><option value="economico">Econômico</option><option value="moderado">Moderado</option><option value="livre">Flexível</option></select></label><label>Rotina<select id="stRoutine"><option value="variada">Variada</option><option value="trabalho">Trabalho</option><option value="casual">Casual</option><option value="eventos">Eventos sociais</option></select></label><button class="btn-primary" type="button" id="stSave">Salvar meu perfil</button><p id="stSaveMsg" role="status" style="font-size:12px"></p>
 <hr style="margin:20px 0;opacity:.2"><h3>2 · Meu guarda-roupa</h3><p style="font-size:12px">Cadastre peças para recomendações com o que você já possui. Para analisar fotos, use também o recurso de foto do aplicativo.</p><label>Peça<input id="stItem" placeholder="Ex.: camisa de linho"></label><label>Categoria<select id="stCategory"><option value="superior">Parte superior</option><option value="inferior">Parte inferior</option><option value="calcado">Calçado</option><option value="relogio">Relógio</option><option value="oculos">Óculos</option><option value="acessorio">Outro acessório</option></select></label><label>Cor<input id="stItemColor" placeholder="Ex.: azul-marinho"></label><div class="stylist-extension"><label for="stItemPhoto">Foto da peça (opcional, armazenada neste dispositivo)<input id="stItemPhoto" type="file" accept="image/*"></label><p id="stPhotoStatus" role="status" style="font-size:12px"></p></div><button class="btn-ghost" type="button" id="stAdd">Adicionar peça</button><div id="stWardrobe" style="display:grid;gap:7px;margin-top:12px"></div>
-<hr style="margin:20px 0;opacity:.2"><h3>3 · Monte um look</h3><label>Ocasião<select id="stOccasion"><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="jantar">Jantar</option><option value="casual">Passeio casual</option><option value="evento">Evento formal</option></select></label><label>Clima<select id="stWeather"><option value="ameno">Ameno</option><option value="quente">Quente</option><option value="frio">Frio</option></select></label><label><input id="stWatch" type="checkbox" checked> Quero usar relógio</label><label><input id="stGlasses" type="checkbox"> Quero usar óculos</label><label for="stFormality">Formalidade<select id="stFormality"><option value="auto">Adequada à ocasião</option><option value="casual">Mais casual</option><option value="formal">Mais formal</option></select></label><div id="stLookControls" style="margin:12px 0;display:grid;gap:12px"><label>Prioridade da combinação<select id="stLookPriority"><option value="acervo">Usar meu guarda-roupa</option><option value="coerencia">Harmonia de cores</option><option value="conforto">Conforto e praticidade</option></select></label><label><input id="stAccessoryExtra" type="checkbox"> Considerar outros acessórios cadastrados</label><button id="stAlternative" class="btn-ghost" type="button" style="display:none">Outra combinação</button></div><button class="btn-primary" type="button" id="stGenerate">Sugerir look</button><div id="stResult" aria-live="polite" style="margin-top:14px;line-height:1.6"></div></section></div><script id="personal-stylist-v1">
+<hr style="margin:20px 0;opacity:.2"><h3>3 · Monte um look</h3><label>Ocasião<select id="stOccasion"><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="jantar">Jantar</option><option value="casual">Passeio casual</option><option value="evento">Evento formal</option></select></label><label>Clima<select id="stWeather"><option value="ameno">Ameno</option><option value="quente">Quente</option><option value="frio">Frio</option></select></label><label><input id="stWatch" type="checkbox" checked> Quero usar relógio</label><label><input id="stGlasses" type="checkbox"> Quero usar óculos</label><label for="stFormality">Formalidade<select id="stFormality"><option value="auto">Adequada à ocasião</option><option value="casual">Mais casual</option><option value="formal">Mais formal</option></select></label><div id="stLookControls" style="margin:12px 0;display:grid;gap:12px"><label>Prioridade da combinação<select id="stLookPriority"><option value="acervo">Usar meu guarda-roupa</option><option value="coerencia">Harmonia de cores</option><option value="conforto">Conforto e praticidade</option></select></label><label><input id="stAccessoryExtra" type="checkbox"> Considerar outros acessórios cadastrados</label><button id="stAlternative" class="btn-ghost" type="button" style="display:none">Outra combinação</button></div><button class="btn-primary" type="button" id="stGenerate">Sugerir look</button><div id="stResult" aria-live="polite" style="margin-top:14px;line-height:1.6"></div><div id="gdeLookStudio" class="gde-look-studio" hidden>
+ <div class="gde-look-heading"><div><span class="style-kicker">ESTÚDIO DE LOOKS</span><h3>Seu look, do seu jeito.</h3><p>Toque em uma peça para substituí-la. Salve a combinação que você mais gostar.</p></div></div>
+ <div id="gdeLookPieces" class="gde-look-pieces" aria-label="Peças selecionadas"></div>
+ <div class="gde-look-actions"><label for="gdeLookName">Nome do look<input id="gdeLookName" maxlength="65" placeholder="Ex.: Jantar de sexta"></label><button id="gdeLookSave" type="button" class="btn-primary">Salvar look</button></div>
+ <p id="gdeLookFeedback" role="status" aria-live="polite"></p>
+ </div>
+ <section class="gde-saved-looks" id="gdeSavedLooksSection" aria-label="Meus looks salvos"><div class="gde-saved-heading"><h3>Meus looks salvos</h3><span id="gdeSavedCount"></span></div><div id="gdeSavedLooks" class="gde-saved-grid"></div></section></section></div><script id="personal-stylist-v1">
 (function(){
  const e=id=>document.getElementById(id),pk="gde:stylist-profile:v1",wk="gde:stylist-wardrobe:v1";
  const safe=x=>String(x||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -2791,6 +2812,7 @@ function generate(){
  const acc=accessory.map(a=>'<li>'+esc(a.label)+': '+esc(a.item?a.item.name:"não cadastrado; opcional")+'</li>').join("");
  const occasionText=$("stOccasion").selectedOptions[0].text;
  $("stResult").innerHTML='<h4>Look para '+esc(occasionText)+'</h4><ol>'+rows+'</ol>'+(acc?'<h4>Acessórios opcionais</h4><ul>'+acc+'</ul>':'')+'<p><b>Harmonia sugerida:</b> '+esc(colors)+'. A combinação é orientativa; tonalidades exatas não são verificadas por foto.</p><p><b>Conforto:</b> '+esc(fit+' '+wtip)+'</p>'+(missing.length?'<p><b>Itens que faltam:</b> '+missing.length+'. '+(p.budget==="acervo"?"Você pode substituir por peças semelhantes que já possui.":"Considere apenas se realmente precisar comprar.")+'</p>':'<p>Conjunto principal montado com peças cadastradas.</p>')+'<p><b>Perfume:</b> '+esc(perfume)+'</p><small>Motor local por critérios de texto informado: não infere silhueta, cor real, gênero ou qualidade pela fotografia. Confirme o dress code específico da ocasião.</small>';
+ window.dispatchEvent(new CustomEvent("gde:look-generated",{detail:{chosen,accessory,opts,occasionText}}));
  $("stAlternative").style.display=items.length>1?"block":"none";
 }
 $("stGenerate").onclick=()=>{alternative=0;generate()};
@@ -2870,6 +2892,79 @@ updateAppBtn:'<path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 9a7 7 0 0 1 12-2l2 5M4
 installBtn:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 7v8m-3-3 3 3 3-3"/>'
 };
 for(const [id,body] of Object.entries(paths)){const target=document.getElementById(id)?.querySelector(".drawer-icon");if(!target)continue;target.innerHTML='<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+body+'</svg>'}
+})();
+</script><script id="gde-visual-look-studio-v1">
+(function(){
+ const el=id=>document.getElementById(id), wardrobeKey="gde:stylist-wardrobe:v1",looksKey="gde:saved-looks:v1";
+ const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const read=(key,def)=>{try{const x=JSON.parse(localStorage.getItem(key)||"null");return Array.isArray(x)?x:def}catch(_){return def}};
+ const photo=x=>typeof x==="string"&&/^data:image\/(?:png|jpeg|webp|gif);base64,[a-zA-Z0-9+/=]+$/.test(x)?x:null;
+ const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 4 3 3 3-3 6 4-3 5-2-1v9H8v-9l-2 1-3-5z"/></svg>';
+ const categories=[["superior","Parte superior"],["inferior","Parte inferior"],["calcado","Calçado"],["relogio","Relógio"],["oculos","Óculos"],["acessorio","Acessório"]];
+ let current=null;
+ const getPieces=()=>read(wardrobeKey,[]),getLooks=()=>read(looksKey,[]);
+ const keyOf=(x,i)=>x?String(x.name||"")+"|"+String(x.category||"")+"|"+String(x.color||"")+"|"+i:"";
+ function stableIndex(x,items){if(!x)return -1;return items.findIndex(p=>p===x||p.name===x.name&&p.category===x.category&&p.color===x.color&&p.photo===x.photo)}
+ function render(){
+  const target=el("gdeLookPieces");if(!current){el("gdeLookStudio").hidden=true;return}el("gdeLookStudio").hidden=false;
+  const all=getPieces();target.innerHTML="";
+  for(const [type,label] of categories){
+   const enabled=["superior","inferior","calcado"].includes(type)||current.accessory.some(x=>({relogio:"Relógio",oculos:"Óculos",acessorio:"Acessório"}[type]===x.label));
+   if(!enabled)continue;
+   const row=current.chosen.find(x=>x.category===type),accessory=current.accessory.find(x=>x.label===({relogio:"Relógio",oculos:"Óculos",acessorio:"Acessório"}[type]));
+   const piece=row?.item||accessory?.item||null;
+   const options=all.map((p,i)=>({p,i})).filter(o=>o.p.category===type);
+   const selected=stableIndex(piece,all);
+   const box=document.createElement("div");box.className="gde-look-piece";
+   const img=photo(piece?.photo),thumb=img?'<img src="'+img+'" alt="Foto da peça selecionada">':icon;
+   box.innerHTML='<div class="gde-look-thumb">'+thumb+'</div><b>'+safe(label)+'</b><small>'+safe(piece?(piece.name+(piece.color?" · "+piece.color:"")):(row?.suggestion||"Ainda sem peça cadastrada"))+'</small><label>Substituir<select data-category="'+type+'" aria-label="Substituir '+safe(label)+'"><option value="">'+(piece?"Manter peça":"Escolher peça")+'</option>'+options.map(({p,i})=>'<option value="'+i+'">'+safe(p.name)+(p.color?" · "+safe(p.color):"")+'</option>').join("")+'</select></label>';
+   target.appendChild(box);
+  }
+ }
+ function clearPhotoFromSaved(p){return p?{name:String(p.name||""),category:String(p.category||""),color:String(p.color||""),photo:photo(p.photo)}:null}
+ function save(){
+  if(!current)return;const name=el("gdeLookName").value.trim().slice(0,65)||"Meu look",now=new Date().toISOString();
+  const record={id:"look-"+now+"-"+Math.random().toString(36).slice(2,8),name,occasion:current.opts?.occasion||"",createdAt:now,chosen:current.chosen.map(r=>({category:r.category,item:clearPhotoFromSaved(r.item),suggestion:r.item?null:r.suggestion||null})),accessory:current.accessory.map(r=>({label:r.label,item:clearPhotoFromSaved(r.item)}))};
+  const saved=getLooks();saved.unshift(record);
+  if(saved.length>30)saved.length=30;
+  try{localStorage.setItem(looksKey,JSON.stringify(saved));el("gdeLookFeedback").textContent="Look salvo neste dispositivo.";renderSaved()}catch(e){el("gdeLookFeedback").textContent="Sem espaço para salvar. Libere armazenamento ou remova looks antigos."}
+ }
+ function renderSaved(){
+  const list=getLooks(),host=el("gdeSavedLooks");el("gdeSavedCount").textContent=list.length+" look(s)";
+  host.innerHTML="";
+  if(!list.length){host.innerHTML='<p style="font-size:12px;color:var(--ink-soft)">Ainda não há looks salvos. Monte um look e salve sua composição favorita.</p>';return}
+  for(const [i,look] of list.entries()){
+   const card=document.createElement("article");card.className="gde-saved-card";
+   const preview=(look.chosen||[]).map(r=>{const src=photo(r.item?.photo);return src?'<img src="'+src+'" alt="'+safe(r.item?.name||"Peça")+'">':'<span>'+safe(r.item?.name||r.suggestion||"Peça")+'</span>'}).join("");
+   card.innerHTML='<strong>'+safe(look.name)+'</strong><small>'+safe(look.occasion||"Ocasião livre")+'</small><div class="gde-saved-preview">'+preview+'</div><div class="gde-saved-controls"><button type="button" data-load="'+i+'">Editar look</button><button type="button" data-delete="'+i+'">Excluir</button></div>';
+   host.appendChild(card);
+  }
+ }
+ el("gdeLookPieces").addEventListener("change",ev=>{
+  const select=ev.target.closest("select[data-category]");if(!select||!current||!select.value)return;
+  const item=getPieces()[Number(select.value)];if(!item||item.category!==select.dataset.category)return;
+  const row=current.chosen.find(r=>r.category===item.category);
+  if(row){row.item=item;row.suggestion=null}else{
+   const label=categories.find(c=>c[0]===item.category)?.[1];
+   const extra=current.accessory.find(r=>r.label===label);if(extra)extra.item=item;
+  }
+  render();el("gdeLookFeedback").textContent="Peça substituída. Salve para guardar a alteração.";
+ });
+ el("gdeLookSave").addEventListener("click",save);
+ el("gdeSavedLooks").addEventListener("click",ev=>{
+  const b=ev.target.closest("button[data-load],button[data-delete]");if(!b)return;
+  const index=Number(b.dataset.load??b.dataset.delete),looks=getLooks(),look=looks[index];if(!look)return;
+  if(b.hasAttribute("data-delete")){
+   if(!confirm('Excluir o look "'+look.name+'"?'))return;
+   looks.splice(index,1);try{localStorage.setItem(looksKey,JSON.stringify(looks));renderSaved()}catch(e){el("gdeLookFeedback").textContent="Não foi possível excluir."}return;
+  }
+  current={chosen:(look.chosen||[]).map(r=>({...r,item:r.item||null})),accessory:(look.accessory||[]).map(r=>({...r})),opts:{occasion:look.occasion||""}};
+  el("gdeLookName").value=look.name;render();el("gdeLookStudio").scrollIntoView({behavior:"smooth",block:"start"});
+ });
+ window.addEventListener("gde:look-generated",ev=>{current=ev.detail;el("gdeLookName").value="Look para "+ev.detail.occasionText;el("gdeLookFeedback").textContent="";render()});
+ document.getElementById("stylistOpenBtn")?.addEventListener("click",renderSaved);
+ renderSaved();
+ window.__gdeVisualLookQA={getLooks,getPieces,renderSaved,render};
 })();
 </script></body>
 </html>
