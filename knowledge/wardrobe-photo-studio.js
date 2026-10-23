@@ -33,7 +33,7 @@ function init(){
 const input=el("stItemPhoto");if(!input)return;
 const panel=document.createElement("section");panel.id="gdePhotoStudio";panel.hidden=true;panel.className="gde-photo-studio";
 panel.innerHTML='<h4>Estúdio da peça</h4><p>Endireite e centralize a fotografia. A opção de fundo branco funciona melhor com fundo liso e contrastante; confira se não apagou detalhes da roupa.</p><canvas id="gdePhotoCanvas" width="520" height="520" aria-label="Prévia da peça em enquadramento quadrado"></canvas><label>Alinhar peça: <output id="gdePhotoDegrees">0°</output><input type="range" id="gdePhotoRotate" min="-45" max="45" value="0" step="1"></label><label>Enquadramento<input type="range" id="gdePhotoZoom" min="65" max="115" value="100"></label><label class="gde-photo-check"><input type="checkbox" id="gdePhotoRemove"> Remover fundo uniforme e substituir por branco (experimental)</label><label id="gdeToleranceWrap" hidden>Sensibilidade do fundo<input type="range" id="gdePhotoTolerance" min="10" max="90" value="30"></label><div class="gde-photo-controls"><button id="gdePhotoApply" type="button">Usar foto preparada</button><button id="gdePhotoOriginal" type="button">Manter original</button></div><p id="gdePhotoStatus" role="status"></p>';
-input.insertAdjacentElement("afterend",panel);
+input.closest("label")?.insertAdjacentElement("afterend",panel);
 input.addEventListener("change",make);
 ["gdePhotoRotate","gdePhotoZoom","gdePhotoTolerance"].forEach(id=>el(id).addEventListener("input",()=>{prepared=null;render()}));
 el("gdePhotoRemove").addEventListener("change",()=>{el("gdeToleranceWrap").hidden=!el("gdePhotoRemove").checked;prepared=null;render()});
