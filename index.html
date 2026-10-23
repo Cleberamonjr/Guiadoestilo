@@ -300,6 +300,17 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 @media(max-width:480px){#stylistModal>section,#bodyFitModal>div{padding:18px!important}#stylistModal>section>div:first-child{align-items:flex-start!important}#stylistModal>section>div:first-child button{flex:none}#bodyFitModal>div>div:has(#bfSave){grid-template-columns:1fr!important}}
 
 .style-home,.scent-quiz{padding:clamp(18px,4vw,28px);border:1px solid var(--line);border-radius:20px;background:var(--surface);margin:14px 0 20px;color:var(--ink)}.style-home{background:linear-gradient(135deg,var(--surface),var(--surface-2))}.style-kicker{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:700}.style-home h2,.scent-quiz h2{font:600 clamp(26px,5vw,38px)/1.15 var(--serif);margin:10px 0;color:var(--ink)}.style-home p,.scent-quiz p{font-size:13px;line-height:1.65;color:var(--ink-soft)}.style-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.style-quick button{min-width:0;min-height:74px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;padding:13px;border-radius:12px;background:var(--bg);color:var(--ink);border:1px solid var(--line)}.style-quick small{color:var(--ink-soft);font-size:11px}.scent-intro{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.scent-intro>span{font-size:11px;border-radius:100px;border:1px solid var(--line);padding:6px 10px;white-space:nowrap}.scent-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.scent-fields label{display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--ink);font-weight:600;min-width:0}.scent-fields select,.scent-fields input{width:100%;min-width:0;box-sizing:border-box;min-height:46px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:10px;font:500 16px var(--sans)}.scent-fields input::placeholder{color:var(--muted)}.scent-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.scent-actions button{min-height:44px;padding:10px 14px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:10px}.scent-actions button[type=submit]{background:var(--accent);color:var(--accent-ink)}#scentPreferenceSummary:not(:empty){background:var(--surface-2);border-radius:10px;padding:14px;font-size:13px;line-height:1.6}#scentQuizFeedback{min-height:1.2em}#scentQuizSection,#styleHome{scroll-margin-top:75px}@media(max-width:620px){.style-quick,.scent-fields{grid-template-columns:1fr}.style-quick button{min-height:58px}.scent-intro{flex-direction:column}.scent-actions button{flex:1}}
+
+/* Collection is a dedicated tab, not part of the personal-style home. */
+#perfumeHub[hidden]{display:none!important}
+#perfumeHub{display:block;margin-top:16px}
+#perfumeHub>.perfume-hub-heading{padding:22px 18px 14px;border:1px solid var(--line);border-radius:18px;background:var(--surface);margin-bottom:15px}
+.perfume-hub-heading h2{font:600 clamp(27px,6vw,38px)/1.14 var(--serif);margin:6px 0;color:var(--ink)}
+.perfume-hub-heading p{font-size:13px;line-height:1.6;color:var(--ink-soft);margin:0}
+#perfumeHub>.bar-row{margin-top:12px}
+#perfumeHub>.profile-dashboard,#perfumeHub>.occasion-advisor{margin-top:18px}
+.product-nav-item{min-width:0!important}
+.product-nav-item b{white-space:nowrap}
 </style>
 <style id="collection-ai-search-css">
 .ai-search-result{margin-top:16px}
@@ -617,7 +628,7 @@ header::after{
   </div>
   <div class="drawer-footer"><span class="sync-dot"></span><span>Exporte sua coleção regularmente. O salvamento local depende deste navegador e pode ser apagado. Chaves de IA salvas no navegador não são adequadas a dispositivos compartilhados.</span></div>
 </aside>
-  <nav class="product-nav" aria-label="Navegação principal"><button class="product-nav-item active" data-view="inicio" type="button" id="navHome">⌂ <b>Início</b></button><button class="product-nav-item" data-view="looks" type="button" id="navLooks">✦ <b>Looks</b></button><button class="product-nav-item" data-view="perfil" type="button" id="navProfile">◉ <b>Perfil</b></button><button class="product-nav-item" data-view="acervo" type="button" id="navCollection">◈ <b>Acervo</b></button></nav>
+  <nav class="product-nav" aria-label="Navegação principal"><button class="product-nav-item active" data-view="inicio" type="button" id="navHome">⌂ <b>Início</b></button><button class="product-nav-item" data-view="looks" type="button" id="navLooks">✦ <b>Looks</b></button><button class="product-nav-item" data-view="perfil" type="button" id="navProfile">◉ <b>Perfil</b></button><button class="product-nav-item" data-view="perfumes" type="button" id="navCollection">◈ <b>Perfumes</b></button></nav>
   <div class="legacy-tabs" role="tablist" aria-hidden="true">
     <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Fragrâncias</button>
     <button role="tab" id="tabW" aria-selected="false" onclick="switchTab('watches')">Acessórios</button>
@@ -2772,6 +2783,39 @@ const text=parts.join(" · ")||"Ainda sem escolhas específicas.";out.innerHTML=
 const saved=read();refill();if(saved){for(const [k,v] of Object.entries(saved)){const field=form.elements.namedItem(k);if(field&&typeof v==="string")field.value=v}}summary(saved);
 form.addEventListener("submit",ev=>{ev.preventDefault();const data=Object.fromEntries(new FormData(form).entries());if(data.favorite&&data.favorite===data.dislike){el("scentQuizFeedback").textContent="Escolha perfumes diferentes como favorito e menos apreciado.";return}data.avoid=String(data.avoid||"").trim().slice(0,80);data.updatedAt=new Date().toISOString();try{localStorage.setItem(key,JSON.stringify(data));el("scentQuizFeedback").textContent="Preferências gravadas neste dispositivo. Você pode alterar quando quiser.";summary(data)}catch(e){el("scentQuizFeedback").textContent="Armazenamento indisponível. Não foi possível gravar."}});
 window.getScentPreferences=read;
+})();
+</script><script id="dedicated-perfumes-tab-v1">
+(function(){
+ const id=x=>document.getElementById(x);
+ const main=id("viewPerfumes"),header=id("styleHome"),grid=id("pGrid"),nav=id("navCollection");
+ if(!main||!header||!grid||!nav)return;
+ let hub=id("perfumeHub");
+ if(!hub){
+  hub=document.createElement("section");hub.id="perfumeHub";hub.hidden=true;hub.setAttribute("aria-label","Coleção de perfumes");
+  hub.innerHTML='<div class="perfume-hub-heading"><span class="style-kicker">ACERVO · PERFUMARIA</span><h2>Meus perfumes</h2><p>Explore sua coleção, analise pirâmides e radares olfativos ou encontre a fragrância certa para cada ocasião.</p></div>';
+  main.appendChild(hub);
+  for(const key of ["pSummary","onboardingNote","pControls","pGrid","pEmpty","profileDashboard","occasionAdvisor"]){const node=id(key);if(node)hub.appendChild(node)}
+ }
+ function mark(tab){document.querySelectorAll(".product-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===tab))}
+ function ensurePerfumes(){if(main.hidden&&typeof window.switchTab==="function")window.switchTab("perfumes")}
+ function showHub(){ensurePerfumes();hub.hidden=false;mark("perfumes");hub.scrollIntoView({behavior:"smooth",block:"start"})}
+ function hideHub(){hub.hidden=true}
+ nav.onclick=showHub;
+ id("navHome").addEventListener("click",hideHub);
+ id("navLooks").addEventListener("click",hideHub);
+ id("navProfile").addEventListener("click",hideHub);
+ id("homeOpenStylist")?.addEventListener("click",hideHub);
+ id("homeOpenProfile")?.addEventListener("click",hideHub);
+ id("homeOpenWardrobe")?.addEventListener("click",hideHub);
+ const prior=window.switchProductView;
+ window.switchProductView=function(view){if(view==="relogios"){hideHub();if(prior)prior(view);return}showHub()};
+ const back=()=>{if(main.hidden)return;hideHub();mark("inicio");header.scrollIntoView({behavior:"smooth",block:"start"})};
+ const goHome=id("navHome");
+ if(goHome)goHome.addEventListener("click",()=>{ensurePerfumes();back()});
+ // Keep olfactory shortcuts compatible when launched from any other surface.
+ window.gdeOpenPerfumes=showHub;
+ // Initial view prioritizes the styling dashboard, even when the collection has items.
+ hideHub();
 })();
 </script></body>
 </html>
