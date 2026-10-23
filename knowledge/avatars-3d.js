@@ -16,5 +16,7 @@ function render(n,gender){
  (f?'<path d="M 48 15 Q 41 1 58 2 Q 77 0 73 20" fill="none" stroke="'+edge+'" stroke-width="4" opacity=".85"/>':'')+
  '</svg>';
 }
+function mountNav(){const nav=document.querySelector(".gde-refined-nav");if(nav&&nav.parentElement!==document.body){document.body.appendChild(nav);nav.style.setProperty("height","auto","important")}}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mountNav);else mountNav();
 window.GDEAvatar3D={render};
 })();
