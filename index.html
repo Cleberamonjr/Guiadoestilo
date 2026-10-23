@@ -2844,7 +2844,7 @@ function generate(){
  const wtip={quente:"Considere leveza, ventilação e proteção solar.",frio:"Adapte com camadas e proteção térmica.",ameno:"Use camadas removíveis conforme a temperatura real."}[opts.weather];
  const missing=chosen.filter(x=>!x.item);
  const owned=(typeof state!=="undefined"&&Array.isArray(state.perfumes)?state.perfumes:[]).filter(x=>x.status==="tenho");
- const perfume=owned.length?"Você tem "+owned.length+" fragrância(s) cadastrada(s). Para escolher uma com segurança, informe também o ambiente e a intensidade no consultor olfativo.":"Inclua seus perfumes na coleção para completar a combinação.";
+ const perfume=owned.length?"Veja a sugestão contextual de fragrância no Estúdio de Looks, abaixo desta recomendação.":"Você ainda não cadastrou fragrâncias como Tenho; o look funciona normalmente sem perfume.";
  const rows=chosen.map((x,i)=>'<li style="margin:10px 0"><b>'+esc(["Parte superior","Parte inferior","Calçado"][i])+':</b> '+esc(name(x))+(x.item?'<small style="display:block;color:var(--ink-soft)">Do seu guarda-roupa</small>':'<small style="display:block;color:var(--ink-soft)">Ideia de peça; não cadastrada</small>')+(x.item?.photo?'<img src="'+esc(x.item.photo)+'" alt="Peça selecionada" style="display:block;width:84px;height:84px;object-fit:cover;border-radius:10px;margin-top:7px">':"")+'</li>').join("");
  const acc=accessory.map(a=>'<li>'+esc(a.label)+': '+esc(a.item?a.item.name:"não cadastrado; opcional")+'</li>').join("");
  const occasionText=$("stOccasion").selectedOptions[0].text;
