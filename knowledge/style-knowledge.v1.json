@@ -1,0 +1,519 @@
+{
+  "schemaVersion": "1.0",
+  "edition": "2026-10-23",
+  "licenseNote": "Regras originais resumidas com citações para leitura; não reproduz catálogos proprietários nem pirâmides comerciais.",
+  "disclaimer": "Recomendações heurísticas e inclusivas; verifique caimento real, iluminação, restrições de ocasião e dados do usuário.",
+  "domains": [
+    "cores",
+    "caimento",
+    "tecidos",
+    "calcados",
+    "estilos",
+    "acessorios",
+    "perfumes",
+    "fotografia",
+    "looks"
+  ],
+  "rules": [
+    {
+      "id": "CLR01",
+      "domain": "cores",
+      "title": "Harmonia monocromática",
+      "guidance": "Combine variações claras e escuras de uma mesma família de cor; a textura cria diferenciação visual.",
+      "tags": [
+        "monocromatico",
+        "minimalista",
+        "elegancia",
+        "look"
+      ],
+      "topics": [
+        "roupa",
+        "cores"
+      ],
+      "confidence": "heuristica",
+      "source": "https://help.getwardrobe.com/latest/items/outfit-principles-color/"
+    },
+    {
+      "id": "CLR02",
+      "domain": "cores",
+      "title": "Harmonia análoga",
+      "guidance": "Cores próximas no círculo cromático tendem a criar transições suaves; azul e verde-azulado são exemplos.",
+      "tags": [
+        "analogo",
+        "azul",
+        "verde",
+        "harmonia"
+      ],
+      "topics": [
+        "roupa",
+        "cores"
+      ],
+      "confidence": "heuristica",
+      "source": "https://help.getwardrobe.com/latest/items/outfit-principles-color/"
+    },
+    {
+      "id": "CLR03",
+      "domain": "cores",
+      "title": "Contraste complementar",
+      "guidance": "Cores opostas podem criar contraste intenso; use um destaque e deixe as outras peças neutras quando buscar discrição.",
+      "tags": [
+        "complementar",
+        "contraste",
+        "marcante",
+        "criativo"
+      ],
+      "topics": [
+        "roupa",
+        "cores"
+      ],
+      "confidence": "heuristica",
+      "source": "https://help.getwardrobe.com/latest/items/outfit-principles-color/"
+    },
+    {
+      "id": "CLR04",
+      "domain": "cores",
+      "title": "Neutros como ponte",
+      "guidance": "Branco, creme, cinza, marinho, bege e preto costumam facilitar a integração de cores; confira temperatura e saturação reais.",
+      "tags": [
+        "neutras",
+        "preto",
+        "branco",
+        "marinho",
+        "bege"
+      ],
+      "topics": [
+        "roupa",
+        "cores"
+      ],
+      "confidence": "heuristica",
+      "source": "https://help.getwardrobe.com/latest/items/outfit-principles-color/"
+    },
+    {
+      "id": "CLR05",
+      "domain": "cores",
+      "title": "Colorimetria sem diagnóstico",
+      "guidance": "Uma foto sob luz artificial ou com filtros não determina com segurança subtom de pele ou estação pessoal; ofereça hipótese e peça confirmação.",
+      "tags": [
+        "foto",
+        "colorimetria",
+        "pele",
+        "iluminacao"
+      ],
+      "topics": [
+        "foto",
+        "cores"
+      ],
+      "confidence": "heuristica",
+      "source": "https://www.vogue.com/article/color-theory-for-clothing"
+    },
+    {
+      "id": "FIT01",
+      "domain": "caimento",
+      "title": "Preferência acima do biotipo",
+      "guidance": "A forma corporal não determina o que alguém pode vestir. Priorize preferência, mobilidade, conforto, prova da peça e intenção visual.",
+      "tags": [
+        "silhueta",
+        "biotipo",
+        "caimento",
+        "conforto"
+      ],
+      "topics": [
+        "corpo",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FIT02",
+      "domain": "caimento",
+      "title": "Ombros e mangas",
+      "guidance": "Verifique se a costura e a mobilidade dos ombros correspondem à modelagem pretendida; oversize é intencional e não um erro.",
+      "tags": [
+        "ombros",
+        "camisa",
+        "blazer",
+        "mangas"
+      ],
+      "topics": [
+        "corpo",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FIT03",
+      "domain": "caimento",
+      "title": "Calças e movimento",
+      "guidance": "Avalie cintura, quadril, gancho, comprimento e liberdade ao sentar. A preferência de cintura e barra orienta ajustes.",
+      "tags": [
+        "calca",
+        "comprimento",
+        "cintura",
+        "movimento"
+      ],
+      "topics": [
+        "corpo",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FIT04",
+      "domain": "caimento",
+      "title": "Proporções como efeito opcional",
+      "guidance": "Linha de cintura, abertura de jaquetas, comprimento e contraste podem alterar proporções percebidas; nunca apresente como correção obrigatória.",
+      "tags": [
+        "tronco",
+        "pernas",
+        "proporcao",
+        "cintura"
+      ],
+      "topics": [
+        "corpo",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FAB01",
+      "domain": "tecidos",
+      "title": "Calor e respiração",
+      "guidance": "Em calor, considere ventilação, gramatura, caimento e tecidos adequados ao ambiente; algodão e linho são alternativas, não garantias de conforto.",
+      "tags": [
+        "quente",
+        "calor",
+        "linho",
+        "algodao",
+        "clima"
+      ],
+      "topics": [
+        "clima",
+        "tecido"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FAB02",
+      "domain": "tecidos",
+      "title": "Frio e camadas",
+      "guidance": "Em frio, recomende camadas ajustáveis, isolamento e proteção ao vento conforme a temperatura e o deslocamento.",
+      "tags": [
+        "frio",
+        "camada",
+        "casaco",
+        "tricot"
+      ],
+      "topics": [
+        "clima",
+        "tecido"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "SHO01",
+      "domain": "calcados",
+      "title": "Formalidade contextual",
+      "guidance": "Oxford, derby, loafer, mocassim e alguns modelos de sapatilha ou salto podem elevar formalidade; dress code específico prevalece.",
+      "tags": [
+        "formal",
+        "trabalho",
+        "sapato",
+        "mocassim",
+        "loafer"
+      ],
+      "topics": [
+        "calcados",
+        "ocasiao"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "SHO02",
+      "domain": "calcados",
+      "title": "Tênis urbano",
+      "guidance": "Tênis limpo e discreto combina com muitos looks casuais e alguns smart casual, mas não deve ser presumido adequado a eventos formais.",
+      "tags": [
+        "tenis",
+        "casual",
+        "smart casual"
+      ],
+      "topics": [
+        "calcados",
+        "ocasiao"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "SHO03",
+      "domain": "calcados",
+      "title": "Conforto e percurso",
+      "guidance": "Leve em conta duração em pé, caminhada, piso e clima; não recomende calçado apenas por estética.",
+      "tags": [
+        "caminhada",
+        "conforto",
+        "bota",
+        "salto"
+      ],
+      "topics": [
+        "calcados",
+        "clima"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "STY01",
+      "domain": "estilos",
+      "title": "Clássico contemporâneo",
+      "guidance": "Peças coordenadas, proporções intencionais e baixo ruído visual; inclui alfaiataria flexível e acessórios discretos.",
+      "tags": [
+        "classico",
+        "confiavel",
+        "elegante"
+      ],
+      "topics": [
+        "estilo",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "STY02",
+      "domain": "estilos",
+      "title": "Minimalismo",
+      "guidance": "Reduza quantidade de elementos visuais, priorize textura e caimento, evitando confundir minimalismo com obrigação de usar preto.",
+      "tags": [
+        "minimalista",
+        "discreto",
+        "elegante"
+      ],
+      "topics": [
+        "estilo",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "STY03",
+      "domain": "estilos",
+      "title": "Expressão criativa",
+      "guidance": "Uma peça de destaque, cor contrastante ou volume intencional podem transmitir criatividade sem reduzir a coerência do conjunto.",
+      "tags": [
+        "criativo",
+        "marcante",
+        "originalidade"
+      ],
+      "topics": [
+        "estilo",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "ACC01",
+      "domain": "acessorios",
+      "title": "Relógios e metais",
+      "guidance": "Considere escala do relógio, ocasião e harmonia com outros metais. Misturar metais é possível e não representa erro.",
+      "tags": [
+        "relogio",
+        "prata",
+        "dourado",
+        "acessorio"
+      ],
+      "topics": [
+        "acessorios",
+        "roupa"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "ACC02",
+      "domain": "acessorios",
+      "title": "Óculos e contexto",
+      "guidance": "Ao sugerir óculos, respeite necessidade de grau, proteção UV, conforto e preferência estética; não deduza o formato de rosto com certeza por foto.",
+      "tags": [
+        "oculos",
+        "rosto",
+        "sol"
+      ],
+      "topics": [
+        "acessorios",
+        "foto"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FRG01",
+      "domain": "perfumes",
+      "title": "Prioridade à coleção real",
+      "guidance": "Recomende somente fragrâncias marcadas como 'Tenho', verificando identidade do frasco e dados registrados; não invente lançamentos ou pirâmides.",
+      "tags": [
+        "perfume",
+        "colecao",
+        "preferencia"
+      ],
+      "topics": [
+        "perfume",
+        "dados"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FRG02",
+      "domain": "perfumes",
+      "title": "Ambiente compartilhado",
+      "guidance": "Em escritórios e locais fechados, respeite sensibilidades a fragrância e políticas do ambiente; perfume discreto ou nenhum é uma escolha legítima.",
+      "tags": [
+        "trabalho",
+        "reuniao",
+        "indoor",
+        "projecao"
+      ],
+      "topics": [
+        "perfume",
+        "ocasiao"
+      ],
+      "confidence": "heuristica",
+      "source": "https://fragrancereview.net/guides/how-to-choose-a-fragrance-by-projection/"
+    },
+    {
+      "id": "FRG03",
+      "domain": "perfumes",
+      "title": "Projeção não é longevidade",
+      "guidance": "Use projeção, intensidade desejada e ambiente separadamente da duração. Concentração EDT ou EDP não garante projeção específica.",
+      "tags": [
+        "projecao",
+        "longevidade",
+        "edt",
+        "edp"
+      ],
+      "topics": [
+        "perfume",
+        "ocasiao"
+      ],
+      "confidence": "heuristica",
+      "source": "https://fragrancereview.net/guides/how-to-choose-a-fragrance-by-projection/"
+    },
+    {
+      "id": "FRG04",
+      "domain": "perfumes",
+      "title": "Gosto declarado prevalece",
+      "guidance": "Perfume favorito, rejeitado, famílias e doçura informados pelo usuário têm precedência sobre inferências genéricas e associações estereotipadas.",
+      "tags": [
+        "favorito",
+        "rejeitado",
+        "doce",
+        "familia"
+      ],
+      "topics": [
+        "perfume",
+        "preferencia"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "FRG05",
+      "domain": "perfumes",
+      "title": "Mensagem olfativa subjetiva",
+      "guidance": "Frescor pode sugerir leveza e acordes densos podem sugerir presença, mas percepção muda por pessoa e cultura: explique como sugestão, nunca como fato.",
+      "tags": [
+        "mensagem",
+        "elegancia",
+        "presenca",
+        "confiavel"
+      ],
+      "topics": [
+        "perfume",
+        "estilo"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "VIS01",
+      "domain": "fotografia",
+      "title": "Confirmar atributos da foto",
+      "guidance": "IA pode sugerir categoria, cor e tecido aparentes; peça confirmação do usuário, principalmente sob sombra, filtros e pouca luz.",
+      "tags": [
+        "foto",
+        "categoria",
+        "cor",
+        "tecido",
+        "visao"
+      ],
+      "topics": [
+        "foto",
+        "dados"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "VIS02",
+      "domain": "fotografia",
+      "title": "Privacidade das imagens",
+      "guidance": "Não envie fotos a serviços externos sem ação e informação claras. Sempre permita apagar imagens e manter recomendações manuais.",
+      "tags": [
+        "privacidade",
+        "imagem",
+        "foto"
+      ],
+      "topics": [
+        "foto",
+        "dados"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "OUT01",
+      "domain": "looks",
+      "title": "Composição pela posse",
+      "guidance": "Escolha itens cadastrados antes de propor compras. Diferencie peças existentes de sugestões externas, sem afirmar disponibilidade comercial.",
+      "tags": [
+        "guarda roupa",
+        "compra",
+        "look"
+      ],
+      "topics": [
+        "roupa",
+        "dados"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    },
+    {
+      "id": "OUT02",
+      "domain": "looks",
+      "title": "Mensagem aspiracional",
+      "guidance": "Combine estilo aspiracional declarado, ocasião e formalidade, explicando escolhas de roupa e perfume sem atribuir características pessoais à aparência.",
+      "tags": [
+        "imagem",
+        "aspiracional",
+        "postura",
+        "posicionamento"
+      ],
+      "topics": [
+        "estilo",
+        "ocasiao"
+      ],
+      "confidence": "heuristica",
+      "source": null
+    }
+  ]
+}
