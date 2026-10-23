@@ -40,7 +40,7 @@ function dropdown(item){
  const existing=sel.value;
  sel.innerHTML='<option value="">Não especificada</option>'+db.categories.filter(x=>x.id<27).map(x=>'<option value="'+x.id+'">'+escape(x.name)+'</option>').join("");
  const proposed=impliedId(item);
- sel.value=existing&&db.categories.some(c=>String(c.id)===existing)?existing:proposed===null?"":String(proposed);
+ sel.value=proposed===null?"":String(proposed);
 }
 function getSelected(){
  const category=Number(el("fpCategory")?.value),raw=el("fpCategory")?.value||"";
