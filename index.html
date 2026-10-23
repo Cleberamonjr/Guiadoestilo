@@ -2813,11 +2813,18 @@ evento:["peça superior ou vestido apropriado ao dress code","peça inferior coo
 };
 const priorityMatch=(c,p)=>p==="frias"?c.cool:p==="quentes"?c.warm:p==="vivas"?c.bright:p==="neutras"?c.neutral:true;
 function score(item,opts,usedColors){
- const name=fold(item.name),color=canonical(item.color),text=name+" "+fold(item.color);
+ const name=fold(item.name),color=canonical(item.color),text=name+" "+fold(item.color)+" "+fold(item.fabric)+" "+fold(item.fit);
  let n=10;
  if(occasion[opts.occasion]?.test(name))n+=opts.priority==="conforto"?10:20;
  if(climate[opts.weather]?.test(name))n+=opts.priority==="conforto"?24:12;
  if(opts.formality==="formal"&&formal.test(name))n+=24;
+ if(item.formality==="formal"&&opts.formality==="formal")n+=20;
+ if(item.formality==="casual"&&opts.formality==="casual")n+=16;
+ if(item.formality==="smart-casual"&&["trabalho","jantar","encontro"].includes(opts.occasion))n+=10;
+ if(opts.weather==="quente"&&/linho|algodao|viscose|leve|respiravel/.test(fold(item.fabric)))n+=9;
+ if(opts.weather==="frio"&&/la|tricot|couro|fleece/.test(fold(item.fabric)))n+=9;
+ if(item.fit&&window.getBodyFitProfile?.().fit==="regular"&&["regular","reta"].includes(item.fit))n+=8;
+ if(item.fit&&window.getBodyFitProfile?.().fit==="oversized"&&item.fit==="oversized")n+=8;
  if(opts.formality==="casual"&&casual.test(name))n+=18;
  if(priorityMatch(color,opts.colors))n+=opts.priority==="coerencia"?28:14;
  if(usedColors.length){const existing=usedColors.map(canonical);if(color.neutral||existing.some(c=>c.neutral))n+=18;else if(existing.some(c=>(c.cool&&color.cool)||(c.warm&&color.warm)))n+=12}
@@ -3046,5 +3053,5 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
  renderSaved();
  window.__gdeVisualLookQA={getLooks,getPieces,renderSaved,render};
 })();
-</script><script src="knowledge/style-kb.js" defer></script></body>
+</script><script src="knowledge/style-kb.js" defer></script><script src="knowledge/wardrobe-vision.js" defer></script></body>
 </html>
