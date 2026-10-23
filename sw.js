@@ -1,8 +1,8 @@
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
-const CACHE = 'gde-v41';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './knowledge/style-kb.js', './knowledge/style-knowledge.v1.json', './knowledge/wardrobe-vision.js', './knowledge/style-onboarding.js', './knowledge/wardrobe-photo-studio.js', './knowledge/wardrobe-catalog.js', './knowledge/garment-taxonomy.v1.json', './knowledge/fashionpedia-ontology.v1.json', './knowledge/fashionpedia-bridge.js'];
+const CACHE = 'gde-v42';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './knowledge/style-kb.js', './knowledge/style-knowledge.v1.json', './knowledge/wardrobe-vision.js', './knowledge/style-onboarding.js', './knowledge/wardrobe-photo-studio.js', './knowledge/wardrobe-catalog.js', './knowledge/garment-taxonomy.v1.json', './knowledge/fashionpedia-ontology.v1.json', './knowledge/fashionpedia-bridge.js', './knowledge/mobile-layout-v42.js'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(() => {})).then(() => self.skipWaiting()));
 });
