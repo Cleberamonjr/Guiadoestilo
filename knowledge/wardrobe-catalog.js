@@ -29,5 +29,13 @@ function init(){
  load().then(d=>{el("gdeGarmentCount").textContent=d.items.length+" referências de peças disponíveis nesta versão.";options()}).catch(()=>{el("gdeGarmentCount").textContent="Referências indisponíveis; o cadastro manual continua disponível."});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+window.addEventListener("gde:look-generated",async ev=>{try{
+ const data=await load(),rows=(ev.detail?.chosen||[]).filter(x=>x.item?.garmentRef),rules=rows.map(x=>({piece:x.item.name,rule:data.items.find(r=>r.id===x.item.garmentRef)})).filter(x=>x.rule);
+ if(!rules.length)return;
+ let node=el("gdeGarmentLookAdvice");if(!node){node=document.createElement("section");node.id="gdeGarmentLookAdvice";node.className="gde-garment-reference";el("stResult")?.insertAdjacentElement("afterend",node)}
+ if(node){node.replaceChildren();const h=document.createElement("h4");h.textContent="Caimento e uso das suas peças";node.appendChild(h);
+ for(const x of rules){const p=document.createElement("p");p.textContent=x.piece+": "+x.rule.fitAdvice+" "+x.rule.pairingAdvice;node.appendChild(p)}}}
+ catch(e){}
+});
 window.GDEGarmentCatalog={load,getSelected(){const key=el("gdeGarmentModel")?.value;return taxonomy?.items?.find(x=>x.id===key)||null},target};
 })();
