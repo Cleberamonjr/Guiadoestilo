@@ -2082,14 +2082,28 @@ async function runOccasionAdvisor(){
  if(!owned.length){toast("Cadastre ao menos um perfume para consultar.");return;}
  const btn=$("#oaRun");btn.disabled=true;btn.textContent="Consultando…";$("#oaResult").innerHTML="";
  const ctx=adviserContext();
- const ranked=owned.map(p=>adviserScore(p,occasion,ctx)).sort((a,b)=>b.score-a.score);
+ const preference=window.getScentPreferences?.()||null;
+ const prefNorm=x=>String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+ const ranked=owned.map(p=>{
+   const result=adviserScore(p,occasion,ctx);
+   if(!preference)return result;
+   const n=p.radar||{}, has=k=>Number(n[k])>0;
+   let delta=0;
+   if(preference.favorite&&String(p.id)===String(preference.favorite)){delta+=12;result.reasons.push("fragrância declarada favorita");}
+   if(preference.dislike&&String(p.id)===String(preference.dislike)){delta-=32;result.reasons.push("afinidade pessoal declarada menor");}
+   const aliases={citrica:["citric","fresh","fresc"],floral:["floral"],amadeirada:["amadeir","wood"],aromatica:["aromat","fougere"],ambarada:["ambar","oriental","especiad"],gourmand:["gourmand","doce"],aquatica:["aquat","marinh","ocean"]};
+   if(preference.family&&(aliases[preference.family]||[]).some(v=>prefNorm(p.family).includes(v))){delta+=6;result.reasons.push("família declarada favorita");}
+   if(preference.sweetness&&has("doce"))delta+=preference.sweetness==="baixa"?(5-Number(n.doce))*.6:preference.sweetness==="alta"?(Number(n.doce)-5)*.6:-Math.abs(Number(n.doce)-5)*.5;
+   if(preference.projection&&has("projecao")){const target=preference.projection==="discreta"?3:preference.projection==="marcante"?8:5;delta-=Math.abs(Number(n.projecao)-target)*.7;}
+   result.score=Math.max(0,Math.min(100,Math.round(result.score+delta)));return result;
+ }).sort((a,b)=>b.score-a.score);
  const top=ranked[0];
  const list=ranked.slice(0,25).map(x=>({id:x.p.id,nome:x.p.name,marca:x.p.brand,familia:x.p.family,notas:(x.p.notes||[]).slice(0,8),radar:x.p.radar||{},score_local:x.score}));
  try{
    const cfg=getAiConfigs();
    if(!cfg.length)throw new Error("no_provider");
    const bodyFit=window.getBodyFitProfile?window.getBodyFitProfile():null;
-   const prompt="Consultor de perfumaria. Escolha somente um id do acervo informado. Contexto: "+JSON.stringify({occasion,ctx,bodyFit})+". O perfil corporal é opcional e NÃO permite inferir caimento de roupa a partir de notas de perfume. Ranking local: "+JSON.stringify(list)+". Considere projeção, local fechado, temperatura, período e intensidade. Retorne JSON {\"id\":\"\",\"why\":\"\"}. Não invente desempenho, clima real, notas ou perfumes. Explique incertezas.";
+   const prompt="Consultor de perfumaria. Escolha somente um id do acervo informado. Contexto: "+JSON.stringify({occasion,ctx,bodyFit,preference})+". O perfil corporal é opcional e NÃO permite inferir caimento de roupa a partir de notas de perfume. Ranking local: "+JSON.stringify(list)+". Considere projeção, local fechado, temperatura, período e intensidade. Retorne JSON {\"id\":\"\",\"why\":\"\"}. Não invente desempenho, clima real, notas ou perfumes. Explique incertezas.";
    const out=await aiComplete(prompt);const candidate=out.data||{};
    const chosen=owned.some(p=>p.id===candidate.id)?candidate.id:top.p.id;
    renderOccasionAdvisor({id:chosen,why:candidate.why||"Recomendação conforme os critérios cadastrados."},owned,ranked);
@@ -2745,6 +2759,7 @@ const navigate=(id,tab)=>{if(document.getElementById("viewPerfumes").hidden)wind
 el("navHome").onclick=()=>navigate("styleHome","inicio");el("navLooks").onclick=()=>el("stylistOpenBtn").click();el("navProfile").onclick=()=>navigate("scentQuizSection","perfil");el("navCollection").onclick=()=>navigate("pGrid","acervo");
 el("homeOpenStylist").onclick=()=>el("stylistOpenBtn").click();el("homeOpenWardrobe").onclick=()=>{el("stylistOpenBtn").click();setTimeout(()=>el("stWardrobe")?.scrollIntoView({behavior:"smooth",block:"center"}),40)};
 el("homeOpenProfile").onclick=()=>navigate("scentQuizSection","perfil");el("scentQuizEditBody").onclick=()=>el("bodyFitBtn").click();el("scentGoQuiz").onclick=()=>navigate("scentQuizSection","perfil");
+const vision=el("styleVision"),quiz=el("scentQuizSection");if(vision&&quiz)vision.insertAdjacentElement("afterend",quiz);
 let anchor=el("pGrid");for(const id of ["profileDashboard","occasionAdvisor"]){const section=el(id);if(anchor&&section){anchor.insertAdjacentElement("afterend",section);anchor=section}}
 function catalog(){return (typeof state!=="undefined"&&Array.isArray(state.perfumes)?state.perfumes:[]).filter(p=>p.status==="tenho").map(p=>({id:String(p.id),name:String((p.brand?p.brand+" · ":"")+(p.name||"Sem nome"))}))}
 function refill(){const items=catalog();for(const id of ["scentFavorite","scentDislike"]){const input=el(id),selected=input.value;input.querySelectorAll("option:not(:first-child)").forEach(x=>x.remove());for(const p of items){const opt=document.createElement("option");opt.value=p.id;opt.textContent=p.name;input.appendChild(opt)}input.value=items.some(x=>x.id===selected)?selected:""}return items}
