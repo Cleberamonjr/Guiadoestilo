@@ -1,0 +1,2147 @@
+{
+  "version": "1.0",
+  "updated": "2026-10-23",
+  "license": "Glossário editorial elaborado para o Guia do Estilo. Não contém imagens ou catálogos comerciais.",
+  "scope": "Tipos de peças e orientações de caimento flexíveis, sem restrições de gênero.",
+  "items": [
+    {
+      "id": "GAR001",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jeans reta",
+      "silhouette": "reto",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "reta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR002",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jeans slim",
+      "silhouette": "ajustado",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "slim"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR003",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jeans skinny",
+      "silhouette": "ajustado",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "skinny"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR004",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jeans relaxed",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "relaxed"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR005",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jeans baggy",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "baggy"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR006",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jeans tapered",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "tapered"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR007",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jeans bootcut",
+      "silhouette": "abertura gradual",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "bootcut"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR008",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "chino",
+      "silhouette": "reto",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "chino"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR009",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "alfaiataria reta",
+      "silhouette": "reto",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "alfaiataria",
+        "reta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR010",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "alfaiataria pregas",
+      "silhouette": "reto",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "alfaiataria",
+        "pregas"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR011",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "cargo",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "cargo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR012",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "jogger",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jogger"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR013",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "sarja",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "sarja"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR014",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "linho",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "linho"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR015",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "cenoura",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "cenoura"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR016",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "wide leg",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "wide",
+        "leg"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR017",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "bermuda alfaiataria",
+      "silhouette": "reto",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "bermuda",
+        "alfaiataria"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR018",
+      "category": "calca",
+      "audience": "masculino",
+      "label": "bermuda jeans",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "bermuda",
+        "jeans"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR019",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans skinny",
+      "silhouette": "ajustado",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "skinny"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR020",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans reta",
+      "silhouette": "reto",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "reta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR021",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans mom",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "mom"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR022",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans boyfriend",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "boyfriend"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR023",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans flare",
+      "silhouette": "abertura gradual",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "flare"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR024",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans bootcut",
+      "silhouette": "abertura gradual",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "bootcut"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR025",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans wide leg",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "wide",
+        "leg"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR026",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans barrel",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "barrel"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR027",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans baggy",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "baggy"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR028",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jeans cropped",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jeans",
+        "cropped"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR029",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "palazzo",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "palazzo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR030",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "pantalona",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "pantalona"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR031",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "pantacourt",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "pantacourt"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR032",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "culotte",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "culotte"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR033",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "cenoura",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "cenoura"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR034",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "alfaiataria reta",
+      "silhouette": "reto",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "alfaiataria",
+        "reta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR035",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "alfaiataria ampla",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "alfaiataria",
+        "ampla"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR036",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "cargo",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "cargo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR037",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "jogger",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "jogger"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR038",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "legging",
+      "silhouette": "ajustado",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "legging"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR039",
+      "category": "calca",
+      "audience": "feminino",
+      "label": "saia-calça",
+      "silhouette": "variável",
+      "fitAdvice": "Confira cintura, gancho, quadril, mobilidade e comprimento; priorize o caimento preferido e o calçado escolhido.",
+      "pairingAdvice": "Pode ser combinada com camiseta, camisa ou malha, equilibrando formalidade e textura.",
+      "aliases": [
+        "saia-calça"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR040",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camiseta gola redonda",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camiseta",
+        "gola",
+        "redonda"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR041",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camiseta gola V",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camiseta",
+        "gola",
+        "v"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR042",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camiseta oversized",
+      "silhouette": "amplo",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camiseta",
+        "oversized"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR043",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camiseta boxy",
+      "silhouette": "reto",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camiseta",
+        "boxy"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR044",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camiseta manga longa",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camiseta",
+        "manga",
+        "longa"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR045",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camiseta henley",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camiseta",
+        "henley"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR046",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camiseta regata",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camiseta",
+        "regata"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR047",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camisa oxford",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "oxford"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR048",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camisa social",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "social"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR049",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camisa linho",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "linho"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR050",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camisa camp collar",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "camp",
+        "collar"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR051",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camisa flanela",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "flanela"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR052",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "camisa jeans",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "jeans"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR053",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "polo",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "polo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR054",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "polo tricô",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "polo",
+        "tricô"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR055",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "suéter gola V",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "suéter",
+        "gola",
+        "v"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR056",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "suéter gola alta",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "suéter",
+        "gola",
+        "alta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR057",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "cardigã",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "cardigã"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR058",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "moletom",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "moletom"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR059",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "blazer",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blazer"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR060",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "jaqueta bomber",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "jaqueta",
+        "bomber"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR061",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "jaqueta jeans",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "jaqueta",
+        "jeans"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR062",
+      "category": "parte-superior",
+      "audience": "masculino",
+      "label": "jaqueta couro",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "jaqueta",
+        "couro"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR063",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "t-shirt básica",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "t-shirt",
+        "básica"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR064",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "t-shirt boxy",
+      "silhouette": "reto",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "t-shirt",
+        "boxy"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR065",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "t-shirt cropped",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "t-shirt",
+        "cropped"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR066",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "t-shirt baby look",
+      "silhouette": "ajustado",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "t-shirt",
+        "baby",
+        "look"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR067",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa gola alta",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "gola",
+        "alta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR068",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa ombro a ombro",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "ombro",
+        "a",
+        "ombro"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR069",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa ciganinha",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "ciganinha"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR070",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa envelope",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "envelope"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR071",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa peplum",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "peplum"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR072",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa regata",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "regata"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR073",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa canelada",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "canelada"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR074",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blusa assimétrica",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blusa",
+        "assimétrica"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR075",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "camisa social",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "social"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR076",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "camisa oversized",
+      "silhouette": "amplo",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "oversized"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR077",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "camisa linho",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "camisa",
+        "linho"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR078",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "body",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "body"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR079",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "top halter",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "top",
+        "halter"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR080",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "top tomara que caia",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "top",
+        "tomara",
+        "que",
+        "caia"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR081",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "top cropped",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "top",
+        "cropped"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR082",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "cardigã",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "cardigã"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR083",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "blazer",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "blazer"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR084",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "jaqueta curta",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "jaqueta",
+        "curta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR085",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "colete alfaiataria",
+      "silhouette": "reto",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "colete",
+        "alfaiataria"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR086",
+      "category": "parte-superior",
+      "audience": "feminino",
+      "label": "quimono",
+      "silhouette": "variável",
+      "fitAdvice": "Avalie ombros, largura do tronco, liberdade dos braços e o comprimento de acordo com a modelagem.",
+      "pairingAdvice": "Combine com calça ou saia conforme o dress code; coordene cores e textura.",
+      "aliases": [
+        "quimono"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR087",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "tubinho",
+      "silhouette": "ajustado",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "tubinho"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR088",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "evasê",
+      "silhouette": "abertura gradual",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "evasê"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR089",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "envelope",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "envelope"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR090",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "chemise",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "chemise"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR091",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "slip dress",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "slip",
+        "dress"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR092",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "midi reto",
+      "silhouette": "reto",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "midi",
+        "reto"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR093",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "midi plissado",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "midi",
+        "plissado"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR094",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "longo fluido",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "longo",
+        "fluido"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR095",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "curto reto",
+      "silhouette": "reto",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "curto",
+        "reto"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR096",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "trapézio",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "trapézio"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR097",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "frente única",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "frente",
+        "única"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR098",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "império",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "império"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR099",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "blazer dress",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "blazer",
+        "dress"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR100",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "malha ajustado",
+      "silhouette": "ajustado",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "malha",
+        "ajustado"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR101",
+      "category": "vestido",
+      "audience": "feminino",
+      "label": "solto e amplo",
+      "silhouette": "amplo",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com calçado e acessórios adequados à ocasião, sem exigir peça inferior.",
+      "aliases": [
+        "solto",
+        "e",
+        "amplo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR102",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "lápis",
+      "silhouette": "ajustado",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "lápis"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR103",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "evasê",
+      "silhouette": "abertura gradual",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "evasê"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR104",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "plissada",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "plissada"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR105",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "godê",
+      "silhouette": "abertura gradual",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "godê"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR106",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "reta",
+      "silhouette": "reto",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "reta"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR107",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "midi acetinada",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "midi",
+        "acetinada"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR108",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "mini",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "mini"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR109",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "longa fluida",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "longa",
+        "fluida"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR110",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "jeans",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "jeans"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR111",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "envelope",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "envelope"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR112",
+      "category": "saia",
+      "audience": "feminino",
+      "label": "cargo",
+      "silhouette": "variável",
+      "fitAdvice": "Confira movimento, transparência, forro, cintura e comprimento para a ocasião.",
+      "pairingAdvice": "Combine com blusa, camisa ou top de proporção confortável.",
+      "aliases": [
+        "cargo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR113",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "tênis minimalista",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "tênis",
+        "minimalista"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR114",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "tênis de corrida",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "tênis",
+        "de",
+        "corrida"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR115",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "tênis chunky",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "tênis",
+        "chunky"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR116",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "tênis retrô",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "tênis",
+        "retrô"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR117",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "sneaker couro",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "sneaker",
+        "couro"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR118",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "bota chelsea",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "bota",
+        "chelsea"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR119",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "coturno",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "coturno"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR120",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "loafer",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "loafer"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR121",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "mocassim",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "mocassim"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR122",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "oxford",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "oxford"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR123",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "derby",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "derby"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR124",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "sandália",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "sandália"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR125",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "papete",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "papete"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR126",
+      "category": "calcado",
+      "audience": "unissex",
+      "label": "chinelo",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "chinelo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR127",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "sapatilha",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "sapatilha"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR128",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "slingback",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "slingback"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR129",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "scarpin",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "scarpin"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR130",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "mule",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "mule"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR131",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "bota cano alto",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "bota",
+        "cano",
+        "alto"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR132",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "bota cano curto",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "bota",
+        "cano",
+        "curto"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR133",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "sandália de tiras",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "sandália",
+        "de",
+        "tiras"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR134",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "salto bloco",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "salto",
+        "bloco"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR135",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "rasteira",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "rasteira"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR136",
+      "category": "calcado",
+      "audience": "feminino",
+      "label": "espadrille",
+      "silhouette": "variável",
+      "fitAdvice": "Confira conforto ao caminhar, aderência, duração de uso e adequação à ocasião.",
+      "pairingAdvice": "Ajuste formalidade e conforto à roupa e ao local.",
+      "aliases": [
+        "espadrille"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR137",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "trench coat",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "trench",
+        "coat"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR138",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "sobretudo",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "sobretudo"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR139",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "blazer estruturado",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "blazer",
+        "estruturado"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR140",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "colete",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "colete"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR141",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "jaqueta puffer",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "jaqueta",
+        "puffer"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR142",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "jaqueta utilitária",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "jaqueta",
+        "utilitária"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR143",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "cardigã",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "cardigã"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR144",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "jaqueta jeans",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "jaqueta",
+        "jeans"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR145",
+      "category": "terceira-peca",
+      "audience": "unissex",
+      "label": "jaqueta bomber",
+      "silhouette": "variável",
+      "fitAdvice": "Confira a sobreposição sem restringir ombros e braços; ajuste comprimento e volume à intenção do look.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "jaqueta",
+        "bomber"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR146",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "relógio",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "relógio"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR147",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "óculos escuros",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "óculos",
+        "escuros"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR148",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "cinto",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "cinto"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR149",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "bolsa estruturada",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "bolsa",
+        "estruturada"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR150",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "bolsa transversal",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "bolsa",
+        "transversal"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR151",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "lenço",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "lenço"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR152",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "brinco",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "brinco"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR153",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "colar",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "colar"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR154",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "pulseira",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "pulseira"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR155",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "chapéu",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "chapéu"
+      ],
+      "confidence": "guidance"
+    },
+    {
+      "id": "GAR156",
+      "category": "acessorio",
+      "audience": "unissex",
+      "label": "boné",
+      "silhouette": "variável",
+      "fitAdvice": "Escolha pela preferência, funcionalidade e contexto, sem regras rígidas de combinação.",
+      "pairingAdvice": "Use como complemento da composição, não como obrigação.",
+      "aliases": [
+        "boné"
+      ],
+      "confidence": "guidance"
+    }
+  ]
+}
