@@ -354,6 +354,15 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .gde-saved-grid{display:grid;gap:10px}.gde-saved-card{background:var(--surface-2);padding:12px;border:1px solid var(--line);border-radius:12px}.gde-saved-card strong{display:block;font-size:14px}.gde-saved-card small{display:block;font-size:11px;color:var(--ink-soft);margin-top:3px}.gde-saved-preview{display:flex;gap:7px;margin:10px 0;flex-wrap:wrap}.gde-saved-preview img,.gde-saved-preview span{width:58px;height:58px;object-fit:cover;border-radius:8px;background:var(--bg)}.gde-saved-preview span{display:grid;place-items:center;font-size:10px;color:var(--muted);text-align:center;padding:4px}.gde-saved-controls{display:flex;gap:8px}.gde-saved-controls button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 12px}
 .gde-look-piece select:focus-visible,.gde-look-actions button:focus-visible,.gde-saved-controls button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media(max-width:440px){.gde-look-pieces{grid-template-columns:1fr 1fr}.gde-look-actions{flex-direction:column;align-items:stretch}.gde-look-actions label{width:100%}.gde-look-pieces .gde-look-piece:last-child:nth-child(odd){grid-column:span 2}}
+
+.gde-context-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.gde-context-controls label,.gde-context-scent label{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:6px!important;margin:0!important;font-size:13px!important;font-weight:600!important;color:var(--ink)!important}
+.gde-context-controls select,.gde-context-scent select{width:100%!important;min-width:0!important;box-sizing:border-box!important;min-height:46px!important;border:1px solid var(--line)!important;border-radius:10px!important;background:var(--surface-2)!important;color:var(--ink)!important;font:500 16px var(--sans)!important;padding:9px!important}
+.gde-context-note{font-size:12px;color:var(--ink-soft);line-height:1.6;margin:8px 0 16px}
+.gde-context-scent{background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:14px;margin:10px 0 18px;color:var(--ink)}
+.gde-context-scent h4{font-size:16px;margin:0 0 9px}.gde-context-scent p{font-size:13px;color:var(--ink-soft);line-height:1.65}
+.gde-context-scent small{display:block;margin-top:9px;font-size:11px;color:var(--muted);line-height:1.55}
+@media(max-width:470px){.gde-context-controls{grid-template-columns:1fr}}
 </style>
 <style id="collection-ai-search-css">
 .ai-search-result{margin-top:16px}
@@ -2662,9 +2671,9 @@ function switchProductView(view){
 </script><div id="stylistModal" hidden style="position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.83);overflow:auto;padding:16px 10px"><section style="max-width:650px;margin:12px auto;background:var(--card,#172333);color:var(--text,#fff);border:1px solid var(--line,#555);border-radius:18px;padding:20px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Seu Personal Stylist</h2><button class="btn-ghost" id="stylistClose" type="button">Fechar</button></div><p style="font-size:13px">Construa seu perfil, cadastre peças e receba combinações. Tudo pode ser editado; nenhuma característica corporal define o que você pode vestir.</p>
 <h3>1 · Sua identidade</h3><label>Estilo que você gosta<select id="stStyle"><option value="classico">Clássico</option><option value="casual">Casual refinado</option><option value="minimalista">Minimalista</option><option value="criativo">Criativo</option><option value="esportivo">Esportivo</option><option value="explorar">Quero descobrir</option></select></label><label>Imagem que deseja transmitir<select id="stImage"><option value="elegante">Elegância</option><option value="confiavel">Confiança</option><option value="criativo">Criatividade</option><option value="discreto">Discrição</option><option value="marcante">Presença marcante</option></select></label><label>Cores que prefere<select id="stColors"><option value="neutras">Neutras</option><option value="frias">Frias</option><option value="quentes">Quentes</option><option value="vivas">Vibrantes</option><option value="mistas">Variadas</option></select></label><label>Orçamento para novas peças<select id="stBudget"><option value="acervo">Usar o que já tenho</option><option value="economico">Econômico</option><option value="moderado">Moderado</option><option value="livre">Flexível</option></select></label><label>Rotina<select id="stRoutine"><option value="variada">Variada</option><option value="trabalho">Trabalho</option><option value="casual">Casual</option><option value="eventos">Eventos sociais</option></select></label><button class="btn-primary" type="button" id="stSave">Salvar meu perfil</button><p id="stSaveMsg" role="status" style="font-size:12px"></p>
 <hr style="margin:20px 0;opacity:.2"><h3>2 · Meu guarda-roupa</h3><p style="font-size:12px">Cadastre peças para recomendações com o que você já possui. Para analisar fotos, use também o recurso de foto do aplicativo.</p><label>Peça<input id="stItem" placeholder="Ex.: camisa de linho"></label><label>Categoria<select id="stCategory"><option value="superior">Parte superior</option><option value="inferior">Parte inferior</option><option value="calcado">Calçado</option><option value="relogio">Relógio</option><option value="oculos">Óculos</option><option value="acessorio">Outro acessório</option></select></label><label>Cor<input id="stItemColor" placeholder="Ex.: azul-marinho"></label><div class="stylist-extension"><label for="stItemPhoto">Foto da peça (opcional, armazenada neste dispositivo)<input id="stItemPhoto" type="file" accept="image/*"></label><p id="stPhotoStatus" role="status" style="font-size:12px"></p></div><button class="btn-ghost" type="button" id="stAdd">Adicionar peça</button><div id="stWardrobe" style="display:grid;gap:7px;margin-top:12px"></div>
-<hr style="margin:20px 0;opacity:.2"><h3>3 · Monte um look</h3><label>Ocasião<select id="stOccasion"><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="jantar">Jantar</option><option value="casual">Passeio casual</option><option value="evento">Evento formal</option></select></label><label>Clima<select id="stWeather"><option value="ameno">Ameno</option><option value="quente">Quente</option><option value="frio">Frio</option></select></label><label><input id="stWatch" type="checkbox" checked> Quero usar relógio</label><label><input id="stGlasses" type="checkbox"> Quero usar óculos</label><label for="stFormality">Formalidade<select id="stFormality"><option value="auto">Adequada à ocasião</option><option value="casual">Mais casual</option><option value="formal">Mais formal</option></select></label><div id="stLookControls" style="margin:12px 0;display:grid;gap:12px"><label>Prioridade da combinação<select id="stLookPriority"><option value="acervo">Usar meu guarda-roupa</option><option value="coerencia">Harmonia de cores</option><option value="conforto">Conforto e praticidade</option></select></label><label><input id="stAccessoryExtra" type="checkbox"> Considerar outros acessórios cadastrados</label><button id="stAlternative" class="btn-ghost" type="button" style="display:none">Outra combinação</button></div><button class="btn-primary" type="button" id="stGenerate">Sugerir look</button><div id="stResult" aria-live="polite" style="margin-top:14px;line-height:1.6"></div><div id="gdeLookStudio" class="gde-look-studio" hidden>
+<hr style="margin:20px 0;opacity:.2"><h3>3 · Monte um look</h3><label>Ocasião<select id="stOccasion"><option value="trabalho">Trabalho</option><option value="encontro">Encontro</option><option value="jantar">Jantar</option><option value="casual">Passeio casual</option><option value="evento">Evento formal</option></select></label><label>Clima<select id="stWeather"><option value="ameno">Ameno</option><option value="quente">Quente</option><option value="frio">Frio</option></select></label><label><input id="stWatch" type="checkbox" checked> Quero usar relógio</label><label><input id="stGlasses" type="checkbox"> Quero usar óculos</label><label for="stFormality">Formalidade<select id="stFormality"><option value="auto">Adequada à ocasião</option><option value="casual">Mais casual</option><option value="formal">Mais formal</option></select></label><div id="stLookControls" style="margin:12px 0;display:grid;gap:12px"><label>Prioridade da combinação<select id="stLookPriority"><option value="acervo">Usar meu guarda-roupa</option><option value="coerencia">Harmonia de cores</option><option value="conforto">Conforto e praticidade</option></select></label><label><input id="stAccessoryExtra" type="checkbox"> Considerar outros acessórios cadastrados</label><button id="stAlternative" class="btn-ghost" type="button" style="display:none">Outra combinação</button></div><div class="gde-context-controls"><label>Ambiente<select id="stEnvironment"><option value="auto">Não especificado</option><option value="indoor">Ambiente fechado</option><option value="outdoor">Ao ar livre</option></select></label><label>Intensidade de perfume<select id="stScentIntensity"><option value="balanced">Equilibrada</option><option value="soft">Discreta</option><option value="strong">Marcante</option><option value="none">Sem perfume</option></select></label></div><p class="gde-context-note">Uma consulta combina look, acessórios e fragrância, usando apenas os dados que você cadastrou.</p><button class="btn-primary" type="button" id="stGenerate">Sugerir look</button><div id="stResult" aria-live="polite" style="margin-top:14px;line-height:1.6"></div><div id="gdeLookStudio" class="gde-look-studio" hidden>
  <div class="gde-look-heading"><div><span class="style-kicker">ESTÚDIO DE LOOKS</span><h3>Seu look, do seu jeito.</h3><p>Toque em uma peça para substituí-la. Salve a combinação que você mais gostar.</p></div></div>
- <div id="gdeLookPieces" class="gde-look-pieces" aria-label="Peças selecionadas"></div>
+ <div id="gdeLookPieces" class="gde-look-pieces" aria-label="Peças selecionadas"></div><div class="gde-context-scent" id="gdeContextScent" aria-live="polite"><h4>Fragrância para completar o look</h4><p id="gdeContextScentWhy"></p><label>Escolha final<select id="gdeContextScentChoose"><option value="">Sem perfume</option></select></label><small>Resultado orientativo baseado no seu acervo e preferências declaradas, não em desempenho medido.</small></div>
  <div class="gde-look-actions"><label for="gdeLookName">Nome do look<input id="gdeLookName" maxlength="65" placeholder="Ex.: Jantar de sexta"></label><button id="gdeLookSave" type="button" class="btn-primary">Salvar look</button></div>
  <p id="gdeLookFeedback" role="status" aria-live="polite"></p>
  </div>
@@ -2790,10 +2799,38 @@ function select(items,category,opts,used,shift){
  const sorted=candidates.map((x,i)=>({x,i,value:score(x,opts,used)})).sort((a,b)=>b.value-a.value||a.i-b.i);
  return sorted[shift%sorted.length].x;
 }
+
+function fragrancePick(opts){
+ const prefs=window.getScentPreferences?.()||null;
+ const perfumes=(typeof state!=="undefined"&&Array.isArray(state.perfumes)?state.perfumes:[]).filter(p=>p&&p.status==="tenho"&&p.name);
+ if(opts.intensity==="none")return {id:"",why:"Você optou por não usar perfume nesta ocasião.",candidates:perfumes.map(p=>({id:String(p.id),label:(p.brand?p.brand+" · ":"")+p.name}))};
+ if(!perfumes.length)return {id:"",why:"Nenhuma fragrância cadastrada como 'Tenho'. A combinação de roupas continua disponível.",candidates:[]};
+ const familyPatterns={citrica:/citric|fresc/,floral:/flor/,amadeirada:/amadeir|wood/,aromatica:/aromat|fougere/,ambarada:/ambar|oriental|especiad/,gourmand:/gourmand|doce/,aquatica:/aquat|marinh/};
+ const candidates=perfumes.map(p=>{
+  let score=0,why=[],evidence=0;const radar=p.radar||{},num=k=>{const n=Number(radar[k]);return Number.isFinite(n)&&n>0?n:null};
+  const n=num("projecao"),fresh=num("frescor"),sweet=num("doce"),day=num("dia"),night=num("noite");
+  if(prefs?.favorite&&String(p.id)===String(prefs.favorite)){score+=30;evidence++;why.push("favorito declarado")}
+  if(prefs?.dislike&&String(p.id)===String(prefs.dislike)){score-=100;evidence++;why.push("menor afinidade declarada")}
+  if(prefs?.family&&familyPatterns[prefs.family]?.test(fold(p.family))){score+=12;evidence++;why.push("família que você prefere")}
+  if(n!==null){const target=opts.intensity==="soft"?3:opts.intensity==="strong"?8:5;score+=10-Math.abs(n-target)*2;evidence++;why.push("projeção registrada")}
+  if(opts.environment==="indoor"&&n!==null){score+=(5-n)*2;why.push("ambiente fechado")}
+  if(opts.weather==="quente"&&fresh!==null){score+=(fresh-5)*2;evidence++;why.push("frescor informado")}
+  if(opts.weather==="quente"&&sweet!==null){score-=(sweet-5);why.push("doçura informada")}
+  if(opts.weather==="frio"&&sweet!==null){score+=(sweet-5);evidence++;why.push("perfil mais encorpado")}
+  if(["trabalho","casual"].includes(opts.occasion)&&day!==null){score+=(day-5)*2;evidence++;why.push("adequação diurna cadastrada")}
+  if(["jantar","encontro","evento"].includes(opts.occasion)&&night!==null){score+=(night-5)*2;evidence++;why.push("adequação noturna cadastrada")}
+  if(prefs?.sweetness&&sweet!==null){const target=prefs.sweetness==="baixa"?2:prefs.sweetness==="alta"?8:5;score+=6-Math.abs(target-sweet)*1.5;evidence++;why.push("doçura preferida")}
+  return {id:String(p.id),label:(p.brand?p.brand+" · ":"")+p.name,score,evidence,why};
+ }).sort((a,b)=>b.score-a.score||b.evidence-a.evidence||a.label.localeCompare(b.label));
+ const best=candidates[0];
+ if(!best||best.evidence===0)return {id:"",why:"Você tem perfumes cadastrados, mas ainda faltam preferências ou atributos confiáveis para indicar um em particular. Selecione manualmente ou responda ao questionário olfativo.",candidates};
+ if(prefs?.dislike&&best.id===String(prefs.dislike))return {id:"",why:"O único candidato tem menor afinidade declarada. Não farei uma recomendação automática.",candidates};
+ return {id:best.id,why:"Sugestão: "+best.label+". Critérios: "+Array.from(new Set(best.why)).join(", ")+". São dados cadastrados e escolhas pessoais, não medições de desempenho.",candidates};
+}
 let alternative=0;
 function generate(){
  const p=Object.fromEntries(Object.entries({style:"stStyle",image:"stImage",colors:"stColors",budget:"stBudget"}).map(([k,id])=>[k,$(id)?.value||""]));
- const opts={...p,occasion:$("stOccasion").value,weather:$("stWeather").value,formality:$("stFormality").value,priority:$("stLookPriority").value};
+ const opts={...p,occasion:$("stOccasion").value,weather:$("stWeather").value,formality:$("stFormality").value,priority:$("stLookPriority").value,environment:$("stEnvironment").value,intensity:$("stScentIntensity").value};
  const items=read("gde:stylist-wardrobe:v1",[]);
  if(!Array.isArray(items)){$("stResult").textContent="Não foi possível carregar seu guarda-roupa.";return}
  const chosen=[],used=[],kinds=["superior","inferior","calcado"];
@@ -2812,12 +2849,12 @@ function generate(){
  const acc=accessory.map(a=>'<li>'+esc(a.label)+': '+esc(a.item?a.item.name:"não cadastrado; opcional")+'</li>').join("");
  const occasionText=$("stOccasion").selectedOptions[0].text;
  $("stResult").innerHTML='<h4>Look para '+esc(occasionText)+'</h4><ol>'+rows+'</ol>'+(acc?'<h4>Acessórios opcionais</h4><ul>'+acc+'</ul>':'')+'<p><b>Harmonia sugerida:</b> '+esc(colors)+'. A combinação é orientativa; tonalidades exatas não são verificadas por foto.</p><p><b>Conforto:</b> '+esc(fit+' '+wtip)+'</p>'+(missing.length?'<p><b>Itens que faltam:</b> '+missing.length+'. '+(p.budget==="acervo"?"Você pode substituir por peças semelhantes que já possui.":"Considere apenas se realmente precisar comprar.")+'</p>':'<p>Conjunto principal montado com peças cadastradas.</p>')+'<p><b>Perfume:</b> '+esc(perfume)+'</p><small>Motor local por critérios de texto informado: não infere silhueta, cor real, gênero ou qualidade pela fotografia. Confirme o dress code específico da ocasião.</small>';
- window.dispatchEvent(new CustomEvent("gde:look-generated",{detail:{chosen,accessory,opts,occasionText}}));
+ window.dispatchEvent(new CustomEvent("gde:look-generated",{detail:{chosen,accessory,opts,occasionText,scent:fragrancePick(opts)}}));
  $("stAlternative").style.display=items.length>1?"block":"none";
 }
 $("stGenerate").onclick=()=>{alternative=0;generate()};
 $("stAlternative").onclick=()=>{alternative++;generate()};
-window.__stylistOutfitQA={canonical,score,select,generate};
+window.__stylistOutfitQA={canonical,score,select,generate,fragrancePick};
 })();
 </script><script id="style-first-layout-and-scent-quiz">
 (function(){
@@ -2920,11 +2957,19 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
    box.innerHTML='<div class="gde-look-thumb">'+thumb+'</div><b>'+safe(label)+'</b><small>'+safe(piece?(piece.name+(piece.color?" · "+piece.color:"")):(row?.suggestion||"Ainda sem peça cadastrada"))+'</small><label>Substituir<select data-category="'+type+'" aria-label="Substituir '+safe(label)+'"><option value="">'+(piece?"Manter peça":"Escolher peça")+'</option>'+options.map(({p,i})=>'<option value="'+i+'">'+safe(p.name)+(p.color?" · "+safe(p.color):"")+'</option>').join("")+'</select></label>';
    target.appendChild(box);
   }
+  showScent();
+ }
+ function showScent(){
+  const context=current?.scent||{id:"",why:"Nenhuma fragrância associada a esta combinação.",candidates:[]};
+  const choice=el("gdeContextScentChoose");choice.innerHTML='<option value="">Sem perfume</option>';
+  for(const p of context.candidates||[]){const opt=document.createElement("option");opt.value=String(p.id);opt.textContent=String(p.label);choice.appendChild(opt)}
+  choice.value=(context.candidates||[]).some(x=>String(x.id)===String(context.id))?String(context.id):"";
+  el("gdeContextScentWhy").textContent=context.why||"";
  }
  function clearPhotoFromSaved(p){return p?{name:String(p.name||""),category:String(p.category||""),color:String(p.color||""),photo:photo(p.photo)}:null}
  function save(){
   if(!current)return;const name=el("gdeLookName").value.trim().slice(0,65)||"Meu look",now=new Date().toISOString();
-  const record={id:"look-"+now+"-"+Math.random().toString(36).slice(2,8),name,occasion:current.opts?.occasion||"",createdAt:now,chosen:current.chosen.map(r=>({category:r.category,item:clearPhotoFromSaved(r.item),suggestion:r.item?null:r.suggestion||null})),accessory:current.accessory.map(r=>({label:r.label,item:clearPhotoFromSaved(r.item)}))};
+  const record={id:"look-"+now+"-"+Math.random().toString(36).slice(2,8),name,occasion:current.opts?.occasion||"",createdAt:now,chosen:current.chosen.map(r=>({category:r.category,item:clearPhotoFromSaved(r.item),suggestion:r.item?null:r.suggestion||null})),accessory:current.accessory.map(r=>({label:r.label,item:clearPhotoFromSaved(r.item)})),scent:{id:el("gdeContextScentChoose").value,label:el("gdeContextScentChoose").selectedOptions[0]?.textContent||"",why:current.scent?.why||""}};
   const saved=getLooks();if(editingId){const idx=saved.findIndex(x=>x.id===editingId);if(idx>=0){record.id=editingId;record.createdAt=saved[idx].createdAt;saved.splice(idx,1,record)}else saved.unshift(record)}else saved.unshift(record);
   if(saved.length>30)saved.length=30;
   try{localStorage.setItem(looksKey,JSON.stringify(saved));el("gdeLookFeedback").textContent=editingId?"Look atualizado neste dispositivo.":"Look salvo neste dispositivo.";editingId=record.id;renderSaved()}catch(e){el("gdeLookFeedback").textContent="Sem espaço para salvar. Libere armazenamento ou remova looks antigos."}
@@ -2951,6 +2996,7 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
   render();el("gdeLookFeedback").textContent="Peça substituída. Salve para guardar a alteração.";
  });
  el("gdeLookSave").addEventListener("click",save);
+ el("gdeContextScentChoose").addEventListener("change",ev=>{if(current?.scent){current.scent.id=ev.target.value;el("gdeLookFeedback").textContent="Preferência de perfume alterada. Salve o look para registrar.";}});
  el("gdeSavedLooks").addEventListener("click",ev=>{
   const b=ev.target.closest("button[data-load],button[data-delete]");if(!b)return;
   const index=Number(b.dataset.load??b.dataset.delete),looks=getLooks(),look=looks[index];if(!look)return;
@@ -2958,7 +3004,7 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
    if(!confirm('Excluir o look "'+look.name+'"?'))return;
    looks.splice(index,1);try{localStorage.setItem(looksKey,JSON.stringify(looks));renderSaved()}catch(e){el("gdeLookFeedback").textContent="Não foi possível excluir."}return;
   }
-  editingId=look.id;current={chosen:(look.chosen||[]).map(r=>({...r,item:r.item||null})),accessory:(look.accessory||[]).map(r=>({...r})),opts:{occasion:look.occasion||""}};
+  editingId=look.id;current={chosen:(look.chosen||[]).map(r=>({...r,item:r.item||null})),accessory:(look.accessory||[]).map(r=>({...r})),opts:{occasion:look.occasion||""},scent:{id:look.scent?.id||"",why:look.scent?.why||"Perfume escolhido na combinação salva.",candidates:look.scent?.id?[{id:look.scent.id,label:look.scent.label||"Fragrância salva"}]:[]}};
   el("gdeLookName").value=look.name;render();el("gdeLookStudio").scrollIntoView({behavior:"smooth",block:"start"});
  });
  window.addEventListener("gde:look-generated",ev=>{current=ev.detail;editingId=null;el("gdeLookName").value="Look para "+ev.detail.occasionText;el("gdeLookFeedback").textContent="";render()});
