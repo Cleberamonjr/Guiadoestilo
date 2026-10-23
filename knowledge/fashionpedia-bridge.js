@@ -10,7 +10,7 @@ const normalize=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
 const groupLabels={"nickname":"Modelo específico","silhouette":"Silhueta","waistline":"Cintura","length":"Comprimento","neckline type":"Decote","opening type":"Fechamento","non-textile material type":"Materiais não têxteis","leather":"Couro","textile finishing, manufacturing techniques":"Acabamento","textile pattern":"Estampa","animal":"Textura animal"};
 let db=null,error=null,selectedAttributes=new Set();
 const categoryOverrides={
-  "calca":6,"vestido":10,"saia":8,"calcado":23,"parte-superior":1,"terceira-peca":4,"acessorio":24
+  "calca":6,"vestido":10,"saia":8,"calcado":23,"parte-superior":1,"terceira-peca":4
 };
 const typeOverrides=[
  [/camiseta|t-shirt|top|regata|blusa|body|cropped|moletom/i,1],
