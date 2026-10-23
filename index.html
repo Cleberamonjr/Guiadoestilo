@@ -298,6 +298,8 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 #bodyFitModal #bfSave,#bodyFitModal #bfClose{width:100%!important;min-width:0!important}
 #paletteModal button[data-palette]{color:var(--ink)!important}
 @media(max-width:480px){#stylistModal>section,#bodyFitModal>div{padding:18px!important}#stylistModal>section>div:first-child{align-items:flex-start!important}#stylistModal>section>div:first-child button{flex:none}#bodyFitModal>div>div:has(#bfSave){grid-template-columns:1fr!important}}
+
+.style-home,.scent-quiz{padding:clamp(18px,4vw,28px);border:1px solid var(--line);border-radius:20px;background:var(--surface);margin:14px 0 20px;color:var(--ink)}.style-home{background:linear-gradient(135deg,var(--surface),var(--surface-2))}.style-kicker{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:700}.style-home h2,.scent-quiz h2{font:600 clamp(26px,5vw,38px)/1.15 var(--serif);margin:10px 0;color:var(--ink)}.style-home p,.scent-quiz p{font-size:13px;line-height:1.65;color:var(--ink-soft)}.style-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.style-quick button{min-width:0;min-height:74px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;padding:13px;border-radius:12px;background:var(--bg);color:var(--ink);border:1px solid var(--line)}.style-quick small{color:var(--ink-soft);font-size:11px}.scent-intro{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.scent-intro>span{font-size:11px;border-radius:100px;border:1px solid var(--line);padding:6px 10px;white-space:nowrap}.scent-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.scent-fields label{display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--ink);font-weight:600;min-width:0}.scent-fields select,.scent-fields input{width:100%;min-width:0;box-sizing:border-box;min-height:46px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:10px;font:500 16px var(--sans)}.scent-fields input::placeholder{color:var(--muted)}.scent-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.scent-actions button{min-height:44px;padding:10px 14px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:10px}.scent-actions button[type=submit]{background:var(--accent);color:var(--accent-ink)}#scentPreferenceSummary:not(:empty){background:var(--surface-2);border-radius:10px;padding:14px;font-size:13px;line-height:1.6}#scentQuizFeedback{min-height:1.2em}#scentQuizSection,#styleHome{scroll-margin-top:75px}@media(max-width:620px){.style-quick,.scent-fields{grid-template-columns:1fr}.style-quick button{min-height:58px}.scent-intro{flex-direction:column}.scent-actions button{flex:1}}
 </style>
 <style id="collection-ai-search-css">
 .ai-search-result{margin-top:16px}
@@ -615,17 +617,22 @@ header::after{
   </div>
   <div class="drawer-footer"><span class="sync-dot"></span><span>Exporte sua coleção regularmente. O salvamento local depende deste navegador e pode ser apagado. Chaves de IA salvas no navegador não são adequadas a dispositivos compartilhados.</span></div>
 </aside>
-  <nav class="product-nav" aria-label="Navegação principal">
-    <button class="product-nav-item active" type="button" data-view="perfumes" onclick="switchProductView('colecao')"><span>◈</span><b>Coleção</b><small>Seu acervo</small></button>
-    <button class="product-nav-item" type="button" data-view="consultor" onclick="focusProductSection('occasionAdvisor')"><span>✦</span><b>Consultor</b><small>Qual usar?</small></button>
-    <button class="product-nav-item" type="button" data-view="impacto" onclick="focusProductSection('profileDashboard')"><span>◎</span><b>Perfil</b><small>DNA olfativo</small></button>
-    <button class="product-nav-item" type="button" data-view="compra" onclick="openSheet('q')"><span>⌕</span><b>Descobrir</b><small>Compras conscientes</small></button>
-  </nav>
+  <nav class="product-nav" aria-label="Navegação principal"><button class="product-nav-item active" data-view="inicio" type="button" id="navHome">⌂ <b>Início</b></button><button class="product-nav-item" data-view="looks" type="button" id="navLooks">✦ <b>Looks</b></button><button class="product-nav-item" data-view="perfil" type="button" id="navProfile">◉ <b>Perfil</b></button><button class="product-nav-item" data-view="acervo" type="button" id="navCollection">◈ <b>Acervo</b></button></nav>
   <div class="legacy-tabs" role="tablist" aria-hidden="true">
     <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Fragrâncias</button>
     <button role="tab" id="tabW" aria-selected="false" onclick="switchTab('watches')">Acessórios</button>
   </div>
-  <section id="viewPerfumes">
+  <section id="viewPerfumes"><section class="style-home" id="styleHome"><span class="style-kicker">IMAGEM · ESTILO · CONFIANÇA</span><h2>Seu estilo começa em você.</h2><p>Combine o que você veste com quem deseja ser. Seus perfumes são parte da experiência — não o ponto de partida.</p><div class="style-quick"><button id="homeOpenStylist" type="button"><b>✦ Montar um look</b><small>Roupas e acessórios</small></button><button id="homeOpenWardrobe" type="button"><b>▦ Meu guarda-roupa</b><small>Peças e fotos</small></button><button id="homeOpenProfile" type="button"><b>◉ Meu perfil</b><small>Preferências e identidade</small></button></div></section>
+<section id="scentQuizSection" class="scent-quiz"><div class="scent-intro"><div><span class="style-kicker">PREFERÊNCIAS REAIS</span><h2>Sua assinatura olfativa</h2><p>Escolha o que realmente gosta. Suas respostas podem ser alteradas a qualquer momento.</p></div><span id="scentQuizState">Não preenchido</span></div><form id="scentQuizForm"><div class="scent-fields">
+<label>Sensação desejada<select name="feeling"><option value="">Escolha</option><option value="frescor">Frescor e leveza</option><option value="conforto">Aconchego</option><option value="elegancia">Elegância discreta</option><option value="presenca">Presença marcante</option><option value="criatividade">Originalidade</option></select></label>
+<label>Família preferida<select name="family"><option value="">Ainda não sei</option><option value="citrica">Cítrica / fresca</option><option value="floral">Floral</option><option value="amadeirada">Amadeirada</option><option value="aromatica">Aromática</option><option value="ambarada">Ambarada / especiada</option><option value="gourmand">Gourmand</option><option value="aquatica">Aquática</option></select></label>
+<label>Doçura<select name="sweetness"><option value="">Sem preferência</option><option value="baixa">Baixa</option><option value="moderada">Moderada</option><option value="alta">Alta</option></select></label>
+<label>Projeção<select name="projection"><option value="">Sem preferência</option><option value="discreta">Discreta</option><option value="moderada">Equilibrada</option><option value="marcante">Marcante</option></select></label>
+<label>Principal ocasião<select name="occasion"><option value="">Variada</option><option value="dia">Dia</option><option value="trabalho">Trabalho</option><option value="encontro">Encontros</option><option value="noite">Noite</option></select></label>
+<label>Favorito entre seus perfumes<select name="favorite" id="scentFavorite"><option value="">Ainda não escolhi</option></select></label>
+<label>Perfume que menos combina com você<select name="dislike" id="scentDislike"><option value="">Nenhum / não sei</option></select></label>
+<label>Nota ou característica que evita<input name="avoid" maxlength="80" placeholder="Ex.: muito doce (opcional)"></label>
+</div><div class="scent-actions"><button type="submit">Salvar preferências</button><button type="button" id="scentQuizEditBody">Editar corpo e caimento</button></div><p id="scentQuizFeedback" role="status" aria-live="polite"></p></form><div id="scentPreferenceSummary" aria-live="polite"></div></section>
     <div class="summary" id="pSummary" hidden>
       <div class="count"><div class="num" id="pCount">0</div><div class="lbl"><b id="pWord">frascos</b><span class="w">na coleção</span><div id="pWish"></div></div></div>
 
@@ -672,17 +679,7 @@ header::after{
           <p id="profileOlfactory">—</p>
           <div class="profile-radar" id="profileBars" aria-label="Radar do perfil olfativo da coleção"><div id="profileRadarTabs" class="rtabs"></div><div id="profileRadarCanvas"></div></div>
         </article>
-        <article class="profile-card">
-          <h3>Impacto social</h3>
-          <p id="profilePsych">—</p>
-          <p class="profile-note">Leitura baseada no DNA olfativo da coleção e em associações perceptivas; não é diagnóstico psicológico.</p>
-          <div class="profile-families" id="profileFamilies"></div>
-        </article>
-        <article class="profile-card">
-          <h3>Seu gosto real</h3>
-          <p id="profileTaste">—</p>
-          <div class="profile-families" id="profileTasteTags"></div><div class="profile-insight" id="profileConfidence"></div>
-        </article>
+        <div hidden id="legacyOlfactoryData"><p id="profilePsych"></p><div id="profileFamilies"></div><p id="profileTaste"></p><div id="profileTasteTags"></div><div id="profileConfidence"></div></div><article class="profile-card"><h3>Preferências olfativas pessoais</h3><p id="scentProfileMirror">Conte o que você gosta no questionário.</p><button id="scentGoQuiz" type="button" class="profile-action">Editar minhas preferências ↗</button></article>
         <article class="profile-card">
           <h3>Lacunas da coleção</h3>
           <p id="profileGaps">—</p>
@@ -2738,6 +2735,28 @@ function generate(){
 $("stGenerate").onclick=()=>{alternative=0;generate()};
 $("stAlternative").onclick=()=>{alternative++;generate()};
 window.__stylistOutfitQA={canonical,score,select,generate};
+})();
+</script><script id="style-first-layout-and-scent-quiz">
+(function(){
+const el=id=>document.getElementById(id),key="gde:scent-preferences:v1";
+const safe=x=>String(x||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const read=()=>{try{return JSON.parse(localStorage.getItem(key)||"null")}catch(e){return null}};
+const navigate=(id,tab)=>{if(document.getElementById("viewPerfumes").hidden)window.switchTab?.("perfumes");document.querySelectorAll(".product-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===tab));el(id)?.scrollIntoView({behavior:"smooth",block:"start"})};
+el("navHome").onclick=()=>navigate("styleHome","inicio");el("navLooks").onclick=()=>el("stylistOpenBtn").click();el("navProfile").onclick=()=>navigate("scentQuizSection","perfil");el("navCollection").onclick=()=>navigate("pGrid","acervo");
+el("homeOpenStylist").onclick=()=>el("stylistOpenBtn").click();el("homeOpenWardrobe").onclick=()=>{el("stylistOpenBtn").click();setTimeout(()=>el("stWardrobe")?.scrollIntoView({behavior:"smooth",block:"center"}),40)};
+el("homeOpenProfile").onclick=()=>navigate("scentQuizSection","perfil");el("scentQuizEditBody").onclick=()=>el("bodyFitBtn").click();el("scentGoQuiz").onclick=()=>navigate("scentQuizSection","perfil");
+let anchor=el("pGrid");for(const id of ["profileDashboard","occasionAdvisor"]){const section=el(id);if(anchor&&section){anchor.insertAdjacentElement("afterend",section);anchor=section}}
+function catalog(){return (typeof state!=="undefined"&&Array.isArray(state.perfumes)?state.perfumes:[]).filter(p=>p.status==="tenho").map(p=>({id:String(p.id),name:String((p.brand?p.brand+" · ":"")+(p.name||"Sem nome"))}))}
+function refill(){const items=catalog();for(const id of ["scentFavorite","scentDislike"]){const input=el(id),selected=input.value;input.querySelectorAll("option:not(:first-child)").forEach(x=>x.remove());for(const p of items){const opt=document.createElement("option");opt.value=p.id;opt.textContent=p.name;input.appendChild(opt)}input.value=items.some(x=>x.id===selected)?selected:""}return items}
+const form=el("scentQuizForm");
+function summary(data){const mirror=el("scentProfileMirror"),out=el("scentPreferenceSummary");if(!data){el("scentQuizState").textContent="Não preenchido";out.textContent="Suas escolhas ajudam o consultor a entender suas preferências, sem presumir gostos pela coleção.";mirror.textContent="Responda ao questionário para registrar o que realmente gosta.";return}
+const items=refill(),fav=items.find(p=>p.id===data.favorite),dis=items.find(p=>p.id===data.dislike),parts=[];
+for(const [k,label] of [["feeling","Sensação"],["family","Família"],["sweetness","Doçura"],["projection","Projeção"],["occasion","Ocasião"]])if(data[k]){const field=form.elements.namedItem(k),opt=field&&Array.from(field.options).find(o=>o.value===data[k]);parts.push(label+": "+(opt?opt.textContent:data[k]))}
+if(fav)parts.push("Favorito: "+fav.name);if(dis)parts.push("Menor afinidade: "+dis.name);if(data.avoid)parts.push("Evita: "+data.avoid);
+const text=parts.join(" · ")||"Ainda sem escolhas específicas.";out.innerHTML="<b>Perfil declarado</b><p>"+safe(text)+"</p><small>As suas respostas são preferências subjetivas, não diagnóstico nem análise científica.</small>";mirror.textContent=text;el("scentQuizState").textContent="Salvo"}
+const saved=read();refill();if(saved){for(const [k,v] of Object.entries(saved)){const field=form.elements.namedItem(k);if(field&&typeof v==="string")field.value=v}}summary(saved);
+form.addEventListener("submit",ev=>{ev.preventDefault();const data=Object.fromEntries(new FormData(form).entries());if(data.favorite&&data.favorite===data.dislike){el("scentQuizFeedback").textContent="Escolha perfumes diferentes como favorito e menos apreciado.";return}data.avoid=String(data.avoid||"").trim().slice(0,80);data.updatedAt=new Date().toISOString();try{localStorage.setItem(key,JSON.stringify(data));el("scentQuizFeedback").textContent="Preferências gravadas neste dispositivo. Você pode alterar quando quiser.";summary(data)}catch(e){el("scentQuizFeedback").textContent="Armazenamento indisponível. Não foi possível gravar."}});
+window.getScentPreferences=read;
 })();
 </script></body>
 </html>
