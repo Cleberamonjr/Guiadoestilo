@@ -40,7 +40,7 @@ const shortcut=document.createElement("button");shortcut.type="button";shortcut.
 shortcut.addEventListener("click",()=>window.openPerfume?.());
 const count=$("pSummary");if(count)count.insertAdjacentElement("afterend",shortcut);else perfumeHub.prepend(shortcut);
 // Put perfume collection before all deep analysis panels.
-const grid=$("pGrid");const empty=$("pEmpty");const sortBlock=$("."); // safe no-op
+const grid=$("pGrid");const empty=$("pEmpty");
 if(grid){
  const controlWrap=perfumeHub.querySelector(".gde-perfume-filters");
  const top=shortcut.nextSibling;
