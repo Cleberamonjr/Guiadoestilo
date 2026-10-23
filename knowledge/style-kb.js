@@ -1,7 +1,7 @@
 /* Guia do Estilo - local, curated knowledge retrieval. No external AI or tracking. */
 (function(){
 "use strict";
-const dataUrl=new URL("style-knowledge.v1.json",document.currentScript?.src||document.baseURI);
+const dataUrl=new URL("style-knowledge.v1.json",document.querySelector('script[src*="style-kb.js"]')?.src||new URL("knowledge/style-kb.js",document.baseURI).href);
 const byId=id=>document.getElementById(id);
 const fold=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const tokens=s=>fold(s).split(/[^a-z0-9]+/).filter(x=>x.length>2);
