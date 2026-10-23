@@ -718,6 +718,69 @@ header::after{
 .style-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.style-mini{background:var(--bg);border:1px solid var(--line-soft);border-radius:12px;padding:10px}.style-mini b{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px}.style-mini p{font-size:11.5px!important;color:var(--ink-soft)!important}.style-tip{margin-top:10px;padding:10px 12px;border-left:3px solid var(--gold);background:var(--bg);border-radius:0 10px 10px 0;font-size:12px;color:var(--ink-soft)}.style-tip b{color:var(--ink)}
 @media(max-width:700px){.style-vision-grid{grid-template-columns:1fr}.style-photo-zone{min-height:210px}.style-photo-preview{min-height:210px}}
 @media(max-width:560px){.style-vision{padding:16px;border-radius:17px}.style-vision h2{font-size:27px}.style-columns{grid-template-columns:1fr}}
+
+/* v42 — editorial mobile UX: short home, clear tabs, progressive disclosure. */
+#gdePhotoFold:not(.open),#gdePhotoFold[hidden],#styleHome[hidden],#perfumeHub[hidden],.gde-photo-entry[hidden]{display:none!important}
+#styleHome{padding:clamp(18px,4vw,28px)!important;margin:10px 0 12px!important;box-shadow:none!important;border-radius:20px!important}
+#styleHome h2{font-size:clamp(27px,5vw,39px)!important;line-height:1.12!important;max-width:520px;margin:10px 0!important}
+#styleHome>p{font-size:13px!important;line-height:1.55!important;max-width:480px;margin:0 0 12px!important}
+#styleHome .style-quick{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:14px!important}
+#styleHome .style-quick>button{min-height:72px!important;padding:12px!important;gap:10px!important;box-shadow:none!important;transition:transform .18s ease,background-color .18s ease!important}
+#styleHome .style-quick>button.gde-primary-quick{grid-column:1/-1;min-height:60px!important}
+#styleHome .style-quick>button:not(.gde-primary-quick){flex-direction:column!important;align-items:flex-start!important;gap:6px!important}
+#styleHome .style-quick>button:not(.gde-primary-quick) .gde-quick-chevron{display:none!important}
+#styleHome .style-quick>button:not(.gde-primary-quick) svg{height:21px!important;width:21px!important;flex-basis:21px!important}
+#styleHome .style-quick>button:not(.gde-primary-quick) small{font-size:10.5px!important}
+#styleHome .style-quick>button b{font-size:13px!important}
+#styleHome .gde-hero-profile{margin-top:4px!important;font-size:11px!important;min-height:38px!important}
+.gde-photo-entry{display:flex;width:100%;align-items:center;text-align:left;gap:12px;min-height:65px;padding:12px 14px;margin:0 0 12px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink)}
+.gde-photo-entry>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.gde-photo-entry b{font-size:13px;font-weight:700}.gde-photo-entry small{font-size:11px;color:var(--ink-soft);line-height:1.4}
+.gde-photo-entry-icon{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:12px;background:var(--surface-2);color:var(--accent)}
+.gde-photo-entry svg{width:21px;height:21px}.gde-photo-chevron{width:18px!important;flex:none;color:var(--muted)}
+.gde-photo-fold{scroll-margin-top:20px}
+.gde-photo-fold .style-vision{margin:0 0 12px!important;border-radius:16px!important;box-shadow:none!important}
+.gde-photo-fold .style-vision-pills{display:none!important}
+.gde-photo-fold .style-vision-copy h2{font-size:24px!important}
+.gde-photo-fold .style-vision-copy p{font-size:12px!important;line-height:1.6!important}
+#perfumeHub{scroll-margin-top:16px}
+#perfumeHub>.perfume-hub-heading{padding:17px!important;margin-bottom:10px!important;border-radius:16px!important}
+#perfumeHub>.perfume-hub-heading h2{font-size:27px!important;margin:4px 0!important}
+#perfumeHub>.perfume-hub-heading p{line-height:1.5!important;font-size:12px!important}
+#perfumeHub #pSummary{margin:0 0 9px!important;padding:12px!important}
+#perfumeHub #pGrid{margin-top:12px!important}
+.gde-perfume-add{display:flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 15px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink);font-weight:650;font-size:12px}
+.gde-perfume-add svg{width:18px;height:18px}
+.gde-perfume-filters{margin:10px 0}
+.gde-fold{background:var(--surface);border:1px solid var(--line);border-radius:15px;margin:11px 0;overflow:hidden;scroll-margin-top:18px}
+.gde-fold>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:11px 14px;cursor:pointer;list-style:none;color:var(--ink)}
+.gde-fold>summary::-webkit-details-marker{display:none}
+.gde-fold>summary>span{display:flex;flex-direction:column;gap:4px}
+.gde-fold>summary b{font-size:13px;font-weight:700}
+.gde-fold>summary small{font-size:11px;color:var(--ink-soft);line-height:1.3}
+.gde-fold>summary svg{width:19px;height:19px;flex:none;transition:transform .18s ease}
+.gde-fold[open]>summary svg{transform:rotate(180deg)}
+.gde-fold>:not(summary){margin:0 11px 12px!important}
+.gde-filter-fold #pControls{display:flex;flex-wrap:wrap;padding:10px!important;gap:8px!important}
+.gde-filter-fold #pControls[hidden]{display:none!important}
+.gde-filter-fold #pControls .search{min-width:100%;flex:1}
+.gde-filter-fold #pControls>.select,.gde-filter-fold #pControls>.char-filter{flex:1 1 140px;min-width:0}
+.gde-filter-fold #pControls select,.gde-filter-fold #pControls input{max-width:100%;min-height:43px;font-size:16px}
+.gde-filter-fold #pControls>.btn-add{display:none!important}
+.gde-fold #profileDashboard,.gde-fold #occasionAdvisor,.gde-fold #scentQuizSection{padding:12px!important;border:0!important;box-shadow:none!important}
+.gde-refined-nav .product-nav-item .gde-nav-icon{transition:transform .18s ease}
+.gde-refined-nav .product-nav-item:active .gde-nav-icon{transform:scale(.91)}
+@media(max-width:580px){
+ body{padding-bottom:calc(72px + env(safe-area-inset-bottom))!important}
+ .gde-refined-nav{position:fixed!important;z-index:180!important;bottom:0!important;left:0!important;right:0!important;margin:0!important;padding:7px max(8px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-right))!important;border-top:1px solid var(--line)!important;background:var(--surface)!important;box-shadow:0 -8px 24px rgba(0,0,0,.09)!important;border-radius:16px 16px 0 0!important}
+ .gde-refined-nav .product-nav-item{min-height:52px!important}
+ #styleHome{margin:6px 0 10px!important}
+ .style-home-kicker,.style-kicker{letter-spacing:.12em}
+ .gde-photo-fold .style-vision-grid{grid-template-columns:1fr!important}
+ #perfumeHub #pGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+}
+@media(max-width:365px){#perfumeHub #pGrid{grid-template-columns:1fr!important}#styleHome .style-quick>button b{font-size:12px!important}}
+@media(prefers-reduced-motion:reduce){.gde-fold>summary svg,.gde-refined-nav .product-nav-item .gde-nav-icon,#styleHome .style-quick>button{transition:none!important}}
 </style></head>
 <body>
 <div class="wrap">
@@ -3099,5 +3162,5 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
  renderSaved();
  window.__gdeVisualLookQA={getLooks,getPieces,renderSaved,render};
 })();
-</script><script src="knowledge/style-kb.js" defer></script><script src="knowledge/wardrobe-vision.js" defer></script><script src="knowledge/style-onboarding.js" defer></script><script src="knowledge/wardrobe-catalog.js" defer></script><script src="knowledge/fashionpedia-bridge.js" defer></script><script src="knowledge/wardrobe-photo-studio.js" defer></script></body>
+</script><script src="knowledge/style-kb.js" defer></script><script src="knowledge/wardrobe-vision.js" defer></script><script src="knowledge/style-onboarding.js" defer></script><script src="knowledge/wardrobe-catalog.js" defer></script><script src="knowledge/fashionpedia-bridge.js" defer></script><script src="knowledge/wardrobe-photo-studio.js" defer></script><script src="knowledge/mobile-layout-v42.js" defer></script></body>
 </html>
