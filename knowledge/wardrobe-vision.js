@@ -54,6 +54,7 @@ function apply(){
  if(!candidate||!el("stPhotoConfirm").checked)return;
  const fields={name:"stItem",category:"stCategory",color:"stItemColor",fit:"stGarmentFit",fabric:"stGarmentFabric",formality:"stGarmentFormality"};
  for(const [field,id] of Object.entries(fields)){const value=candidate[field];if(value&&el(id))el(id).value=value}
+ const model=el("gdeGarmentModel");if(model)model.value="";el("stCategory")?.dispatchEvent(new Event("change",{bubbles:true}));
  el("stPhotoStatus").textContent="Sugestões aplicadas aos campos. Você pode corrigir qualquer informação antes de salvar.";
  clear();
 }
