@@ -384,6 +384,40 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 .gde-clothing-details label{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:7px!important;font-size:13px!important;min-width:0!important}
 .gde-clothing-details input,.gde-clothing-details select{min-width:0!important;width:100%!important;box-sizing:border-box!important;min-height:46px!important;font:500 16px var(--sans)!important;color:var(--ink)!important;background:var(--surface-2)!important;border:1px solid var(--line)!important;border-radius:10px!important;padding:9px!important}
 @media(max-width:540px){.gde-clothing-details{grid-template-columns:1fr}}
+
+/* v39: approachable first experience and progressive profile before dashboard */
+#gdeWelcome[hidden]{display:none!important}#gdeWelcome{position:fixed;inset:0;z-index:10015;background:color-mix(in srgb,var(--bg) 93%,transparent);backdrop-filter:blur(15px);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:calc(env(safe-area-inset-top) + 15px) 14px calc(env(safe-area-inset-bottom) + 20px);box-sizing:border-box}
+body.gde-welcome-open{overflow:hidden!important}
+.gde-welcome-card{box-sizing:border-box;width:min(100%,530px);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:23px;padding:clamp(18px,5vw,28px);margin:12px auto;box-shadow:0 20px 65px rgba(0,0,0,.18)}
+.gde-welcome-card header{position:static!important;display:flex!important;align-items:center!important;justify-content:space-between!important;background:none!important;backdrop-filter:none!important;padding:0!important;margin:0!important;border:0!important;color:var(--ink)!important;font:650 11px var(--sans);letter-spacing:.13em}
+.gde-welcome-card header span{letter-spacing:0;color:var(--muted);font-weight:500}
+.gde-welcome-progress{height:5px;background:var(--surface-2);border-radius:99px;margin:17px 0 24px;overflow:hidden}.gde-welcome-progress span{display:block;height:100%;background:var(--accent);transition:width .22s ease}
+.gde-welcome-card h2{font:600 clamp(25px,6vw,36px)/1.13 var(--serif);color:var(--ink);margin:0 0 14px}
+.gde-welcome-card p,.gde-welcome-card small{color:var(--ink-soft);font-size:13px;line-height:1.65}
+.gde-gender-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0}.gde-gender-row button{border:1px solid var(--line);color:var(--ink);background:var(--surface-2);border-radius:11px;padding:11px 5px;min-height:48px;font:600 12px var(--sans);cursor:pointer}
+.gde-gender-row button[aria-pressed="true"],.gde-avatars button[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:2px;background:var(--surface-2)}
+.gde-avatars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:12px 0}
+.gde-avatars button{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:6px 4px;min-width:0;min-height:125px;cursor:pointer}.gde-avatars svg{height:94px;width:100%;max-width:75px;display:block;margin:0 auto}.gde-avatars small{font-size:9px;display:block;line-height:1.25;color:var(--ink-soft)}
+.gde-wizard-fields{display:grid;gap:13px}.gde-wizard-fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:650;color:var(--ink)}
+.gde-wizard-fields select{font:500 16px var(--sans);min-height:48px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink);padding:9px 12px;width:100%}
+.gde-welcome-card footer{display:flex;justify-content:space-between;gap:10px;margin-top:26px}.gde-welcome-card footer button{flex:1;min-height:48px;padding:10px;border-radius:12px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);font:650 14px var(--sans)}.gde-welcome-card footer #gdeWizardNext{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}.gde-welcome-card footer button:disabled{opacity:.35}
+.gde-hero-profile{background:transparent;color:var(--accent);border:0;min-height:44px;padding:8px 0;margin-top:10px;cursor:pointer;font-size:12px;font-weight:650}
+#styleHome{overflow:hidden;isolation:isolate;background:linear-gradient(125deg,var(--surface),color-mix(in srgb,var(--surface) 78%,var(--accent) 22%));border-radius:23px}
+#styleHome h2{max-width:660px;line-height:1.12;letter-spacing:-.035em}
+#styleHome .gde-primary-quick{box-shadow:0 10px 30px -20px var(--accent);transition:transform .2s ease,box-shadow .2s ease}
+#styleHome .gde-primary-quick:active{transform:scale(.985)}
+.gde-refined-nav .gde-nav-icon{transition:transform .22s cubic-bezier(.2,.7,.2,1)}.gde-refined-nav .product-nav-item:active .gde-nav-icon{transform:scale(.88)}.gde-refined-nav .product-nav-item.active .gde-nav-icon{transform:translateY(-1px)}
+.gde-garment-reference{padding:15px;margin:15px 0;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);color:var(--ink)}.gde-garment-reference h4{margin:0 0 6px;font-size:16px}.gde-garment-reference p{font-size:12px;line-height:1.6;color:var(--ink-soft)}.gde-garment-fields{display:grid;gap:11px}.gde-garment-fields label{display:flex!important;flex-direction:column!important;gap:5px!important;margin:0!important;font-size:13px!important}.gde-garment-fields select{min-width:0!important;width:100%!important;min-height:46px!important;border:1px solid var(--line)!important;background:var(--surface)!important;color:var(--ink)!important;border-radius:10px!important;font:500 16px var(--sans)!important;padding:9px!important}
+#gdeGarmentCount{font-size:11px;color:var(--muted)}
+.gde-photo-studio[hidden]{display:none!important}.gde-photo-studio{border:1px solid var(--line);background:var(--surface);border-radius:15px;margin:13px 0;padding:14px;color:var(--ink)}
+.gde-photo-studio h4{margin:0 0 5px}.gde-photo-studio p{font-size:12px;line-height:1.65;color:var(--ink-soft)}
+.gde-photo-studio canvas{display:block;width:min(100%,350px);height:auto;aspect-ratio:1;object-fit:contain;background:white;border:1px solid #ddd;border-radius:12px;margin:12px auto}
+.gde-photo-studio label{display:flex!important;flex-direction:column!important;gap:6px!important;margin:12px 0!important;font-size:12px!important}
+.gde-photo-studio label.gde-photo-check{flex-direction:row!important;align-items:center!important;gap:10px!important}
+.gde-photo-studio input[type="range"]{width:100%;min-height:35px;accent-color:var(--accent)}.gde-photo-studio input[type="checkbox"]{width:21px;height:21px;flex:none}
+.gde-photo-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gde-photo-controls button{min-height:46px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink);padding:9px;font-size:12px}.gde-photo-controls #gdePhotoApply{background:var(--accent);color:var(--accent-ink)}
+@media(max-width:390px){.gde-avatars button{min-height:112px}.gde-avatars svg{height:77px}.gde-photo-controls{grid-template-columns:1fr}.gde-gender-row{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.gde-refined-nav .gde-nav-icon,#styleHome .gde-primary-quick,.gde-welcome-progress span{transition:none!important;animation:none!important}}
 </style>
 <style id="collection-ai-search-css">
 .ai-search-result{margin-top:16px}
@@ -2721,12 +2755,12 @@ function switchProductView(view){
  const profile=()=>Object.fromEntries(Object.entries(fields).map(([k,id])=>[k,e(id).value]));
  const wardrobe=()=>read(wk,[]);
  function fill(){const p=read(pk,{});for(const [k,id] of Object.entries(fields))if(p[k]&&[...e(id).options].some(o=>o.value===p[k]))e(id).value=p[k];draw();}
- function draw(){e("stWardrobe").innerHTML=wardrobe().map((x,i)=>'<div style="border:1px solid var(--line);border-radius:10px;padding:9px;display:flex;align-items:center;gap:10px">'+(x.photo?'<img src="'+safe(x.photo)+'" alt="Foto de '+safe(x.name)+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px">':'')+'<span style="flex:1;overflow-wrap:anywhere">'+safe(x.name)+' · '+safe(x.color)+' · '+safe(x.category)+'</span><button type="button" data-remove="'+i+'" aria-label="Excluir peça">×</button></div>').join("")||'<small>Nenhuma peça cadastrada.</small>'}
+ function draw(){e("stWardrobe").innerHTML=wardrobe().map((x,i)=>'<div style="border:1px solid var(--line);border-radius:10px;padding:9px;display:flex;align-items:center;gap:10px">'+((x.presentationPhoto||x.photo)?'<img src="'+safe(x.presentationPhoto||x.photo)+'" alt="Foto de '+safe(x.name)+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px">':'')+'<span style="flex:1;overflow-wrap:anywhere">'+safe(x.name)+' · '+safe(x.color)+' · '+safe(x.category)+'</span><button type="button" data-remove="'+i+'" aria-label="Excluir peça">×</button></div>').join("")||'<small>Nenhuma peça cadastrada.</small>'}
  e("stylistOpenBtn").onclick=()=>{fill();e("stylistModal").hidden=false};
  e("stylistClose").onclick=()=>e("stylistModal").hidden=true;
  e("stSave").onclick=()=>{e("stSaveMsg").textContent=save(pk,profile())?"Perfil salvo neste dispositivo.":"Falha ao salvar; verifique o armazenamento."};
  async function photoData(file){if(!file)return null;if(!file.type.startsWith("image/"))throw Error("Selecione uma imagem.");if(file.size>12*1024*1024)throw Error("Imagem acima de 12 MB.");const bitmap=await createImageBitmap(file);const canvas=document.createElement("canvas"),scale=Math.min(1,640/Math.max(bitmap.width,bitmap.height));canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));canvas.getContext("2d").drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();return canvas.toDataURL("image/jpeg",0.65)}
- e("stAdd").onclick=async()=>{const name=e("stItem").value.trim().slice(0,100),color=e("stItemColor").value.trim().slice(0,50);if(!name){e("stItem").focus();return}const btn=e("stAdd");btn.disabled=true;try{const photo=await photoData(e("stItemPhoto").files[0]),w=wardrobe();w.push({name,color,category:e("stCategory").value,photo,fit:e("stGarmentFit").value,fabric:e("stGarmentFabric").value.trim().slice(0,70),formality:e("stGarmentFormality").value,metadataSource:"confirmed_by_user"});if(!save(wk,w))throw Error("Armazenamento insuficiente. Remova peças ou use foto menor.");e("stItem").value="";e("stItemColor").value="";e("stItemPhoto").value="";e("stGarmentFit").value="";e("stGarmentFabric").value="";e("stGarmentFormality").value="";window.dispatchEvent(new Event("gde:wardrobe-saved"));e("stPhotoStatus").textContent="Peça salva.";draw()}catch(err){e("stPhotoStatus").textContent=err.message||"Erro ao salvar."}finally{btn.disabled=false}};
+ e("stAdd").onclick=async()=>{const name=e("stItem").value.trim().slice(0,100),color=e("stItemColor").value.trim().slice(0,50);if(!name){e("stItem").focus();return}const btn=e("stAdd");btn.disabled=true;try{const file=e("stItemPhoto").files[0],photo=await photoData(file),preparedPhoto=window.GDEPhotoStudio?.getPrepared(file)||null,model=window.GDEGarmentCatalog?.getSelected()||null,w=wardrobe();w.push({name,color,category:e("stCategory").value,photo,presentationPhoto:preparedPhoto,fit:e("stGarmentFit").value,fabric:e("stGarmentFabric").value.trim().slice(0,70),formality:e("stGarmentFormality").value,garmentType:model?.category||"",garmentModel:model?.label||"",garmentRef:model?.id||"",metadataSource:"confirmed_by_user"});if(!save(wk,w))throw Error("Armazenamento insuficiente. Remova peças ou use foto menor.");e("stItem").value="";e("stItemColor").value="";e("stItemPhoto").value="";e("stGarmentFit").value="";e("stGarmentFabric").value="";e("stGarmentFormality").value="";window.dispatchEvent(new Event("gde:wardrobe-saved"));e("stPhotoStatus").textContent="Peça salva.";draw()}catch(err){e("stPhotoStatus").textContent=err.message||"Erro ao salvar."}finally{btn.disabled=false}};
  e("stWardrobe").onclick=ev=>{const b=ev.target.closest("[data-remove]");if(!b)return;const w=wardrobe();w.splice(Number(b.dataset.remove),1);if(save(wk,w))draw()};
  const combos={trabalho:["camisa ou polo estruturada","calça de alfaiataria ou chino","loafer ou tênis minimalista"],encontro:["camisa ou malha de textura discreta","calça reta bem ajustada ao conforto","loafer, bota ou tênis limpo"],jantar:["camisa de bom caimento","calça de alfaiataria ou jeans escuro","sapato casual elegante"],casual:["camiseta ou camisa casual","jeans reto ou chino","tênis confortável"],evento:["camisa social ou peça formal adequada ao evento","calça social","sapato social"]};
  const palette={neutras:"marinho, branco, cinza e bege",frias:"azul, cinza e branco",quentes:"marrom, areia e terracota",vivas:"uma cor de destaque com neutros",mistas:"duas cores coordenadas e um neutro"};
@@ -2886,7 +2920,7 @@ function generate(){
  const missing=chosen.filter(x=>!x.item);
  const owned=(typeof state!=="undefined"&&Array.isArray(state.perfumes)?state.perfumes:[]).filter(x=>x.status==="tenho");
  const perfume=owned.length?"Veja a sugestão contextual de fragrância no Estúdio de Looks, abaixo desta recomendação.":"Você ainda não cadastrou fragrâncias como Tenho; o look funciona normalmente sem perfume.";
- const rows=chosen.map((x,i)=>'<li style="margin:10px 0"><b>'+esc(["Parte superior","Parte inferior","Calçado"][i])+':</b> '+esc(name(x))+(x.item?'<small style="display:block;color:var(--ink-soft)">Do seu guarda-roupa</small>':'<small style="display:block;color:var(--ink-soft)">Ideia de peça; não cadastrada</small>')+(x.item?.photo?'<img src="'+esc(x.item.photo)+'" alt="Peça selecionada" style="display:block;width:84px;height:84px;object-fit:cover;border-radius:10px;margin-top:7px">':"")+'</li>').join("");
+ const rows=chosen.map((x,i)=>'<li style="margin:10px 0"><b>'+esc(["Parte superior","Parte inferior","Calçado"][i])+':</b> '+esc(name(x))+(x.item?'<small style="display:block;color:var(--ink-soft)">Do seu guarda-roupa</small>':'<small style="display:block;color:var(--ink-soft)">Ideia de peça; não cadastrada</small>')+((x.item?.presentationPhoto||x.item?.photo)?'<img src="'+esc(x.item.presentationPhoto||x.item.photo)+'" alt="Peça selecionada" style="display:block;width:84px;height:84px;object-fit:cover;border-radius:10px;margin-top:7px">':"")+'</li>').join("");
  const acc=accessory.map(a=>'<li>'+esc(a.label)+': '+esc(a.item?a.item.name:"não cadastrado; opcional")+'</li>').join("");
  const occasionText=$("stOccasion").selectedOptions[0].text;
  $("stResult").innerHTML='<h4>Look para '+esc(occasionText)+'</h4><ol>'+rows+'</ol>'+(acc?'<h4>Acessórios opcionais</h4><ul>'+acc+'</ul>':'')+'<p><b>Harmonia sugerida:</b> '+esc(colors)+'. A combinação é orientativa; tonalidades exatas não são verificadas por foto.</p><p><b>Conforto:</b> '+esc(fit+' '+wtip)+'</p>'+(missing.length?'<p><b>Itens que faltam:</b> '+missing.length+'. '+(p.budget==="acervo"?"Você pode substituir por peças semelhantes que já possui.":"Considere apenas se realmente precisar comprar.")+'</p>':'<p>Conjunto principal montado com peças cadastradas.</p>')+'<p><b>Perfume:</b> '+esc(perfume)+'</p><small>Motor local por critérios de texto informado: não infere silhueta, cor real, gênero ou qualidade pela fotografia. Confirme o dress code específico da ocasião.</small>';
@@ -2994,7 +3028,7 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
    const options=all.map((p,i)=>({p,i})).filter(o=>o.p.category===type);
    const selected=stableIndex(piece,all);
    const box=document.createElement("div");box.className="gde-look-piece";
-   const img=photo(piece?.photo),thumb=img?'<img src="'+img+'" alt="Foto da peça selecionada">':icon;
+   const img=photo(piece?.presentationPhoto||piece?.photo),thumb=img?'<img src="'+img+'" alt="Foto da peça selecionada">':icon;
    box.innerHTML='<div class="gde-look-thumb">'+thumb+'</div><b>'+safe(label)+'</b><small>'+safe(piece?(piece.name+(piece.color?" · "+piece.color:"")):(row?.suggestion||"Ainda sem peça cadastrada"))+'</small><label>Substituir<select data-category="'+type+'" aria-label="Substituir '+safe(label)+'"><option value="">'+(piece?"Manter peça":"Escolher peça")+'</option>'+options.map(({p,i})=>'<option value="'+i+'">'+safe(p.name)+(p.color?" · "+safe(p.color):"")+'</option>').join("")+'</select></label>';
    target.appendChild(box);
   }
@@ -3007,7 +3041,7 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
   choice.value=(context.candidates||[]).some(x=>String(x.id)===String(context.id))?String(context.id):"";
   el("gdeContextScentWhy").textContent=context.why||"";
  }
- function clearPhotoFromSaved(p){return p?{name:String(p.name||""),category:String(p.category||""),color:String(p.color||""),photo:photo(p.photo)}:null}
+ function clearPhotoFromSaved(p){return p?{name:String(p.name||""),category:String(p.category||""),color:String(p.color||""),photo:photo(p.photo),presentationPhoto:photo(p.presentationPhoto),garmentType:String(p.garmentType||''),garmentModel:String(p.garmentModel||'')}:null}
  function save(){
   if(!current)return;const name=el("gdeLookName").value.trim().slice(0,65)||"Meu look",now=new Date().toISOString();
   const record={id:"look-"+now+"-"+Math.random().toString(36).slice(2,8),name,occasion:current.opts?.occasion||"",createdAt:now,chosen:current.chosen.map(r=>({category:r.category,item:clearPhotoFromSaved(r.item),suggestion:r.item?null:r.suggestion||null})),accessory:current.accessory.map(r=>({label:r.label,item:clearPhotoFromSaved(r.item)})),scent:{id:el("gdeContextScentChoose").value,label:el("gdeContextScentChoose").selectedOptions[0]?.textContent||"",why:current.scent?.why||""}};
@@ -3021,7 +3055,7 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
   if(!list.length){host.innerHTML='<p style="font-size:12px;color:var(--ink-soft)">Ainda não há looks salvos. Monte um look e salve sua composição favorita.</p>';return}
   for(const [i,look] of list.entries()){
    const card=document.createElement("article");card.className="gde-saved-card";
-   const preview=(look.chosen||[]).map(r=>{const src=photo(r.item?.photo);return src?'<img src="'+src+'" alt="'+safe(r.item?.name||"Peça")+'">':'<span>'+safe(r.item?.name||r.suggestion||"Peça")+'</span>'}).join("");
+   const preview=(look.chosen||[]).map(r=>{const src=photo(r.item?.presentationPhoto||r.item?.photo);return src?'<img src="'+src+'" alt="'+safe(r.item?.name||"Peça")+'">':'<span>'+safe(r.item?.name||r.suggestion||"Peça")+'</span>'}).join("");
    card.innerHTML='<strong>'+safe(look.name)+'</strong><small>'+safe(look.occasion||"Ocasião livre")+'</small><div class="gde-saved-preview">'+preview+'</div><div class="gde-saved-controls"><button type="button" data-load="'+i+'">Editar look</button><button type="button" data-delete="'+i+'">Excluir</button></div>';
    host.appendChild(card);
   }
@@ -3053,5 +3087,5 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
  renderSaved();
  window.__gdeVisualLookQA={getLooks,getPieces,renderSaved,render};
 })();
-</script><script src="knowledge/style-kb.js" defer></script><script src="knowledge/wardrobe-vision.js" defer></script></body>
+</script><script src="knowledge/style-kb.js" defer></script><script src="knowledge/wardrobe-vision.js" defer></script><script src="knowledge/style-onboarding.js" defer></script><script src="knowledge/wardrobe-catalog.js" defer></script><script src="knowledge/wardrobe-photo-studio.js" defer></script></body>
 </html>
