@@ -311,6 +311,28 @@ header{padding:28px 0 14px;display:flex;align-items:flex-start;justify-content:s
 #perfumeHub>.profile-dashboard,#perfumeHub>.occasion-advisor{margin-top:18px}
 .product-nav-item{min-width:0!important}
 .product-nav-item b{white-space:nowrap}
+
+/* Navigation refinement — recognizable 24px line icons and consistent touch targets. */
+.gde-refined-nav{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;align-items:stretch!important}
+.gde-refined-nav .product-nav-item{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-width:0!important;min-height:58px!important;padding:9px 5px!important;text-align:center!important;border-radius:13px!important;font-size:inherit!important;line-height:1.2!important}
+.gde-refined-nav .product-nav-item .gde-nav-icon{display:block;width:23px;height:23px;flex:none;stroke:currentColor}
+.gde-refined-nav .product-nav-item b{display:block!important;font:650 11px/1.15 var(--sans)!important;white-space:nowrap!important;letter-spacing:.01em!important;text-transform:none!important;color:inherit!important}
+.gde-refined-nav .product-nav-item.active{color:var(--accent-ink)!important;background:var(--accent)!important}
+.gde-refined-nav .product-nav-item:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.gde-refined-nav .product-nav-item:not(.active):hover{background:var(--surface-2)!important}
+.style-home .style-quick{grid-template-columns:1fr!important;gap:9px!important}
+.style-home .style-quick>button{box-sizing:border-box;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;min-height:66px!important;width:100%!important;gap:13px!important;padding:12px 14px!important;border-radius:14px!important;color:var(--ink)!important;background:var(--surface)!important}
+.style-home .style-quick>button .gde-nav-icon{display:block!important;width:23px!important;height:23px!important;flex:0 0 23px!important;stroke:var(--accent)}
+.style-home .style-quick>button>span:not(.gde-quick-chevron){min-width:0;flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.style-home .style-quick>button b{font:650 14px/1.3 var(--sans)!important;color:inherit!important}
+.style-home .style-quick>button small{display:block!important;font:450 12px/1.3 var(--sans)!important;letter-spacing:0!important;color:var(--ink-soft)!important}
+.style-home .style-quick>button .gde-quick-chevron{color:var(--muted);font-size:24px}
+.style-home .style-quick>button.gde-primary-quick{border-color:var(--accent)!important;background:var(--accent)!important;color:var(--accent-ink)!important}
+.style-home .style-quick>button.gde-primary-quick .gde-nav-icon{stroke:var(--accent-ink)!important}
+.style-home .style-quick>button.gde-primary-quick small,.style-home .style-quick>button.gde-primary-quick .gde-quick-chevron{color:var(--accent-ink)!important;opacity:.85}
+.style-home .style-quick>button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media(max-width:400px){.gde-refined-nav .product-nav-item{padding:9px 2px!important}.gde-refined-nav .product-nav-item b{font-size:10.5px!important}}
+@media(prefers-reduced-motion:reduce){.gde-refined-nav .product-nav-item,.style-home .style-quick>button{transition:none!important}}
 </style>
 <style id="collection-ai-search-css">
 .ai-search-result{margin-top:16px}
@@ -628,12 +650,20 @@ header::after{
   </div>
   <div class="drawer-footer"><span class="sync-dot"></span><span>Exporte sua coleção regularmente. O salvamento local depende deste navegador e pode ser apagado. Chaves de IA salvas no navegador não são adequadas a dispositivos compartilhados.</span></div>
 </aside>
-  <nav class="product-nav" aria-label="Navegação principal"><button class="product-nav-item active" data-view="inicio" type="button" id="navHome">⌂ <b>Início</b></button><button class="product-nav-item" data-view="looks" type="button" id="navLooks">✦ <b>Looks</b></button><button class="product-nav-item" data-view="perfil" type="button" id="navProfile">◉ <b>Perfil</b></button><button class="product-nav-item" data-view="perfumes" type="button" id="navCollection">◈ <b>Perfumes</b></button></nav>
+  <nav class="product-nav gde-refined-nav" aria-label="Navegação principal">
+<button class="product-nav-item active" data-view="inicio" type="button" id="navHome" aria-label="Início" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M9 21v-7h6v7"/></svg><b>Início</b></button>
+<button class="product-nav-item" data-view="looks" type="button" id="navLooks" aria-label="Montar looks"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><path d="m9 4 3 3 3-3 6 4-3 5-2-1v9H8v-9l-2 1-3-5z"/></svg><b>Looks</b></button>
+<button class="product-nav-item" data-view="perfil" type="button" id="navProfile" aria-label="Meu perfil"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><circle cx="12" cy="8" r="3.3"/><path d="M4.6 20a7.4 7.4 0 0 1 14.8 0"/><circle cx="12" cy="12" r="10"/></svg><b>Perfil</b></button>
+<button class="product-nav-item" data-view="perfumes" type="button" id="navCollection" aria-label="Meus perfumes"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><rect x="7" y="9" width="10" height="12" rx="2"/><path d="M10 5V3h4v2M9 9V6h6v3M10 14h4"/></svg><b>Perfumes</b></button>
+</nav>
   <div class="legacy-tabs" role="tablist" aria-hidden="true">
     <button role="tab" id="tabP" aria-selected="true" onclick="switchTab('perfumes')">Fragrâncias</button>
     <button role="tab" id="tabW" aria-selected="false" onclick="switchTab('watches')">Acessórios</button>
   </div>
-  <section id="viewPerfumes"><section class="style-home" id="styleHome"><span class="style-kicker">IMAGEM · ESTILO · CONFIANÇA</span><h2>Seu estilo começa em você.</h2><p>Combine o que você veste com quem deseja ser. Seus perfumes são parte da experiência — não o ponto de partida.</p><div class="style-quick"><button id="homeOpenStylist" type="button"><b>✦ Montar um look</b><small>Roupas e acessórios</small></button><button id="homeOpenWardrobe" type="button"><b>▦ Meu guarda-roupa</b><small>Peças e fotos</small></button><button id="homeOpenProfile" type="button"><b>◉ Meu perfil</b><small>Preferências e identidade</small></button></div></section>
+  <section id="viewPerfumes"><section class="style-home" id="styleHome"><span class="style-kicker">IMAGEM · ESTILO · CONFIANÇA</span><h2>Seu estilo começa em você.</h2><p>Combine o que você veste com quem deseja ser. Seus perfumes são parte da experiência — não o ponto de partida.</p><div class="style-quick">
+<button id="homeOpenStylist" type="button" class="gde-primary-quick"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><path d="m9 4 3 3 3-3 6 4-3 5-2-1v9H8v-9l-2 1-3-5z"/></svg><span><b>Montar um look</b><small>Comece pela ocasião</small></span><span class="gde-quick-chevron" aria-hidden="true">›</span></button>
+<button id="homeOpenWardrobe" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M12 4v17M7 8h2M15 8h2"/></svg><span><b>Meu guarda-roupa</b><small>Peças, fotos e acessórios</small></span><span class="gde-quick-chevron" aria-hidden="true">›</span></button>
+<button id="homeOpenProfile" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="gde-nav-icon"><circle cx="12" cy="8" r="3.3"/><path d="M4.6 20a7.4 7.4 0 0 1 14.8 0"/><circle cx="12" cy="12" r="10"/></svg><span><b>Meu perfil</b><small>Estilo e preferências</small></span><span class="gde-quick-chevron" aria-hidden="true">›</span></button></div></section>
 <section id="scentQuizSection" class="scent-quiz"><div class="scent-intro"><div><span class="style-kicker">PREFERÊNCIAS REAIS</span><h2>Sua assinatura olfativa</h2><p>Escolha o que realmente gosta. Suas respostas podem ser alteradas a qualquer momento.</p></div><span id="scentQuizState">Não preenchido</span></div><form id="scentQuizForm"><div class="scent-fields">
 <label>Sensação desejada<select name="feeling"><option value="">Escolha</option><option value="frescor">Frescor e leveza</option><option value="conforto">Aconchego</option><option value="elegancia">Elegância discreta</option><option value="presenca">Presença marcante</option><option value="criatividade">Originalidade</option></select></label>
 <label>Família preferida<select name="family"><option value="">Ainda não sei</option><option value="citrica">Cítrica / fresca</option><option value="floral">Floral</option><option value="amadeirada">Amadeirada</option><option value="aromatica">Aromática</option><option value="ambarada">Ambarada / especiada</option><option value="gourmand">Gourmand</option><option value="aquatica">Aquática</option></select></label>
@@ -2817,5 +2847,5 @@ window.getScentPreferences=read;
  // Initial view prioritizes the styling dashboard, even when the collection has items.
  hideHub();
 })();
-</script></body>
+</script><script id="nav-a11y-enhancement">(function(){const nav=document.querySelector(".gde-refined-nav");if(!nav)return;function sync(){nav.querySelectorAll(".product-nav-item").forEach(b=>{if(b.classList.contains("active"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")})}nav.addEventListener("click",()=>{requestAnimationFrame(sync)});sync()})();</script></body>
 </html>
