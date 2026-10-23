@@ -26,8 +26,7 @@ const ctx=canvas.getContext("2d"),W=canvas.width,H=canvas.height;ctx.clearRect(0
 const deg=Number(el("gdePhotoRotate").value),zoom=Number(el("gdePhotoZoom").value)/100;
 ctx.save();ctx.translate(W/2,H/2);ctx.rotate(deg*Math.PI/180);
 const avail=W*.82*zoom,ratio=Math.min(avail/sourceImage.width,avail/sourceImage.height),dw=sourceImage.width*ratio,dh=sourceImage.height*ratio;
-ctx.drawImage(sourceImage,-dw/2,-dh/2,dw,dh);ctx.restore();
-if(el("gdePhotoRemove")?.checked)removeBackground(canvas,Number(el("gdePhotoTolerance").value));
+if(el("gdePhotoRemove")?.checked){const source=document.createElement("canvas");source.width=Math.max(1,Math.round(dw));source.height=Math.max(1,Math.round(dh));source.getContext("2d").drawImage(sourceImage,0,0,source.width,source.height);removeBackground(source,Number(el("gdePhotoTolerance").value));ctx.drawImage(source,-dw/2,-dh/2,dw,dh)}else ctx.drawImage(sourceImage,-dw/2,-dh/2,dw,dh);ctx.restore();
 el("gdePhotoDegrees").textContent=deg+"°";
 }
 function init(){
