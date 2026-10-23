@@ -2901,7 +2901,7 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
  const photo=x=>typeof x==="string"&&/^data:image\/(?:png|jpeg|webp|gif);base64,[a-zA-Z0-9+/=]+$/.test(x)?x:null;
  const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 4 3 3 3-3 6 4-3 5-2-1v9H8v-9l-2 1-3-5z"/></svg>';
  const categories=[["superior","Parte superior"],["inferior","Parte inferior"],["calcado","Calçado"],["relogio","Relógio"],["oculos","Óculos"],["acessorio","Acessório"]];
- let current=null;
+ let current=null, editingId=null;
  const getPieces=()=>read(wardrobeKey,[]),getLooks=()=>read(looksKey,[]);
  const keyOf=(x,i)=>x?String(x.name||"")+"|"+String(x.category||"")+"|"+String(x.color||"")+"|"+i:"";
  function stableIndex(x,items){if(!x)return -1;return items.findIndex(p=>p===x||p.name===x.name&&p.category===x.category&&p.color===x.color&&p.photo===x.photo)}
@@ -2925,9 +2925,9 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
  function save(){
   if(!current)return;const name=el("gdeLookName").value.trim().slice(0,65)||"Meu look",now=new Date().toISOString();
   const record={id:"look-"+now+"-"+Math.random().toString(36).slice(2,8),name,occasion:current.opts?.occasion||"",createdAt:now,chosen:current.chosen.map(r=>({category:r.category,item:clearPhotoFromSaved(r.item),suggestion:r.item?null:r.suggestion||null})),accessory:current.accessory.map(r=>({label:r.label,item:clearPhotoFromSaved(r.item)}))};
-  const saved=getLooks();saved.unshift(record);
+  const saved=getLooks();if(editingId){const idx=saved.findIndex(x=>x.id===editingId);if(idx>=0){record.id=editingId;record.createdAt=saved[idx].createdAt;saved.splice(idx,1,record)}else saved.unshift(record)}else saved.unshift(record);
   if(saved.length>30)saved.length=30;
-  try{localStorage.setItem(looksKey,JSON.stringify(saved));el("gdeLookFeedback").textContent="Look salvo neste dispositivo.";renderSaved()}catch(e){el("gdeLookFeedback").textContent="Sem espaço para salvar. Libere armazenamento ou remova looks antigos."}
+  try{localStorage.setItem(looksKey,JSON.stringify(saved));el("gdeLookFeedback").textContent=editingId?"Look atualizado neste dispositivo.":"Look salvo neste dispositivo.";editingId=record.id;renderSaved()}catch(e){el("gdeLookFeedback").textContent="Sem espaço para salvar. Libere armazenamento ou remova looks antigos."}
  }
  function renderSaved(){
   const list=getLooks(),host=el("gdeSavedLooks");el("gdeSavedCount").textContent=list.length+" look(s)";
@@ -2958,10 +2958,10 @@ for(const [id,body] of Object.entries(paths)){const target=document.getElementBy
    if(!confirm('Excluir o look "'+look.name+'"?'))return;
    looks.splice(index,1);try{localStorage.setItem(looksKey,JSON.stringify(looks));renderSaved()}catch(e){el("gdeLookFeedback").textContent="Não foi possível excluir."}return;
   }
-  current={chosen:(look.chosen||[]).map(r=>({...r,item:r.item||null})),accessory:(look.accessory||[]).map(r=>({...r})),opts:{occasion:look.occasion||""}};
+  editingId=look.id;current={chosen:(look.chosen||[]).map(r=>({...r,item:r.item||null})),accessory:(look.accessory||[]).map(r=>({...r})),opts:{occasion:look.occasion||""}};
   el("gdeLookName").value=look.name;render();el("gdeLookStudio").scrollIntoView({behavior:"smooth",block:"start"});
  });
- window.addEventListener("gde:look-generated",ev=>{current=ev.detail;el("gdeLookName").value="Look para "+ev.detail.occasionText;el("gdeLookFeedback").textContent="";render()});
+ window.addEventListener("gde:look-generated",ev=>{current=ev.detail;editingId=null;el("gdeLookName").value="Look para "+ev.detail.occasionText;el("gdeLookFeedback").textContent="";render()});
  document.getElementById("stylistOpenBtn")?.addEventListener("click",renderSaved);
  renderSaved();
  window.__gdeVisualLookQA={getLooks,getPieces,renderSaved,render};
