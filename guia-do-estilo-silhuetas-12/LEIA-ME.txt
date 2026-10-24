@@ -1,0 +1,10 @@
+Guia do Estilo — 12 silhuetas aprovadas
+=======================================
+Estrutura: public/app/assets/silhouettes/feminino-01.png até feminino-06.png e masculino-01.png até masculino-06.png
+Arquivo proposto: public/app/knowledge/avatars-3d.js
+
+IMPORTANTE: A substituição no JS sozinha NÃO conclui a migração. O formulário atual precisa ser alterado de 5 para 6 níveis e a escolha deve ser obrigatória no fluxo de cadastro. Atualize os assets e a lógica em conjunto.
+
+Os avatares são imagens 2D, não modelos 3D deformáveis. Ajustes independentes de ombro, cintura e quadril exigirão composição de imagens ou uma solução de malha 3D real. O parâmetro proportions continua na assinatura por compatibilidade, mas não altera o PNG.
+
+Verificar rota /app/assets/silhouettes/ após o build, responsividade, cabeçalho do seletor, persistência e reentrada no cadastro.
